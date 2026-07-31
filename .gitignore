@@ -1,1 +1,51 @@
-# Repository bootstrap
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Secrets and local configuration
+.env
+.env.*
+*.pem
+*.key
+*credentials*
+*secret*
+
+# Runtime data and generated artifacts
+data/
+data_output/
+demo_inputs/
+demo_runs/
+runs/
+uploads/
+backups/
+*.db
+*.db.*
+*.sqlite
+*.sqlite.*
+*.log
+*.bak
+*.bak_*
+*.tmp
+
+# Models, datasets, and dependency bundles
+datasets/
+models/
+checkpoints/
+wheelhouse*/
+*.whl
+*.tar
+*.tar.gz
+*.zip
+
+# Editors and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

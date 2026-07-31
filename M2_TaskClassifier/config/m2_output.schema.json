@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M2 task candidate classification batch",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "label_code",
+      "schema_version",
+      "segment_id",
+      "primary_label",
+      "secondary_labels",
+      "event_hint",
+      "route",
+      "signals",
+      "evidence",
+      "ambiguities"
+    ],
+    "properties": {
+      "label_code": {"enum": ["T", "U", "D", "I", "R", "S", "N"]},
+      "schema_version": {"const": "m2.v1"},
+      "segment_id": {"type": "string", "minLength": 1},
+      "primary_label": {
+        "enum": ["task", "task_update", "decision", "issue", "report", "suggestion", "non_task"]
+      },
+      "secondary_labels": {
+        "type": "array",
+        "uniqueItems": true,
+        "items": {
+          "enum": ["task", "task_update", "decision", "issue", "report", "suggestion", "non_task"]
+        }
+      },
+      "event_hint": {
+        "enum": ["CREATE", "UPDATE", "COMPLETE", "BLOCK", "CHANGE_DEADLINE", "REASSIGN", "CANCEL", "NONE"]
+      },
+      "route": {
+        "enum": ["EXTRACT", "CONTEXT_ONLY", "DISCARD", "HUMAN_REVIEW"]
+      },
+      "signals": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "explicit_action",
+          "explicit_actor",
+          "explicit_object",
+          "explicit_deadline",
+          "negated",
+          "hypothetical",
+          "quoted_previous_instruction",
+          "completed_report",
+          "safety_related"
+        ],
+        "properties": {
+          "explicit_action": {"type": "boolean"},
+          "explicit_actor": {"type": "boolean"},
+          "explicit_object": {"type": "boolean"},
+          "explicit_deadline": {"type": "boolean"},
+          "negated": {"type": "boolean"},
+          "hypothetical": {"type": "boolean"},
+          "quoted_previous_instruction": {"type": "boolean"},
+          "completed_report": {"type": "boolean"},
+          "safety_related": {"type": "boolean"}
+        }
+      },
+      "evidence": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["text", "start_char", "end_char"],
+          "properties": {
+            "text": {"type": "string", "minLength": 1},
+            "start_char": {"type": "integer", "minimum": 0},
+            "end_char": {"type": "integer", "minimum": 1}
+          }
+        }
+      },
+      "ambiguities": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["field", "description"],
+          "properties": {
+            "field": {"type": "string", "minLength": 1},
+            "description": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}
