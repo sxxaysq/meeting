@@ -1,0 +1,1031 @@
+{
+  "mode": "pipeline",
+  "metrics": {
+    "sample_count": 28,
+    "decision_accuracy": 0.9642857142857143,
+    "per_action": {
+      "CREATE": {
+        "support": 8,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "PROGRESS_UPDATE": {
+        "support": 7,
+        "precision": 1.0,
+        "recall": 0.8571428571428571
+      },
+      "MODIFY": {
+        "support": 2,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "COMPLETE": {
+        "support": 2,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "CANCEL": {
+        "support": 2,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "REOPEN": {
+        "support": 2,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "TRANSFER": {
+        "support": 1,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "REVIEW": {
+        "support": 4,
+        "precision": 0.8,
+        "recall": 1.0
+      }
+    },
+    "target_task_id_accuracy": 0.9375,
+    "wrong_target_rate": 0.0,
+    "false_update_rate": 0.0,
+    "false_create_rate": 0.0,
+    "review_rate": 0.17857142857142858,
+    "department_routing_accuracy": 1.0,
+    "confusion": {
+      "CANCEL->CANCEL": 2,
+      "COMPLETE->COMPLETE": 2,
+      "CREATE->CREATE": 8,
+      "MODIFY->MODIFY": 2,
+      "PROGRESS_UPDATE->PROGRESS_UPDATE": 6,
+      "PROGRESS_UPDATE->REVIEW": 1,
+      "REOPEN->REOPEN": 2,
+      "REVIEW->REVIEW": 4,
+      "TRANSFER->TRANSFER": 1
+    },
+    "error_cases": {
+      "false_updates": [],
+      "false_creates": [],
+      "wrong_targets": [],
+      "reviews": [
+        "PROGRESS_RECENT_EVENT_LINK",
+        "REVIEW_TWO_PLAUSIBLE_TARGETS",
+        "REVIEW_DEPARTMENT_CONFLICT",
+        "REVIEW_ONE_ITEM_MULTIPLE_TASKS",
+        "REVIEW_COMPLETE_AND_NEW_GOAL"
+      ]
+    },
+    "idempotency_violations": 0,
+    "transaction_failures": 0
+  },
+  "predictions": [
+    {
+      "sample_id": "CREATE_SAME_PROJECT_DIFFERENT_SYSTEM",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同项目但业务目标是不同子系统。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "当前Item为‘建设火灾监测系统’，历史候选为‘建设红沙泉二矿数据中心’，两者业务目标独立不同，属于新增独立业务目标。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "PROJECT_TASK",
+          "project_entity_id": "P-HSQ2",
+          "project": "红沙泉二矿项目",
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "项目推进",
+          "delivery_group": "新疆交付组",
+          "title": "建设火灾监测系统",
+          "description": "启动红沙泉二矿火灾监测系统建设。",
+          "assignees": [],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_SAME_ASSIGNEE_DIFFERENT_GOAL",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同负责人不能替代业务目标判断。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "当前Item为新增的独立业务目标（无人机巡检方案编制），与历史候选任务（数据中心建设）目标不同，且候选列表中无对应任务。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "PROJECT_TASK",
+          "project_entity_id": "P-HSQ2",
+          "project": "红沙泉二矿项目",
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "项目推进",
+          "delivery_group": "新疆交付组",
+          "title": "编制无人机巡检方案",
+          "description": "张工负责新增无人机巡检方案编制任务。",
+          "assignees": [
+            "张工"
+          ],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_NO_HISTORY",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "历史库没有候选。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "历史候选列表为空，当前Item为新的独立业务目标，无对应历史任务。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "PROJECT_TASK",
+          "project_entity_id": "P-NEW",
+          "project": "新项目",
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "项目推进",
+          "delivery_group": "新疆交付组",
+          "title": "建设井下定位平台",
+          "description": "启动井下定位平台建设。",
+          "assignees": [],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_RESEARCH_TASK",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同为科研但研究目标不同。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "当前Item目标为'多模态识别算法'，历史候选为'时序预测算法'，两者业务目标不同，属于新的独立业务目标。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "RESEARCH_TASK",
+          "project_entity_id": null,
+          "project": null,
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "科研工作",
+          "delivery_group": "新疆交付组",
+          "title": "开展多模态识别算法研究",
+          "description": "启动多模态识别算法研究并形成实验方案。",
+          "assignees": [],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_NON_PROJECT_WORK",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同类制度工作但交付物不同。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "当前Item目标为'修订保密管理制度'，历史候选Task目标为'修订绩效考核制度'，两者业务目标不同，属于新增独立业务目标。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "NON_PROJECT_WORK",
+          "project_entity_id": null,
+          "project": null,
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "综合管理",
+          "delivery_group": "新疆交付组",
+          "title": "修订保密管理制度",
+          "description": "本周启动公司保密管理制度修订。",
+          "assignees": [],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_SIMILAR_TITLE_DIFFERENT_DELIVERABLE",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "字面相似但交付物和子系统都不同。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "当前Item目标为'火灾监测系统招标材料编制'，历史候选Task目标为'数据中心验收材料编制'，两者业务对象（火灾监测vs数据中心）和任务性质（招标vs验收）完全不同，属于新的独立业务目标。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "PROJECT_TASK",
+          "project_entity_id": "P-HSQ2",
+          "project": "红沙泉二矿项目",
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "项目推进",
+          "delivery_group": "新疆交付组",
+          "title": "完成招标材料编制",
+          "description": "完成火灾监测系统招标材料编制。",
+          "assignees": [],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_PERCENT",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "子步骤进度，不是新任务。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前Item描述的数据中心施工进展（吊顶安装、设备到货）属于TASK-DATACENTER（建设红沙泉二矿数据中心）的进度更新，未涉及任务目标变更或完成。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_WAITING",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "等待事项属于持续任务事件。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前Item描述数据中心建设继续推进并等待设备进场，属于历史任务TASK-DATACENTER（建设红沙泉二矿数据中心）的进度更新，未改变任务整体目标或状态。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_DIFFERENT_WORDING",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "表述改变但业务目标连续。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前Item描述的是历史任务'建设红沙泉二矿数据中心'的具体实施进度（墙面收尾及设备上架），属于同一任务下的阶段推进，未改变任务整体目标或属性。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_RESEARCH_STAGE",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-MULTIMODAL",
+        "annotator_note": "科研任务阶段成果。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-MULTIMODAL",
+        "reason": "当前Item描述了历史任务'开展多模态识别算法研究'的具体实验进展（完成第一轮对比实验）及后续计划，任务身份与目标未变，属于进度更新。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_NON_PROJECT",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-SECRET-RULE",
+        "annotator_note": "非项目工作同样有持续生命周期。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-SECRET-RULE",
+        "reason": "当前Item描述保密制度初稿形成并征求意见，属于历史任务'修订保密管理制度'的进度推进，任务身份未变。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_CHILD_STEP_COMPLETE",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "子步骤完成不等于整体 COMPLETE。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前Item描述了历史任务'建设红沙泉二矿数据中心'的具体子步骤（吊顶安装）已完成及后续计划，属于同一任务下的进度更新，未改变任务整体目标或状态。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_RECENT_EVENT_LINK",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-TIANJIN-FACTORY",
+        "annotator_note": "近期事件提供任务身份连续性。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "当前Item目标为'确认付款方式'，历史候选Task目标为'现场沟通'，业务目标不一致；且同一项目下可能存在多个并行子任务，无法安全判定为同一任务的进度更新或新任务创建。",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "MODIFY_SCOPE",
+      "gold": {
+        "decision": "MODIFY",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "任务身份不变，范围有明确调整。"
+      },
+      "prediction": {
+        "decision": "MODIFY",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前Item明确描述了任务范围的调整（从建设数据中心调整为建设主机房并增加灾备机房），且项目、部门、交付组等上下文与历史任务TASK-DATACENTER一致，属于同一任务范围内的属性变更。",
+        "event_summary": null,
+        "changes": {
+          "title": "建设数据中心并增加灾备机房",
+          "description": "数据中心任务范围调整为建设主机房并增加灾备机房。",
+          "work_section": "项目推进",
+          "delivery_group": "新疆交付组",
+          "assignees": [],
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "MODIFY_ASSIGNEE",
+      "gold": {
+        "decision": "MODIFY",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "明确负责人调整，不是 TRANSFER。"
+      },
+      "prediction": {
+        "decision": "MODIFY",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前Item明确陈述数据中心建设任务的负责人由张工调整为李工，属于任务身份不变但明确负责人发生稳定属性变更，符合MODIFY定义。",
+        "event_summary": null,
+        "changes": {
+          "title": "建设红沙泉二矿数据中心",
+          "description": "数据中心建设任务负责人明确调整为李工。",
+          "assignees": [
+            "李工"
+          ],
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "COMPLETE_WHOLE_GOAL",
+      "gold": {
+        "decision": "COMPLETE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "完成对象与任务总目标一致。"
+      },
+      "prediction": {
+        "decision": "COMPLETE",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前Item明确陈述数据中心整体建设已完成并正式交付，与历史任务TASK-DATACENTER的整体目标一致，符合COMPLETE定义。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "COMPLETE_ACCEPTED",
+      "gold": {
+        "decision": "COMPLETE",
+        "target_task_id": "TASK-PLATFORM",
+        "annotator_note": "明确最终验收。"
+      },
+      "prediction": {
+        "decision": "COMPLETE",
+        "target_task_id": "TASK-PLATFORM",
+        "reason": "当前Item明确陈述智能综合管控平台已通过最终验收且任务正式关闭，这与历史候选TASK-PLATFORM的整体目标（完成研发、部署和验收）完全一致，符合COMPLETE定义。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CANCEL_EXPLICIT",
+      "gold": {
+        "decision": "CANCEL",
+        "target_task_id": "TASK-DRONE",
+        "annotator_note": "存在明确取消与不再开展语义。"
+      },
+      "prediction": {
+        "decision": "CANCEL",
+        "target_task_id": "TASK-DRONE",
+        "reason": "当前Item明确声明取消“无人机巡检系统建设”任务且不再开展，与历史候选TASK-DRONE的目标一致，符合CANCEL定义。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CANCEL_TERMINATE_RESEARCH",
+      "gold": {
+        "decision": "CANCEL",
+        "target_task_id": "TASK-TIMESERIES",
+        "annotator_note": "科研任务也支持明确终止。"
+      },
+      "prediction": {
+        "decision": "CANCEL",
+        "target_task_id": "TASK-TIMESERIES",
+        "reason": "当前Item明确陈述“决定终止设备时序预测课题，后续不再投入”，与历史任务“开展设备时序预测研究”目标一致，符合CANCEL定义。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REOPEN_COMPLETED",
+      "gold": {
+        "decision": "REOPEN",
+        "target_task_id": "TASK-EXPANSION",
+        "annotator_note": "已完成任务被明确再次启动。"
+      },
+      "prediction": {
+        "decision": "REOPEN",
+        "target_task_id": "TASK-EXPANSION",
+        "reason": "当前Item明确指出原已完成的任务重新启动且目标一致，符合REOPEN定义。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REOPEN_CANCELLED",
+      "gold": {
+        "decision": "REOPEN",
+        "target_task_id": "TASK-DRONE",
+        "annotator_note": "已取消任务被明确恢复。"
+      },
+      "prediction": {
+        "decision": "REOPEN",
+        "target_task_id": "TASK-DRONE",
+        "reason": "当前Item明确提及“恢复此前取消的...建设”，且历史候选TASK-DRONE状态为CANCELLED，符合已关闭任务被明确再次启动的定义。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "TRANSFER_EXPLICIT",
+      "gold": {
+        "decision": "TRANSFER",
+        "target_task_id": "TASK-DATACENTER",
+        "from_department": "智能矿山事业部",
+        "to_department": "研发中心",
+        "transfer_evidence": "数据中心建设任务后续移交研发中心负责",
+        "annotator_note": "原文明示责任部门迁移。"
+      },
+      "prediction": {
+        "decision": "TRANSFER",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "当前 Item 明确陈述数据中心建设任务后续移交研发中心负责，与历史任务目标一致，符合 TRANSFER 定义。",
+        "event_summary": null,
+        "changes": {
+          "department_id": "D-RD",
+          "department": "研发中心",
+          "department_route": "department://研发中心/tasks"
+        },
+        "department_change": {
+          "from_department": "智能矿山事业部",
+          "to_department": "研发中心",
+          "evidence": "数据中心建设任务后续移交研发中心负责"
+        }
+      }
+    },
+    {
+      "sample_id": "REVIEW_TWO_PLAUSIBLE_TARGETS",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "两个历史目标都合理，无法唯一锁定。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "当前 Item 标题为“平台接口联调推进”，历史候选 TASK-PLATFORM-B 描述为“完成数据管理平台接口接入和联调”，TASK-PLATFORM-A 描述为“完成综合管控平台接口联调”。两者均涉及接口联调且项目、部门一致，但无法确定当前 Item 是推进 TASK-PLATFORM-B 还是 TASK-PLATFORM-A，存在多对一歧义，无法安全唯一判断。",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REVIEW_DEPARTMENT_CONFLICT",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "部门冲突但没有移交原文。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "DETERMINISTIC_SAFETY_REVIEW: 部门冲突且没有明确 TRANSFER",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REVIEW_ONE_ITEM_MULTIPLE_TASKS",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "一个 Item 同时触及两个历史 Task。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "当前 Item 同时涉及数据中心施工推进和火灾监测系统招标启动两个独立业务目标，分别对应两个历史候选任务，无法安全地单一映射到其中一个任务，需人工确认拆分或关联方式。",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REVIEW_COMPLETE_AND_NEW_GOAL",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "同时包含旧任务完成和新独立目标，不能单命令处理。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "当前 Item 同时陈述了历史任务（数据中心）的完成状态，又提出了新的独立业务目标（新建独立运维平台），根据最高原则第11条，必须 REVIEW。",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_PHASE",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "一期和二期是可独立验收的不同业务目标，字面高度相似也不能更新一期。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "当前Item为数据中心二期建设，历史候选为一期建设，属于同一项目下的不同独立业务目标（二期 vs 一期），根据原则5需新建任务。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "PROJECT_TASK",
+          "project_entity_id": "P-HSQ2",
+          "project": "红沙泉二矿项目",
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "项目推进",
+          "delivery_group": "新疆交付组",
+          "title": "完成数据中心二期建设",
+          "description": "启动并完成红沙泉二矿数据中心二期建设。",
+          "assignees": [],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_SUBSYSTEM",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "交付动作相同但目标子系统不同。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "当前Item目标为'火灾监测系统'，历史候选为'综合管控平台'，两者业务对象不同，属于新增独立业务目标。",
+        "event_summary": null,
+        "changes": {
+          "item_type": "PROJECT_TASK",
+          "project_entity_id": "P-HSQ2",
+          "project": "红沙泉二矿项目",
+          "department_id": "D-IM",
+          "department": "智能矿山事业部",
+          "department_route": "department://智能矿山事业部/tasks",
+          "work_section": "项目推进",
+          "delivery_group": "新疆交付组",
+          "title": "编制火灾监测系统招标技术方案",
+          "description": "编制红沙泉二矿火灾监测系统招标技术方案。",
+          "assignees": [],
+          "status": "OPEN"
+        },
+        "department_change": null
+      }
+    }
+  ],
+  "audits": [
+    {
+      "sample_id": "CREATE_SAME_PROJECT_DIFFERENT_SYSTEM",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1379,
+        "completion_tokens": 141,
+        "total_tokens": 1520
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CREATE_SAME_ASSIGNEE_DIFFERENT_GOAL",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1405,
+        "completion_tokens": 149,
+        "total_tokens": 1554
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CREATE_NO_HISTORY",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1144,
+        "completion_tokens": 121,
+        "total_tokens": 1265
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CREATE_RESEARCH_TASK",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1365,
+        "completion_tokens": 143,
+        "total_tokens": 1508
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CREATE_NON_PROJECT_WORK",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1345,
+        "completion_tokens": 136,
+        "total_tokens": 1481
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CREATE_SIMILAR_TITLE_DIFFERENT_DELIVERABLE",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1367,
+        "completion_tokens": 154,
+        "total_tokens": 1521
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "PROGRESS_PERCENT",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1593,
+        "completion_tokens": 157,
+        "total_tokens": 1750
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "PROGRESS_WAITING",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1384,
+        "completion_tokens": 157,
+        "total_tokens": 1541
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "PROGRESS_DIFFERENT_WORDING",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1384,
+        "completion_tokens": 127,
+        "total_tokens": 1511
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "PROGRESS_RESEARCH_STAGE",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1381,
+        "completion_tokens": 161,
+        "total_tokens": 1542
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "PROGRESS_NON_PROJECT",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1357,
+        "completion_tokens": 122,
+        "total_tokens": 1479
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "PROGRESS_CHILD_STEP_COMPLETE",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1389,
+        "completion_tokens": 158,
+        "total_tokens": 1547
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "PROGRESS_RECENT_EVENT_LINK",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1380,
+        "completion_tokens": 96,
+        "total_tokens": 1476
+      },
+      "execution_status": "REVIEW_QUEUED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "MODIFY_SCOPE",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1398,
+        "completion_tokens": 167,
+        "total_tokens": 1565
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "MODIFY_ASSIGNEE",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1411,
+        "completion_tokens": 136,
+        "total_tokens": 1547
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "COMPLETE_WHOLE_GOAL",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1390,
+        "completion_tokens": 143,
+        "total_tokens": 1533
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "COMPLETE_ACCEPTED",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1388,
+        "completion_tokens": 153,
+        "total_tokens": 1541
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CANCEL_EXPLICIT",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1385,
+        "completion_tokens": 146,
+        "total_tokens": 1531
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CANCEL_TERMINATE_RESEARCH",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1359,
+        "completion_tokens": 147,
+        "total_tokens": 1506
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "REOPEN_COMPLETED",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1387,
+        "completion_tokens": 134,
+        "total_tokens": 1521
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "REOPEN_CANCELLED",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1391,
+        "completion_tokens": 153,
+        "total_tokens": 1544
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "TRANSFER_EXPLICIT",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1385,
+        "completion_tokens": 186,
+        "total_tokens": 1571
+      },
+      "format_retry": {
+        "model": "Qwen/Qwen3.6-35B-A3B",
+        "usage": {
+          "prompt_tokens": 1447,
+          "completion_tokens": 178,
+          "total_tokens": 1625
+        }
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "REVIEW_TWO_PLAUSIBLE_TARGETS",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1596,
+        "completion_tokens": 140,
+        "total_tokens": 1736
+      },
+      "execution_status": "REVIEW_QUEUED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "REVIEW_DEPARTMENT_CONFLICT",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1365,
+        "completion_tokens": 148,
+        "total_tokens": 1513
+      },
+      "execution_status": "REVIEW_QUEUED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "REVIEW_ONE_ITEM_MULTIPLE_TASKS",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1581,
+        "completion_tokens": 92,
+        "total_tokens": 1673
+      },
+      "execution_status": "REVIEW_QUEUED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "REVIEW_COMPLETE_AND_NEW_GOAL",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1382,
+        "completion_tokens": 88,
+        "total_tokens": 1470
+      },
+      "execution_status": "REVIEW_QUEUED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_PHASE",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1386,
+        "completion_tokens": 143,
+        "total_tokens": 1529
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_SUBSYSTEM",
+      "model": "Qwen/Qwen3.6-35B-A3B",
+      "usage": {
+        "prompt_tokens": 1388,
+        "completion_tokens": 139,
+        "total_tokens": 1527
+      },
+      "execution_status": "APPLIED",
+      "idempotent_replay": true
+    }
+  ]
+}

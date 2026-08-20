@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://meeting.local/schemas/blocks.schema.json",
+  "title": "M1 Structure Segmenter Output",
+  "description": "业务结构 Block。Block 不等于最终 Item，一个 Block 可以包含多个项目。start_char/end_char 是规范化文本坐标，由确定性代码计算，不允许 LLM 猜测。",
+  "type": "object",
+  "required": ["blocks"],
+  "additionalProperties": false,
+  "properties": {
+    "blocks": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/block" }
+    }
+  },
+  "definitions": {
+    "block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "department",
+        "work_section",
+        "delivery_group",
+        "raw_text",
+        "start_char",
+        "end_char",
+        "page_start",
+        "page_end"
+      ],
+      "properties": {
+        "index": { "type": "integer", "minimum": 0 },
+        "department": { "type": ["string", "null"] },
+        "work_section": { "type": ["string", "null"] },
+        "delivery_group": { "type": ["string", "null"] },
+        "raw_text": { "type": "string", "minLength": 1 },
+        "start_char": { "type": "integer", "minimum": 0 },
+        "end_char": { "type": "integer", "minimum": 0 },
+        "page_start": { "type": ["integer", "null"], "minimum": 1 },
+        "page_end": { "type": ["integer", "null"], "minimum": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>煤矿会议智能任务管理</title>
+  <link rel="stylesheet" href="/static/style.css?v=history-view-20260731-2">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+  <div id="app" v-cloak>
+    <header class="header">
+      <h1>煤矿会议智能任务管理</h1>
+      <div class="header-actions">
+        <select v-if="meetings.length" v-model="selectedMeetingId" @change="onMeetingChange" class="header-meeting-select"><option value="">全部会议</option><option v-for="meeting in meetings" :key="meeting.meeting_id + meeting.started_at" :value="meeting.meeting_id">{{ meeting.meeting_date }} {{ meeting.meeting_title || meeting.source_file }}</option></select>
+        <button class="header-import" @click="activeTab = 'import'">导入数据</button>
+        <span class="task-count">当前 {{ taskRows.length }} 项任务</span>
+        <span class="health" :class="{ bad: health !== 'ok' }">服务{{ health === 'ok' ? '正常' : '检查中' }}</span>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="页面导航">
+      <button class="tab" :class="{ active: activeTab === 'tasks' }" @click="activeTab = 'tasks'">任务清单</button>
+      <button class="tab" :class="{ active: activeTab === 'departments' }" @click="activeTab = 'departments'">部门视图</button>
+      <button class="tab" :class="{ active: activeTab === 'meeting' }" @click="activeTab = 'meeting'">会议信息</button>
+      <button class="tab" :class="{ active: activeTab === 'import' }" @click="activeTab = 'import'">导入会议</button>
+      <button class="tab" :class="{ active: activeTab === 'review' }" @click="activeTab = 'review'; loadReviewCandidates()">人工复核</button>
+      <button class="tab" :class="{ active: activeTab === 'events' }" @click="activeTab = 'events'; loadEvents()">操作记录</button>
+    </nav>
+
+    <main class="content">
+      <section v-if="activeTab === 'tasks'">
+        <div class="page-heading">
+          <div>
+            <h2>任务清单</h2>
+            <p>{{ selectedMeeting ? `当前显示「${selectedMeeting.meeting_title || selectedMeeting.source_file}」的任务；` : '' }}按部门与项目归并展示，工作环节仅在详情中展开。</p>
+          </div>
+          <div class="page-actions"><button class="secondary" @click="exportTrainingSamples">导出训练样本</button><button class="primary" @click="newTask">人工新增任务</button><button class="secondary" @click="loadAll">刷新任务</button></div>
+        </div>
+
+        <div class="filters">
+          <input v-model.trim="searchText" @input="resetPage" type="search" placeholder="搜索任务、部门、项目或责任人">
+          <select v-model="taskFilter" @change="loadTasks">
+            <option value="">全部状态</option>
+            <option value="open">待执行</option>
+            <option value="in_progress">进行中</option>
+            <option value="blocked">受阻</option>
+            <option value="completed">已完成</option>
+            <option value="cancelled">已取消</option>
+          </select>
+          <select v-model="departmentFilter" @change="resetPage">
+            <option value="">全部部门</option>
+            <option v-for="department in departments" :key="department" :value="department">{{ department }}</option>
+          </select>
+          <select v-model="projectFilter" @change="resetPage">
+            <option value="">全部项目</option>
+            <option v-for="project in projects" :key="project" :value="project">{{ project }}</option>
+          </select>
+          <label class="check"><input v-model="includeDeleted" type="checkbox" @change="loadTasks">含软删除</label>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>编号</th><th>部门</th><th>类别</th><th>任务</th><th>责任人</th><th>项目</th><th>优先级</th><th>状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(task, index) in pagedTaskRows" :key="task.task_id" class="task-row">
+                <td class="number">{{ (currentPage - 1) * pageSize + index + 1 }}</td>
+                <td><button v-if="task.department" class="filter-link" @click="filterByDepartment(task.department)">{{ task.department }}</button><span v-else>—</span></td>
+                <td><span class="category" title="界面分组标签，不是模型新增事实">{{ task.category }}</span></td>
+                <td class="task-cell">
+                  <button class="task-title" @click.stop="openTask(task.task_id)">{{ task.title }}</button>
+                  <span v-if="task.work_items && task.work_items.length" class="task-subline">含 {{ task.work_items.length }} 个工作环节</span>
+                </td>
+                <td>{{ task.assignee_raw || '—' }}</td>
+                <td><button v-if="task.project" class="filter-link project" @click="filterByProject(task.project)">{{ task.project }}</button><span v-else>—</span></td>
+                <td><span :class="'badge priority-' + priorityClass(task.priority)">{{ task.priority || '未标注' }}</span></td>
+                <td><span :class="'badge status-' + task.status">{{ taskStatusLabel(task) }}</span></td>
+              </tr>
+              <tr v-if="!taskRows.length"><td colspan="8" class="empty">当前会议和筛选条件下没有任务。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-if="taskRows.length" class="pagination">
+          <span>共 {{ taskRows.length }} 项</span>
+          <label>每页<select v-model.number="pageSize" @change="resetPage"><option :value="10">10</option><option :value="20">20</option><option :value="50">50</option></select>项</label>
+          <button class="secondary" :disabled="currentPage === 1" @click="currentPage--">上一页</button>
+          <span>第 {{ currentPage }} / {{ totalPages }} 页</span>
+          <button class="secondary" :disabled="currentPage === totalPages" @click="currentPage++">下一页</button>
+        </div>
+      </section>
+
+      <section v-else-if="activeTab === 'departments'">
+        <div class="page-heading">
+          <div><h2>部门视图</h2><p>按部门展开项目级任务，便于班前会或调度会逐项跟进。</p></div>
+        </div>
+        <article v-for="group in departmentGroups" :key="group.name" class="department-card">
+          <header><h3>{{ group.name }}</h3><span>{{ group.tasks.length }} 项</span></header>
+          <button v-for="task in group.tasks" :key="task.task_id" class="department-task" @click="openTask(task.task_id)">
+            <span class="department-task-main"><strong>{{ task.title }}</strong><small>{{ task.project || '未标注项目' }} · {{ task.work_items.length }} 个工作环节</small></span>
+            <span :class="'badge status-' + task.status">{{ taskStatusLabel(task) }}</span>
+          </button>
+        </article>
+        <p v-if="!departmentGroups.length" class="empty">当前筛选下没有任务。</p>
+      </section>
+
+      <section v-else-if="activeTab === 'meeting'" class="meeting-page">
+        <template v-if="selectedMeeting">
+          <article class="panel meeting-basic-card"><h2>会议基本信息</h2><div class="meeting-basic-grid"><div><span>日期</span><b>{{ selectedMeeting.meeting_date }}</b></div><div><span>时间</span><b>{{ selectedMeeting.meeting_time || '未填写' }}</b></div><div><span>会议题目</span><b>{{ selectedMeeting.meeting_title || selectedMeeting.source_file }}</b></div><div><span>会议类型</span><b>{{ selectedMeeting.meeting_type }}</b></div></div><div class="attendees"><span>参会人员：</span><template v-if="attendeeList(selectedMeeting.attendees).length"><i v-for="person in attendeeList(selectedMeeting.attendees)" :key="person">{{ person }}</i></template><b v-else>未填写</b></div></article>
+          <article class="panel meeting-requirements-card"><h2>领导要求 / 下一步工作安排</h2><ol v-if="requirementList(selectedMeeting.leader_requirements).length"><li v-for="(requirement, index) in requirementList(selectedMeeting.leader_requirements)" :key="index">{{ requirement }}</li></ol><p v-else class="muted">该会议尚未填写领导要求。</p></article>
+        </template>
+        <p v-else class="empty panel">暂无会议记录，请先导入会议数据。</p>
+      </section>
+
+      <section v-else-if="activeTab === 'import'">
+        <div class="page-heading"><div><h2>导入会议材料</h2><p>处理过程保留 M1、M2、M6 的结果与证据；完成后自动刷新任务清单。</p></div></div>
+        <div class="panel upload-panel">
+          <form @submit.prevent="startRun">
+            <label><span>会议文件</span><input ref="fileInput" type="file" accept=".pdf,.docx" required></label>
+            <label><span>会议题目</span><input v-model.trim="form.meetingTitle" placeholder="例如：信息公司周例会"></label>
+            <label><span>会议日期</span><input v-model="form.meetingDate" type="date" required></label>
+            <label><span>会议时间</span><input v-model.trim="form.meetingTime" placeholder="例如：09:00–10:30"></label>
+            <label><span>会议类型</span><select v-model="form.meetingType"><option>调度会</option><option>班前会</option><option>早调会</option><option>生产经营会</option></select></label>
+            <label><span>参会人员</span><input v-model.trim="form.attendees" placeholder="姓名、部门或职务"></label>
+            <label class="upload-textarea"><span>领导要求</span><textarea v-model.trim="form.leaderRequirements" rows="2" placeholder="填写会议明确提出的领导要求"></textarea></label>
+            <button class="primary" :disabled="busy">{{ busy ? '处理中…' : '开始自动处理' }}</button>
+          </form>
+          <p v-if="message" class="message" :class="{ error: messageIsError }">{{ message }}</p>
+        </div>
+
+        <div v-if="run" class="panel progress-panel">
+          <div class="section-title"><div><h3>运行进度</h3><p>{{ run.run_id }}</p></div><span class="badge status-open">{{ statusLabel(run.status) }}</span></div>
+          <div class="pipeline"><div v-for="stage in stages" :key="stage.key" class="stage" :class="stageClass(stage.key)"><span>{{ stage.index }}</span><strong>{{ stage.label }}</strong></div></div>
+          <div v-if="summary" class="metrics"><article><span>M1 片段</span><strong>{{ summary.m1_count || 0 }}</strong></article><article><span>M2 分类</span><strong>{{ summary.m2_count || 0 }}</strong></article><article><span>成功落库</span><strong>{{ summary.applied_count || 0 }}</strong></article><article><span>重复</span><strong>{{ summary.noop_count || 0 }}</strong></article><article><span>失败</span><strong>{{ summary.failed_count || 0 }}</strong></article></div>
+        </div>
+      </section>
+
+      <section v-else-if="activeTab === 'review'">
+        <div class="page-heading"><div><h2>人工复核队列</h2><p>低置信度、缺字段或状态异常的候选不会自动创建任务；确认后才会按原文证据入库。</p></div><button class="secondary" @click="loadReviewCandidates">刷新队列</button></div>
+        <div v-if="reviewMessage" class="message" :class="{ error: reviewMessageIsError }">{{ reviewMessage }}</div>
+        <article v-for="item in reviewCandidates" :key="item.candidate_id" class="panel review-card">
+          <header><div><strong>{{ item.candidate.title || '待人工命名的任务候选' }}</strong><small>{{ reviewReason(item.reason_code) }} · {{ confidenceLabel(item.confidence_score, item.confidence_source) }}</small></div><span class="category">待复核</span></header>
+          <blockquote>{{ item.candidate.evidence || item.candidate.source_text || '未保留原文证据' }}</blockquote>
+          <div class="review-form">
+            <label><span>任务标题</span><input v-model.trim="reviewDraft(item).title" placeholder="确认后必填"></label>
+            <label><span>负责人</span><input v-model.trim="reviewDraft(item).assignee_raw" placeholder="可留空"></label>
+            <label><span>期限</span><input v-model.trim="reviewDraft(item).deadline_raw" placeholder="可留空"></label>
+            <label><span>部门</span><input v-model.trim="reviewDraft(item).department" placeholder="可留空"></label>
+            <label><span>项目</span><input v-model.trim="reviewDraft(item).project" placeholder="可留空"></label>
+            <label><span>优先级</span><select v-model="reviewDraft(item).priority"><option value="">未标注</option><option>高</option><option>中</option><option>低</option></select></label>
+            <label><span>初始状态</span><select v-model="reviewDraft(item).status"><option value="open">待执行</option><option value="in_progress">进行中</option></select></label>
+            <label class="review-description"><span>任务说明</span><textarea v-model.trim="reviewDraft(item).description" rows="2"></textarea></label>
+          </div>
+          <footer><button class="secondary" @click="rejectReview(item)">拒绝</button><button class="secondary" @click="saveReview(item)">保存复核修改</button><button class="primary" @click="approveReview(item)">确认并添加任务</button></footer>
+        </article>
+        <p v-if="!reviewCandidates.length" class="empty panel">暂无待人工复核的候选。新导入会议后，低置信度或不完整候选会自动出现在这里。</p>
+      </section>
+
+      <section v-else>
+        <div class="page-heading"><div><h2>本次数据库操作</h2><p>所有新增、更新、软删除、重复和失败都保留原文证据。</p></div><button class="secondary" @click="loadEvents">刷新</button></div>
+        <div class="table-wrap event-table">
+          <table><thead><tr><th>动作</th><th>任务</th><th>结果</th><th>原文证据</th><th>时间</th></tr></thead>
+            <tbody><tr v-for="event in events" :key="event.event_id"><td>{{ event.db_action }}</td><td>{{ event.task_id || '—' }}</td><td><span class="category">{{ event.execution_status }}</span></td><td class="evidence">{{ event.evidence_text }}</td><td>{{ formatTime(event.created_at) }}</td></tr><tr v-if="!events.length"><td colspan="5" class="empty">完成一次导入后，这里显示本次操作记录。</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div v-if="selectedTask" class="modal-overlay" @click.self="closeTask">
+      <article class="modal" role="dialog" aria-modal="true" aria-label="任务详情">
+        <button class="modal-close" @click="closeTask" aria-label="关闭">×</button>
+        <div class="modal-heading"><div><p>{{ selectedTask.department || '未标注部门' }} · {{ selectedTask.project || '未标注项目' }}</p><h2>{{ selectedTask.title }}</h2></div><span :class="'badge status-' + selectedTask.status">{{ taskStatusLabel(selectedTask) }}</span></div>
+        <dl class="detail-grid"><div><dt>类别</dt><dd>{{ selectedTask.category }}</dd></div><div><dt>优先级</dt><dd>{{ selectedTask.priority || '未标注' }}</dd></div><div><dt>责任人</dt><dd>{{ selectedTask.assignee_raw || '—' }}</dd></div><div><dt>截止时间原文</dt><dd>{{ selectedTask.deadline_raw || '—' }}</dd></div></dl>
+        <h3>任务说明</h3><p class="task-description">{{ selectedTask.taskDescription || '—' }}</p>
+        <template v-if="selectedTask.work_items && selectedTask.work_items.length"><h3>工作环节</h3><ol class="work-items"><li v-for="item in selectedTask.work_items" :key="item">{{ item }}</li></ol></template>
+        <h3>原文证据</h3><blockquote>{{ selectedTask.evidence_text || '—' }}</blockquote>
+        <template v-if="taskMeeting"><h3>提出会议</h3><dl class="detail-grid"><div><dt>会议题目</dt><dd>{{ taskMeeting.meeting_title || taskMeeting.source_file }}</dd></div><div><dt>会议日期/时间</dt><dd>{{ taskMeeting.meeting_date }} {{ taskMeeting.meeting_time || '' }}</dd></div><div><dt>参会人员</dt><dd>{{ taskMeeting.attendees || '未填写' }}</dd></div><div><dt>领导要求</dt><dd>{{ taskMeeting.leader_requirements || '未填写' }}</dd></div></dl></template>
+        <div class="modal-actions"><button class="secondary" @click="toggleTaskHistory">{{ historyOpen ? '收起历史任务' : '查看历史任务' }}</button><button class="secondary" @click="editTask">编辑任务</button><button class="danger" @click="deleteSelectedTask">软删除任务</button></div>
+        <section v-if="historyOpen" class="history-section">
+          <div class="history-heading"><h3>历史任务</h3><span>{{ taskHistory.length }} 次发布</span></div>
+          <p v-if="historyLoading" class="muted">正在加载历史任务…</p>
+          <div v-else class="history-timeline">
+            <article v-for="item in taskHistory" :key="item.event_id" class="history-item">
+              <header><div><time>{{ historyPublishedAt(item) }}</time><span>{{ item.meeting?.meeting_title || item.meeting?.source_file || '独立任务' }}</span></div><b>{{ item.is_latest_release ? '最新发布' : historyActionLabel(item.db_action) }}</b></header>
+              <h4>{{ item.title || '未命名任务' }}</h4>
+              <div class="history-block"><strong>任务说明</strong><p>{{ taskBody(item.description) || '—' }}</p></div>
+              <div class="history-block"><strong>工作环节</strong><ol v-if="item.work_items.length"><li v-for="workItem in item.work_items" :key="workItem">{{ workItem }}</li></ol><p v-else>—</p></div>
+              <div class="history-block"><strong>原文证据</strong><blockquote>{{ item.evidence_text || '—' }}</blockquote></div>
+            </article>
+            <p v-if="!taskHistory.length" class="muted">暂无历史发布记录。</p>
+          </div>
+        </section>
+        <h3>变更历史</h3><div class="event-list"><article v-for="event in taskEvents" :key="event.event_id"><div><strong>{{ event.db_action }}</strong><span class="category">{{ event.execution_status }}</span></div><p>{{ event.evidence_text }}</p><small>{{ formatTime(event.created_at) }}</small></article><p v-if="!taskEvents.length" class="muted">暂无变更记录。</p></div>
+      </article>
+    </div>
+    <div v-if="editingTask" class="modal-overlay" @click.self="closeTaskEditor">
+      <article class="modal task-editor" role="dialog" aria-modal="true" aria-label="人工编辑任务">
+        <button class="modal-close" @click="closeTaskEditor" aria-label="关闭">×</button>
+        <h2>{{ taskDraft.task_id ? '编辑任务' : '人工新增任务' }}</h2>
+        <p class="muted">可修改部门、项目、状态、任务和责任人；原文证据一经入库不可覆盖，导出时仅使用较长证据。</p>
+        <div class="editor-grid">
+          <label><span>任务标题 *</span><input v-model.trim="taskDraft.title"></label>
+          <label><span>归属会议</span><select v-model="taskDraft.source_meeting_id"><option value="">手工独立任务</option><option v-for="meeting in meetings" :key="meeting.meeting_id" :value="meeting.meeting_id">{{ meeting.meeting_date }} {{ meeting.meeting_title || meeting.source_file }}</option></select></label>
+          <label><span>部门</span><input v-model.trim="taskDraft.department"></label>
+          <label><span>项目</span><input v-model.trim="taskDraft.project"></label>
+          <label><span>责任人</span><input v-model.trim="taskDraft.assignee_raw"></label>
+          <label><span>状态</span><select v-model="taskDraft.status"><option value="open">待执行</option><option value="in_progress">进行中</option><option value="blocked">受阻</option><option value="completed">已完成</option><option value="cancelled">已取消</option></select></label>
+          <label><span>优先级</span><select v-model="taskDraft.priority"><option value="">未标注</option><option>高</option><option>中</option><option>低</option></select></label>
+          <label><span>期限</span><input v-model.trim="taskDraft.deadline_raw"></label>
+          <label class="editor-wide"><span>任务说明</span><textarea v-model.trim="taskDraft.description" rows="3"></textarea></label>
+          <label v-if="!taskDraft.task_id" class="editor-wide"><span>原文证据 *</span><textarea v-model.trim="taskDraft.evidence_text" rows="5" placeholder="粘贴与此任务对应的完整原文证据；训练样本导出要求至少 80 字"></textarea></label>
+        </div>
+        <p v-if="taskEditorMessage" class="message" :class="{ error: taskEditorMessageIsError }">{{ taskEditorMessage }}</p>
+        <footer class="modal-actions"><button class="secondary" @click="closeTaskEditor">取消</button><button class="primary" @click="saveTask">保存</button></footer>
+      </article>
+    </div>
+  </div>
+  <script src="/static/app.js?v=history-view-20260731-2"></script>
+</body>
+</html>

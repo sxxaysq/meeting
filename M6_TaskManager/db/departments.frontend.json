@@ -1,0 +1,19 @@
+[
+  {"department_id":"DP001","name":"人力资源部","route":"preview://department/DP001","aliases":[]},
+  {"department_id":"DP002","name":"人工智能研究院（科技发展中心）","route":"preview://department/DP002","aliases":[]},
+  {"department_id":"DP003","name":"党建宣传部","route":"preview://department/DP003","aliases":[]},
+  {"department_id":"DP004","name":"北京分公司（信息网络部）","route":"preview://department/DP004","aliases":[]},
+  {"department_id":"DP005","name":"团支部","route":"preview://department/DP005","aliases":[]},
+  {"department_id":"DP006","name":"安全生产部","route":"preview://department/DP006","aliases":[]},
+  {"department_id":"DP007","name":"工会","route":"preview://department/DP007","aliases":[]},
+  {"department_id":"DP008","name":"市场经营部","route":"preview://department/DP008","aliases":[]},
+  {"department_id":"DP009","name":"数字化技术服务事业部","route":"preview://department/DP009","aliases":[]},
+  {"department_id":"DP010","name":"数字化技术服务事业部售前项目跟进","route":"preview://department/DP010","aliases":[]},
+  {"department_id":"DP011","name":"数字咨询规划研究院","route":"preview://department/DP011","aliases":[]},
+  {"department_id":"DP012","name":"数维智能事业部","route":"preview://department/DP012","aliases":[]},
+  {"department_id":"DP013","name":"智能制造部","route":"preview://department/DP013","aliases":[]},
+  {"department_id":"DP014","name":"智能矿山事业部","route":"preview://department/DP014","aliases":[]},
+  {"department_id":"DP015","name":"纪检专干","route":"preview://department/DP015","aliases":[]},
+  {"department_id":"DP016","name":"综合办公室（董事会办公室）","route":"preview://department/DP016","aliases":[]},
+  {"department_id":"DP017","name":"资产财务部（业财数字中心）","route":"preview://department/DP017","aliases":[]}
+]

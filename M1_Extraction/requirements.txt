@@ -1,0 +1,11 @@
+# M1_Extraction 运行依赖
+PyMuPDF>=1.24          # PDF 逐页读取，保留页字符区间
+python-docx>=1.1       # DOCX 读取
+jsonschema>=4.0        # 严格 Schema 校验（缺失时回退到内置等价校验）
+PyYAML>=6.0            # 生成 Dify DSL
+
+# 测试
+pytest>=7.0
+
+# 说明：模型调用只用标准库 urllib，不依赖 openai SDK，
+# 以便同一份代码可以直接搬进 Dify Code 节点。

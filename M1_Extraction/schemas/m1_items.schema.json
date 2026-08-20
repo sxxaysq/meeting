@@ -1,0 +1,77 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://meeting.local/schemas/m1_items.schema.json",
+  "title": "M1 Meeting Item Extraction Output",
+  "description": "M1 唯一合法输出。字段固定为 9 个，禁止出现 confidence / priority / project_id / task_id / CREATE / UPDATE / reasoning / merge_group 等业务字段。",
+  "type": "object",
+  "required": ["items"],
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/item" }
+    }
+  },
+  "definitions": {
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "department",
+        "work_section",
+        "delivery_group",
+        "project",
+        "item_type",
+        "assignee",
+        "title",
+        "content",
+        "evidence"
+      ],
+      "properties": {
+        "department": { "$ref": "#/definitions/nullableString" },
+        "work_section": { "$ref": "#/definitions/nullableString" },
+        "delivery_group": { "$ref": "#/definitions/nullableString" },
+        "project": { "$ref": "#/definitions/nullableString" },
+        "item_type": {
+          "type": "string",
+          "enum": [
+            "PROJECT_TASK",
+            "RESEARCH_TASK",
+            "NON_PROJECT_WORK",
+            "NON_TASK_ITEM"
+          ]
+        },
+        "assignee": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "content": { "type": "string", "minLength": 1 },
+        "evidence": { "$ref": "#/definitions/evidence" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "page_start",
+        "page_end",
+        "start_char",
+        "end_char",
+        "exact_match"
+      ],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "page_start": { "type": ["integer", "null"], "minimum": 1 },
+        "page_end": { "type": ["integer", "null"], "minimum": 1 },
+        "start_char": { "type": "integer", "minimum": 0 },
+        "end_char": { "type": "integer", "minimum": 0 },
+        "exact_match": { "type": "boolean" }
+      }
+    }
+  }
+}
