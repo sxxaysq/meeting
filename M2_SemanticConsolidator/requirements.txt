@@ -1,0 +1,3 @@
+# M2 只用标准库跑主链路（urllib + sqlite3 + json），下面两个是可选加强项。
+jsonschema>=4.0      # Schema 双路校验的第二条路；缺了会退回内置校验
+pytest>=7.0          # 测试

@@ -1,0 +1,2474 @@
+{
+  "items": [
+    {
+      "department": "智能矿山事业部",
+      "work_section": "经营工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完善储煤配煤功能资料并编制实施方案",
+      "content": "完善储煤和配煤功能资料，编制实施方案提交给矿方。",
+      "evidence": {
+        "text": "（1）完善储煤和配煤功能资料，编制实施方案提交给矿方。",
+        "page_start": 1,
+        "page_end": 1,
+        "start_char": 251,
+        "end_char": 278,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "经营工作",
+      "delivery_group": null,
+      "project": "鹰骏项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "沟通鹰骏项目进展并配合矿方工作",
+      "content": "前往维华公司沟通鹰骏项目进展，并配合矿方完成相关工作。",
+      "evidence": {
+        "text": "（2）前往维华公司沟通鹰骏项目进展，并配合矿方完成相关工作。",
+        "page_start": 1,
+        "page_end": 1,
+        "start_char": 279,
+        "end_char": 309,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "经营工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "新疆能源石头梅一号煤矿洗煤厂交流与调研",
+      "content": "前往新疆能源石头梅一号煤矿洗煤厂进行交流与现场调研，出具初版方案。",
+      "evidence": {
+        "text": "（3）前往新疆能源石头梅一号煤矿洗煤厂进行交流与现场调研，出具初版方案。",
+        "page_start": 1,
+        "page_end": 1,
+        "start_char": 310,
+        "end_char": 346,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "项目推进",
+      "delivery_group": "新疆交付组",
+      "project": "红沙泉项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "完善综合管控平台及推进多系统功能调试",
+      "content": "持续完善综合管控平台，细化生产主题页面开发，优化灾害平台、环境监测页面功能设计；推进智能视频、全景系统、智能运输集群、地测采系统、无人机综合管控平台系统、人员定位、环境、平整度、火灾监测系统功能调试，完善设备联动、数据展示、消息推送及接口开发等配套工作。",
+      "evidence": {
+        "text": "（1）新疆交付组红沙泉项目：持续完善综合管控平台，细化生产主题页面开发，优化灾害平台、环境监测页面功能设计；推进智能视频、全景系统、智能运输集群、地测采系统、无人机综合管控平台系统、人员定位、环境、平整度、火灾监测系统功能调试，完善设备联动、数据展示、消息推送及接口开发等配套工作。",
+        "page_start": 2,
+        "page_end": 2,
+        "start_char": 354,
+        "end_char": 495,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "项目推进",
+      "delivery_group": "宁夏交付组",
+      "project": "赵石畔项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "智能钻场系统调试及项目资料整理",
+      "content": "智能钻场系统调试；项目工程资料整理、存在问题对接。",
+      "evidence": {
+        "text": "（2）宁夏交付组赵石畔项目：智能钻场系统调试；项目工程资料整理、存在问题对接。",
+        "page_start": 2,
+        "page_end": 2,
+        "start_char": 496,
+        "end_char": 535,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "项目推进",
+      "delivery_group": "宁夏交付组",
+      "project": "宁煤智能化洗煤厂项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "洗煤厂设备安装及推进招标采购",
+      "content": "安装照明及人员定位基站和网关（剩余部分）；水洗车间主要路线电缆桥架铺设（剩余部分）；温振布线、配管；沉淀水池和泵房安装人员定位网关基站，推进子项招标采购事宜。",
+      "evidence": {
+        "text": "宁煤智能化洗煤厂项目：安装照明及人员定位基站和网关（剩余部分）；水洗车间主要路线电缆桥架铺设（剩余部分）；温振布线、配管；沉淀水池和泵房安装人员定位网关基站，推进子项招标采购事宜。",
+        "page_start": 2,
+        "page_end": 2,
+        "start_char": 535,
+        "end_char": 625,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "项目推进",
+      "delivery_group": "鄂尔多斯交付组",
+      "project": "大海则项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "完成工程量盘点及推进回款",
+      "content": "完成工程量盘点表签字，推进挂账回款事宜。",
+      "evidence": {
+        "text": "（3）鄂尔多斯交付组大海则项目：完成工程量盘点表签字，推进挂账回款事宜。",
+        "page_start": 2,
+        "page_end": 2,
+        "start_char": 626,
+        "end_char": 662,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "项目推进",
+      "delivery_group": "鄂尔多斯交付组",
+      "project": "霍洛湾项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "推进付款审批及回款事宜",
+      "content": "紧盯付款线上审批流，推进1414 万元回款事宜。",
+      "evidence": {
+        "text": "霍洛湾项目：紧盯付款线上审批流，推进1414 万元回款事宜。",
+        "page_start": 2,
+        "page_end": 2,
+        "start_char": 662,
+        "end_char": 692,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "项目推进",
+      "delivery_group": "榆林交付组",
+      "project": "423 项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "开展测试、验收及资料归档",
+      "content": "继续开展测试并出具产能核定报告；提报国能进行项目验收；项目资料陆续归档，提报智能矿山杂志的露天煤矿智能化成果资料。",
+      "evidence": {
+        "text": "（4）榆林交付组423 项目：继续开展测试并出具产能核定报告；提报国能进行项目验收；项目资料陆续归档，提报智能矿山杂志的露天煤矿智能化成果资料。",
+        "page_start": 2,
+        "page_end": 2,
+        "start_char": 693,
+        "end_char": 765,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能矿山事业部",
+      "work_section": "项目推进",
+      "delivery_group": "榆林交付组",
+      "project": "大柳塔项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "提交归档资料及跟进罚款处置",
+      "content": "对接业主单位提交归档资料，跟进对接业主单位，跟进项目延期罚款处置事项，确定罚款额度。",
+      "evidence": {
+        "text": "大柳塔项目：对接业主单位提交归档资料，跟进对接业主单位，跟进项目延期罚款处置事项，确定罚款额度。",
+        "page_start": 3,
+        "page_end": 3,
+        "start_char": 765,
+        "end_char": 813,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团总部及子企业",
+      "delivery_group": null,
+      "project": "集团财务共享项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "闫晓文",
+        "刘沛明"
+      ],
+      "title": "集团财务共享项目合同审核与采购招标",
+      "content": "与集团合同审核修改；采购招标。",
+      "evidence": {
+        "text": "（1）集团总部：集团财务共享项目（闫晓文、刘沛明）：与集团合同审核修改；采购招标。",
+        "page_start": 3,
+        "page_end": 3,
+        "start_char": 849,
+        "end_char": 890,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团总部及子企业",
+      "delivery_group": null,
+      "project": "中国煤科矿用装备质量溯源管理平台项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "葛云贵"
+      ],
+      "title": "中国煤科矿用装备质量溯源管理平台项目商务流程跟踪",
+      "content": "跟踪商务流程，推动项目单一来源谈判。",
+      "evidence": {
+        "text": "中国煤科矿用装备质量溯源管理平台项目（葛云贵）：跟踪商务流程，推动项目单一来源谈判。",
+        "page_start": 3,
+        "page_end": 3,
+        "start_char": 890,
+        "end_char": 932,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团总部及子企业",
+      "delivery_group": null,
+      "project": "高质量数据集数据标注建设项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "沈策"
+      ],
+      "title": "高质量数据集数据标注建设项目数据集梳理与流程搭建",
+      "content": "分设备类型查找和梳理故障数据集，支架阻力场景初步流程化搭建。",
+      "evidence": {
+        "text": "（2）煤科总院（沈策）：高质量数据集数据标注建设项目（沈策）：分设备类型查找和梳理故障数据集，支架阻力场景初步流程化搭建。",
+        "page_start": 3,
+        "page_end": 3,
+        "start_char": 933,
+        "end_char": 994,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团总部及子企业",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [
+        "张晓娟"
+      ],
+      "title": "西安研究院日常沟通",
+      "content": "保持日常沟通。",
+      "evidence": {
+        "text": "（3）西安研究院（张晓娟）：保持日常沟通。",
+        "page_start": 3,
+        "page_end": 3,
+        "start_char": 995,
+        "end_char": 1016,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团总部及子企业",
+      "delivery_group": null,
+      "project": "煤矿复合灾害监测预警系统项目（二期）",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "王超"
+      ],
+      "title": "煤矿复合灾害监测预警系统项目试点跟进与优化整改",
+      "content": "持续跟进各试点煤矿试运行状态，针对瓦斯抽采、探放水系统适配偏差、数据异常等现场问题逐项优化整改。",
+      "evidence": {
+        "text": "煤矿复合灾害监测预警系统项目（二期）（王超）：持续跟进各试点煤矿试运行状态，针对瓦斯抽采、探放水系统适配偏差、数据异常等现场问题逐项优化整改。",
+        "page_start": 3,
+        "page_end": 3,
+        "start_char": 1016,
+        "end_char": 1087,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团总部及子企业",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [
+        "沈策"
+      ],
+      "title": "安标国家中心运维合同优化",
+      "content": "优化全生命周期系统运维合同。",
+      "evidence": {
+        "text": "（4）安标国家中心（沈策）：优化全生命周期系统运维合同。",
+        "page_start": 3,
+        "page_end": 3,
+        "start_char": 1088,
+        "end_char": 1116,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团总部及子企业",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [
+        "周磊"
+      ],
+      "title": "科工装备集团规划方案撰写与售前运维工作",
+      "content": "完成第三版总体建设规划方案撰写并汇报；售前方面，梳理工程管理系统厂商功能对照表、了解报价并撰写议案，完成档案管理方案优化完善，跟进智能选型系统功能问题，编写数据标准建设方案，启动高质量数据集建设方案编制，梳理招采业务流程和审批表单并设计原型、开展原型交流；运维方面，持续开展飞书日常运维并推进相关系统开发。",
+      "evidence": {
+        "text": "（5）科工装备集团（周磊）：完成第三版总体建设规划方案撰写并汇报；售前方面，梳理工程管理系统厂商功能对照表、了解报价并撰写议案，完成档案管理方案优化完善，跟进智能选型系统功能问题，编写数据标准建设方案，启动高质量数据集建设方案编制，梳理招采业务流程和审批表单并设计原型、开展原型交流；运维方面，持续开展飞书日常运维并推进相关系统开发。",
+        "page_start": 3,
+        "page_end": 4,
+        "start_char": 1117,
+        "end_char": 1284,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "集团外企业",
+      "delivery_group": null,
+      "project": "宁煤公司",
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [
+        "宋威男"
+      ],
+      "title": "宁煤公司方案补充调研及报价汇报",
+      "content": "方案补充新增调研情况，现场进行报价及增补方案相关汇报。",
+      "evidence": {
+        "text": "（1）宁煤公司（宋威男）：方案补充新增调研情况，现场进行报价及增补方案相关汇报。",
+        "page_start": 4,
+        "page_end": 4,
+        "start_char": 1293,
+        "end_char": 1333,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "2024 年度自主可控建设项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "2024年度自主可控建设项目完成签字及终验",
+      "content": "完成签字及终验工作。",
+      "evidence": {
+        "text": "一是2024 年度自主可控建设项目：完成签字及终验工作。",
+        "page_start": 4,
+        "page_end": 4,
+        "start_char": 1353,
+        "end_char": 1381,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "统一认证&零信任平台项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "沈策"
+      ],
+      "title": "统一认证&零信任平台项目扩大试运行覆盖范围",
+      "content": "持续扩大零信任试运行覆盖范围，稳步推进各类应用系统集成相关工作。",
+      "evidence": {
+        "text": "二是统一认证&零信任平台项目（沈策）：持续扩大零信任试运行覆盖范围，稳步推进各类应用系统集成相关工作。",
+        "page_start": 4,
+        "page_end": 4,
+        "start_char": 1381,
+        "end_char": 1432,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "集团公司电子签章项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "尤梦雅"
+      ],
+      "title": "集团公司电子签章项目验收",
+      "content": "预计周五下午进行验收会。",
+      "evidence": {
+        "text": "三是集团公司电子签章项目（尤梦雅）：预计周五下午进行验收会。",
+        "page_start": 4,
+        "page_end": 4,
+        "start_char": 1432,
+        "end_char": 1462,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "改革平台二期项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "杜广维"
+      ],
+      "title": "改革平台二期项目模块报表开发",
+      "content": "完成改革示范企业、基层联系点模块报表开发。",
+      "evidence": {
+        "text": "四是改革平台二期项目（杜广维）：完成改革示范企业、基层联系点模块报表开发。",
+        "page_start": 4,
+        "page_end": 4,
+        "start_char": 1462,
+        "end_char": 1499,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "统一数据平台升级项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "易超"
+      ],
+      "title": "统一数据平台升级项目数据采集集成与进度汇报",
+      "content": "沟通科研系统数据采集范围，集成西安院经营指标数据，测试常州院接口采集，向生产技术部汇报项目进度。",
+      "evidence": {
+        "text": "五是统一数据平台升级项目（易超）：沟通科研系统数据采集范围，集成西安院经营指标数据，测试常州院接口采集，向生产技术部汇报项目进度。",
+        "page_start": 4,
+        "page_end": 4,
+        "start_char": 1499,
+        "end_char": 1564,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "2025 年度自主可控建设项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "2025年度自主可控建设项目资产报送、接口联调及安全整改",
+      "content": "完成资产系统产权登记模块国资委报送测试相关工作，开展主数据模块与NCC 接口联调测试并协调用友做好配合、处置各类对接问题；在存货、应收、投资、改革发展模块漏洞整改完毕后组织安全复测并闭环剩余整改事项，同时持续推进三重一大系统信创升级。",
+      "evidence": {
+        "text": "六是2025 年度自主可控建设项目：完成资产系统产权登记模块国资委报送测试相关工作，开展主数据模块与NCC 接口联调测试并协调用友做好配合、处置各类对接问题；在存货、应收、投资、改革发展模块漏洞整改完毕后组织安全复测并闭环剩余整改事项，同时持续推进三重一大系统信创升级。",
+        "page_start": 4,
+        "page_end": 4,
+        "start_char": 1564,
+        "end_char": 1699,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "煤科总院智慧楼宇项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "周磊",
+        "陈靖文"
+      ],
+      "title": "煤科总院智慧楼宇项目试运行优化及硬件运维",
+      "content": "配合业主单位和物业单位进行试运行，并根据试运行情况优化软件；现场硬件的运行维护。",
+      "evidence": {
+        "text": "二是煤科总院智慧楼宇项目（周磊+陈靖文）：配合业主单位和物业单位进行试运行，并根据试运行情况优化软件；现场硬件的运行维护。",
+        "page_start": 5,
+        "page_end": 5,
+        "start_char": 1726,
+        "end_char": 1787,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "CRM 二期项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "尤梦雅"
+      ],
+      "title": "CRM二期项目开发对接、设计及培训",
+      "content": "开发工作对接；PPT 及详细功能设计确认；全员组织培训。",
+      "evidence": {
+        "text": "一是CRM 二期项目（尤梦雅）：开发工作对接；PPT 及详细功能设计确认；全员组织培训。",
+        "page_start": 5,
+        "page_end": 5,
+        "start_char": 1796,
+        "end_char": 1840,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "数据中台项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "李扬"
+      ],
+      "title": "数据中台项目AI功能开发及数据上报",
+      "content": "完成AI 数据查询v1.0 功能开发，完成集团数据上报数据模型整理，自动报送数据查询。",
+      "evidence": {
+        "text": "二是数据中台项目（李扬）：完成AI 数据查询v1.0 功能开发，完成集团数据上报数据模型整理，自动报送数据查询。",
+        "page_start": 5,
+        "page_end": 5,
+        "start_char": 1840,
+        "end_char": 1896,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "煤矿复合灾害监测预警系统项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "王超"
+      ],
+      "title": "煤矿复合灾害监测预警系统运维保障",
+      "content": "持续推进系统运维保障，确保系统稳定运行。",
+      "evidence": {
+        "text": "三是煤矿复合灾害监测预警系统项目（王超）：持续推进系统运维保障，确保系统稳定运行。",
+        "page_start": 5,
+        "page_end": 5,
+        "start_char": 1896,
+        "end_char": 1937,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "ERP 项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "闫晓文"
+      ],
+      "title": "ERP项目薪资优化、财务核对及系统调试",
+      "content": "下周将优化两家子公司薪资方案，持续跟进财务数据核对与税务落地，调试生产系统功能，推进链条基础数据录入及各类系统问题整改工作。",
+      "evidence": {
+        "text": "一是ERP 项目（闫晓文）：下周将优化两家子公司薪资方案，持续跟进财务数据核对与税务落地，调试生产系统功能，推进链条基础数据录入及各类系统问题整改工作。",
+        "page_start": 5,
+        "page_end": 5,
+        "start_char": 1945,
+        "end_char": 2021,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "SCM 项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "张水霞"
+      ],
+      "title": "SCM项目供应商审批解决及系统完善",
+      "content": "下周将跟进解决供应商准入审批报错问题，编写各岗位系统操作手册，完成七月需求计划数据导入，持续完善系统适配与落地工作。",
+      "evidence": {
+        "text": "二是SCM 项目（张水霞）：下周将跟进解决供应商准入审批报错问题，编写各岗位系统操作手册，完成七月需求计划数据导入，持续完善系统适配与落地工作。",
+        "page_start": 5,
+        "page_end": 5,
+        "start_char": 2021,
+        "end_char": 2093,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "决策支持系统项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "宋梦"
+      ],
+      "title": "决策支持系统项目开发暂停",
+      "content": "因7 月17 到26 号进行宁夏攻防护，期间奔牛服务器关闭，因此项目开发需暂停一周。",
+      "evidence": {
+        "text": "三是决策支持系统项目（宋梦）：因7 月17 到26 号进行宁夏攻防护，期间奔牛服务器关闭，因此项目开发需暂停一周。",
+        "page_start": 5,
+        "page_end": 5,
+        "start_char": 2093,
+        "end_char": 2150,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "综合展示系统项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "周永南"
+      ],
+      "title": "综合展示系统项目详细设计及页面确认",
+      "content": "详细设计文档，后台功能模块部分编写；页面展示方案汇报，页面效果确认并收集反馈建议。",
+      "evidence": {
+        "text": "四是综合展示系统项目（周永南）：详细设计文档，后台功能模块部分编写；页面展示方案汇报，页面效果确认并收集反馈建议。",
+        "page_start": 5,
+        "page_end": 6,
+        "start_char": 2150,
+        "end_char": 2207,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字化技术服务事业部",
+      "work_section": "重点项目实施推进",
+      "delivery_group": null,
+      "project": "业财一体化项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "张家鸣"
+      ],
+      "title": "业财一体化项目需求调研及讨论",
+      "content": "梳理调研内容，组织项目需求讨论及答疑。",
+      "evidence": {
+        "text": "一是业财一体化项目（张家鸣）：梳理调研内容，组织项目需求讨论及答疑。",
+        "page_start": 6,
+        "page_end": 6,
+        "start_char": 2216,
+        "end_char": 2250,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "经营工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "投标工作：支撑推进煤监局安科公司与矿方进行商务合同的流程审批",
+      "content": "支撑推进煤监局安科公司与矿方进行商务合同的流程审批",
+      "evidence": {
+        "text": "（1）投标工作：支撑推进煤监局安科公司与矿方进行商务合同的流程审批。",
+        "page_start": 6,
+        "page_end": 6,
+        "start_char": 2269,
+        "end_char": 2303,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "经营工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "商机对接：完成产品手册脱敏并提交大土河，跟进业主市场调研情况",
+      "content": "完成产品手册脱敏并提交大土河，跟进业主市场调研情况",
+      "evidence": {
+        "text": "（2）商机对接：完成产品手册脱敏并提交大土河，跟进业主市场调研情况。",
+        "page_start": 6,
+        "page_end": 6,
+        "start_char": 2304,
+        "end_char": 2338,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "赵石畔项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "赵石畔项目技术交流与下一步推进计划协商",
+      "content": "经震有总部沟通协调，已与震有技术人员进行了多次技术交流，震有明确现存接口无法对外提供实时语音流，定制化开发预估周期约3 个月，费用约150 万元，成本太大我方无法接受，已将情况反馈华宇，下周前往矿上测试已完成功能点，并与华宇协商下一步推进计划。",
+      "evidence": {
+        "text": "（1）赵石畔项目：经震有总部沟通协调，已与震有技术人员进行了多次技术交流，震有明确现存接口无法对外提供实时语音流，定制化开发预估周期约3 个月，费用约150 万元，成本太大我方无法接受，已将情况反馈华宇，下周前往矿上测试已完成功能点，并与华宇协商下一步推进计划。",
+        "page_start": 6,
+        "page_end": 6,
+        "start_char": 2348,
+        "end_char": 2479,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "平庄项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "平庄项目会议室设备安装调试与培训推进",
+      "content": "完成会议室设备的安装调试工作。持续推进培训工作开展。",
+      "evidence": {
+        "text": "（2）平庄项目：完成会议室设备的安装调试工作。持续推进培训工作开展。",
+        "page_start": 6,
+        "page_end": 6,
+        "start_char": 2480,
+        "end_char": 2514,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "红沙泉项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "红沙泉项目物联网卡、系统上线、设备督办及平台开发优化",
+      "content": "解决人员定位物联网卡问题、督办系统上线正式使用，审核优化已建系统路面平整度、综合环境检测、全景视频等平台建设成效，督办火灾监测设备到货设备到货安装工作、督办网络安全设备发货；配合新团队开展智能综管平台的开发优化工作。",
+      "evidence": {
+        "text": "（3）红沙泉项目：解决人员定位物联网卡问题、督办系统上线正式使用，审核优化已建系统路面平整度、综合环境检测、全景视频等平台建设成效，督办火灾监测设备到货设备到货安装工作、督办网络安全设备发货；配合新团队开展智能综管平台的开发优化工作。",
+        "page_start": 6,
+        "page_end": 7,
+        "start_char": 2515,
+        "end_char": 2632,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "天地奔牛调度中心项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "天地奔牛调度中心项目整改方案确认与实施验收",
+      "content": "对接业主确认整改方案，7月21 日前完成方案确认；方案确认后协商相关供应商实施整改，8 月7 日前完成整改并同步完成验收工作。",
+      "evidence": {
+        "text": "（4）天地奔牛调度中心项目：对接业主确认整改方案，7月21 日前完成方案确认；方案确认后协商相关供应商实施整改，8 月7 日前完成整改并同步完成验收工作。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 2633,
+        "end_char": 2710,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "西安院展馆项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "西安院展馆项目验收资料制作、培训及展板内容调整",
+      "content": "制作验收资料完成90%，推进完成制作展厅操作手册及相关培训工作，协调现场展品资料制作与摆放（完成100%），根据专家组提供的资料与意见，对平面展板与多媒体内容进行调整。",
+      "evidence": {
+        "text": "（5）西安院展馆项目：制作验收资料完成90%，推进完成制作展厅操作手册及相关培训工作，协调现场展品资料制作与摆放（完成100%），根据专家组提供的资料与意见，对平面展板与多媒体内容进行调整。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 2711,
+        "end_char": 2806,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "彬长融合通信项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "彬长融合通信项目材料整理、问题汇报与解决方案寻找",
+      "content": "整理项目材料，梳理项目现存问题情况，说明因果，向业主领导汇报问题，寻找解决方案。",
+      "evidence": {
+        "text": "（6）彬长融合通信项目：整理项目材料，梳理项目现存问题情况，说明因果，向业主领导汇报问题，寻找解决方案。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 2807,
+        "end_char": 2859,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "延长矿业调度中心项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "延长矿业调度中心项目付款流程跟进与计划督报",
+      "content": "付款流程持续跟进，督报次月付款计划。",
+      "evidence": {
+        "text": "（7）延长矿业调度中心项目：付款流程持续跟进，督报次月付款计划。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 2860,
+        "end_char": 2892,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "天隆项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "天隆项目合同编制、验收会议纪要推进、整改回复及试运行准备",
+      "content": "编制网络安全采购合同；推进考勤系统运行维护采购合同签订；推进业主提供硬件验收会会议纪要；拟定整改回复单；做软件试运行准备；土建装修及硬件整改；决策平台试运行。",
+      "evidence": {
+        "text": "（8）天隆项目：编制网络安全采购合同；推进考勤系统运行维护采购合同签订；推进业主提供硬件验收会会议纪要；拟定整改回复单；做软件试运行准备；土建装修及硬件整改；决策平台试运行。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 2893,
+        "end_char": 2980,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数维智能事业部",
+      "work_section": "项目推进工作",
+      "delivery_group": null,
+      "project": "矿井供排水三维信息模型设计系统项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "矿井供排水三维信息模型设计系统项目软件测试报告提交归档",
+      "content": "完成软件测试报告并提交甲方归档。",
+      "evidence": {
+        "text": "（9）矿井供排水三维信息模型设计系统项目：完成软件测试报告并提交甲方归档。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 2981,
+        "end_char": 3018,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "集团总部信息化运维项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "集团总部信息化运维项目日常巡检和运维服务",
+      "content": "进行日常巡检和运维服务。",
+      "evidence": {
+        "text": "1.集团总部信息化运维项目：进行日常巡检和运维服务。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 3035,
+        "end_char": 3061,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "集团总部信息云资源池扩容项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "集团总部信息云资源池扩容项目验收推进",
+      "content": "提交验收申请，推进项目终验。",
+      "evidence": {
+        "text": "2.集团总部信息云资源池扩容项目、2025 年网络改造项目：提交验收申请，推进项目终验。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 3062,
+        "end_char": 3106,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "2025 年网络改造项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "2025 年网络改造项目验收推进",
+      "content": "提交验收申请，推进项目终验。",
+      "evidence": {
+        "text": "2.集团总部信息云资源池扩容项目、2025 年网络改造项目：提交验收申请，推进项目终验。",
+        "page_start": 7,
+        "page_end": 7,
+        "start_char": 3062,
+        "end_char": 3106,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "集团总部老旧设备补充更新项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "集团总部老旧设备补充更新项目验收材料编制",
+      "content": "完成终验材料编制，推进项目验收。",
+      "evidence": {
+        "text": "3.集团总部老旧设备补充更新项目：完成终验材料编制，推进项目验收。",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3107,
+        "end_char": 3140,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "集团总部2026 年网络安全、迁移、维保项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "集团总部2026 年网络安全、迁移、维保项目招投标文件编写",
+      "content": "编写邀请函及应答函。",
+      "evidence": {
+        "text": "4.集团总部2026 年网络安全、迁移、维保项目：编写邀请函及应答函。",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3141,
+        "end_char": 3176,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "互联网收敛项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "互联网收敛项目线路采购、双栈部署及关联项目跟进",
+      "content": "跟进集团总部互联网出口线路采购签报进展；推进互联网出口网络IPv4/IPv6 双栈部署功能完善工作实施；推进天玛智控互联网收敛项目终验；跟进煤科总院、安标收敛项目采购进展；跟进金租公司ICP 备案进展。",
+      "evidence": {
+        "text": "5.互联网收敛项目：跟进集团总部互联网出口线路采购签报进展；推进互联网出口网络IPv4/IPv6 双栈部署功能完善工作实施；推进天玛智控互联网收敛项目终验；跟进煤科总院、安标收敛项目采购进展；跟进金租公司ICP 备案进展。",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3177,
+        "end_char": 3288,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "中煤科工（西安）智能成套装备科技有限公司28-30 层网络基础设施建设项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "中煤科工（西安）智能成套装备科技有限公司28-30 层网络基础设施建设项目运维",
+      "content": "进行项目运维。",
+      "evidence": {
+        "text": "6.中煤科工（西安）智能成套装备科技有限公司28-30 层网络基础设施建设项目：进行项目运维。",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3289,
+        "end_char": 3336,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "奔牛IDC 扩容二期项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "奔牛IDC 扩容二期项目数据备份、合同归档、装修施工及回款推进",
+      "content": "完成数据备份、服务器合同归档，继续开展室内装修施工，推进项目第一笔回款。",
+      "evidence": {
+        "text": "7.奔牛IDC 扩容二期项目：完成数据备份、服务器合同归档，继续开展室内装修施工，推进项目第一笔回款。",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3337,
+        "end_char": 3388,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "北京分公司（信息网络部）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "自主可控操作系统及数据库推广项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "自主可控操作系统及数据库推广项目合同签订归档及开票",
+      "content": "完成常州院合同签订归档，完成规划院合同开票。",
+      "evidence": {
+        "text": "8.自主可控操作系统及数据库推广项目：完成常州院合同签订归档，完成规划院合同开票。",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3389,
+        "end_char": 3430,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "西安院铣螺旋上下料项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "西安院铣螺旋上下料项目验收跟踪",
+      "content": "西安院铣螺旋上下料项目验收跟踪",
+      "evidence": {
+        "text": "1.西安院铣螺旋上下料项目验收跟踪；",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3440,
+        "end_char": 3458,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "沈阳院MES、QMS项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "沈阳院MES、QMS项目推进",
+      "content": "沈阳院MES、QMS项目推进",
+      "evidence": {
+        "text": "2.沈阳院MES、QMS项目推进；",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3459,
+        "end_char": 3476,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "西安院立体库WES优化项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "西安院立体库WES优化项目合同签订",
+      "content": "西安院立体库WES优化项目合同签订",
+      "evidence": {
+        "text": "3.西安院立体库WES优化项目合同签订；",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3477,
+        "end_char": 3497,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "抚顺矿业胜利实验厂工艺参数优化项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "抚顺矿业胜利实验厂工艺参数优化项目投标文件",
+      "content": "抚顺矿业胜利实验厂工艺参数优化项目投标文件",
+      "evidence": {
+        "text": "4.抚顺矿业胜利实验厂工艺参数优化项目投标文件，",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3498,
+        "end_char": 3522,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "智能动态调控、在线成分分析项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "智能动态调控、在线成分分析项目标书编写",
+      "content": "智能动态调控、在线成分分析项目标书编写",
+      "evidence": {
+        "text": "智能动态调控、在线成分分析项目标书编写；",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3522,
+        "end_char": 3542,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "奔牛高质量数据集项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "奔牛高质量数据集项目启动会",
+      "content": "奔牛高质量数据集项目启动会",
+      "evidence": {
+        "text": "5.奔牛高质量数据集项目启动会；",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3543,
+        "end_char": 3559,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "热处理群控项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "热处理群控项目系统使用问题对接",
+      "content": "热处理群控项目：系统使用问题对接（持续进行）",
+      "evidence": {
+        "text": "6.热处理群控项目：系统使用问题对接（持续进行）；",
+        "page_start": 8,
+        "page_end": 8,
+        "start_char": 3560,
+        "end_char": 3585,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "合同履约监控项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "合同履约监控项目沟通QMS及WMS系统集成",
+      "content": "合同履约监控项目：沟通QMS及WMS系统集成，梳理数据接口",
+      "evidence": {
+        "text": "7.合同履约监控项目：沟通QMS及WMS系统集成，梳理数据接口；",
+        "page_start": 8,
+        "page_end": 9,
+        "start_char": 3586,
+        "end_char": 3618,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "天地奔牛能源管理项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "天地奔牛能源管理项目设备掉线问题跟踪",
+      "content": "天地奔牛能源管理项目：设备掉线问题跟踪",
+      "evidence": {
+        "text": "8.天地奔牛能源管理项目：设备掉线问题跟踪；",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3619,
+        "end_char": 3641,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "奔牛能源管理项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "奔牛能源管理项目新增设备采集调试事宜协调资源处理",
+      "content": "奔牛能源管理项目新增设备采集调试事宜协调资源处理",
+      "evidence": {
+        "text": "奔牛能源管理项目新增设备采集调试事宜协调资源处理；",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3641,
+        "end_char": 3666,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "天地奔牛CRM项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "天地奔牛CRM项目系统集成梳理及上线跟进",
+      "content": "天地奔牛CRM项目：系统集成梳理，整理沟通文档；跟进一阶段二阶段上线情况，进行技术答疑，问题跟进；对系统进行功能差缺补漏，重点对售后模块审批流、权限进行正式系统配置授权",
+      "evidence": {
+        "text": "9.天地奔牛CRM项目：系统集成梳理，整理沟通文档；跟进一阶段二阶段上线情况，进行技术答疑，问题跟进；对系统进行功能差缺补漏，重点对售后模块审批流、权限进行正式系统配置授权；",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3667,
+        "end_char": 3754,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "太原院MOM二期",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "太原院MOM二期合同归档",
+      "content": "太原院MOM二期合同归档",
+      "evidence": {
+        "text": "10.太原院MOM二期合同归档；",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3755,
+        "end_char": 3771,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "天玛地热项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "天玛地热项目投标推进",
+      "content": "天玛地热项目投标推进",
+      "evidence": {
+        "text": "11.天玛地热项目投标推进；",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3772,
+        "end_char": 3786,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "智能制造部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "零碳工厂对外参观交流",
+      "content": "零碳工厂对外参观交流",
+      "evidence": {
+        "text": "12.零碳工厂对外参观交流。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3787,
+        "end_char": 3801,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完成2026年企业深化改革与管理创新成果的复审",
+      "content": "完成2026 年企业深化改革与管理创新成果的复审。",
+      "evidence": {
+        "text": "1.完成2026 年企业深化改革与管理创新成果的复审。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3815,
+        "end_char": 3842,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "督办本年度规章制度“立改废”工作计划中核心制度制修订工作",
+      "content": "督办本年度规章制度“立改废”工作计划中核心制度制修订工作。",
+      "evidence": {
+        "text": "2.督办本年度规章制度“立改废”工作计划中核心制度制修订工作。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3843,
+        "end_char": 3874,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "煤科总院对外宣传项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "完成公众号运营",
+      "content": "完成公众号运营。",
+      "evidence": {
+        "text": "3.煤科总院对外宣传项目：完成公众号运营。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3875,
+        "end_char": 3896,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "科工装备全链条宣传配套项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "完成公众号运营及策划宣传片文案",
+      "content": "完成公众号运营；策划科工装备未来工厂宣传片文案。",
+      "evidence": {
+        "text": "4.科工装备全链条宣传配套项目：完成公众号运营；策划科工装备未来工厂宣传片文案。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3897,
+        "end_char": 3937,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": "商机项目",
+      "delivery_group": null,
+      "project": "延长矿业融媒体项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "完成融媒体服务框架协议签订",
+      "content": "完成融媒体服务框架协议签订。",
+      "evidence": {
+        "text": "（1）延长矿业融媒体项目：完成融媒体服务框架协议签订。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3946,
+        "end_char": 3973,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": "商机项目",
+      "delivery_group": null,
+      "project": "科工装备企业文化项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "制作墙面照片、配合修改效果图及推进竞谈工作",
+      "content": "根据领导意见制作墙面照片；待收到基建部外墙、研发中心调度指挥中心内外墙、研发中心党建会议室反馈后，配合完成效果图的修改工作；推进竞谈工作。",
+      "evidence": {
+        "text": "（2）科工装备企业文化项目：根据领导意见制作墙面照片；待收到基建部外墙、研发中心调度指挥中心内外墙、研发中心党建会议室反馈后，配合完成效果图的修改工作；推进竞谈工作。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 3974,
+        "end_char": 4057,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": "商机项目",
+      "delivery_group": null,
+      "project": "科工装备工厂展厅项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "完善制造工厂展厅初版设计方案及参考效果图",
+      "content": "持续完善制造工厂展厅初版设计方案内容，增加完善参考效果图。",
+      "evidence": {
+        "text": "（3）科工装备工厂展厅项目：持续完善制造工厂展厅初版设计方案内容，增加完善参考效果图。",
+        "page_start": 9,
+        "page_end": 9,
+        "start_char": 4058,
+        "end_char": 4101,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": "商机项目",
+      "delivery_group": null,
+      "project": "潞安集团展厅项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "完成展厅最新效果图、概算及施工图",
+      "content": "完成最新效果图及概算；完成展厅最新施工图平面部分及所有施工图。",
+      "evidence": {
+        "text": "（4）潞安集团展厅项目：完成最新效果图及概算；完成展厅最新施工图平面部分及所有施工图。",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4102,
+        "end_char": 4145,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "数字咨询规划研究院",
+      "work_section": "商机项目",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "推动已实施展会项目后续收尾事宜",
+      "content": "推动已实施展会项目后续开票、回款、增项变更等收尾事宜。",
+      "evidence": {
+        "text": "6.推动已实施展会项目后续开票、回款、增项变更等收尾事宜。",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4146,
+        "end_char": 4175,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人工智能研究院（科技发展中心）",
+      "work_section": "商机推进",
+      "delivery_group": null,
+      "project": "集团审法平台信创升级改造项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "姚宣丞"
+      ],
+      "title": "协助集团审法部进行项目签报",
+      "content": "协助集团审法部进行项目签报。",
+      "evidence": {
+        "text": "1.1 集团审法平台信创升级改造项目，协助集团审法部进行项目签报。【姚宣丞】",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4202,
+        "end_char": 4240,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人工智能研究院（科技发展中心）",
+      "work_section": "商机推进",
+      "delivery_group": null,
+      "project": "集团智能算力集约化管控平台项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "任佳朋"
+      ],
+      "title": "准备商务推进，配合推进项目签报及开展招投标工作",
+      "content": "准备商务推进，一是配合集团信息中心推进项目签报；二是准备开展招投标相关工作。",
+      "evidence": {
+        "text": "1.2 集团智能算力集约化管控平台项目，准备商务推进，一是配合集团信息中心推进项目签报；二是准备开展招投标相关工作。【任佳朋】",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4241,
+        "end_char": 4304,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人工智能研究院（科技发展中心）",
+      "work_section": "商机推进",
+      "delivery_group": null,
+      "project": "集团智慧工会项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "李冠琛"
+      ],
+      "title": "推进项目签报立项及准备小程序注册事宜",
+      "content": "推进项目签报立项，准备小程序注册相关事宜。",
+      "evidence": {
+        "text": "1.3 集团智慧工会项目，推进项目签报立项，准备小程序注册相关事宜。【李冠琛】",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4305,
+        "end_char": 4344,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人工智能研究院（科技发展中心）",
+      "work_section": "陕投集团数智管控中心项目【白洋、刘麟驰】",
+      "delivery_group": null,
+      "project": "陕投集团数智管控中心项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "陕投集团数智管控中心项目硬件布线、软件优化及施工推进",
+      "content": "硬件团队布线施工；软件团队继续优化、深化软件方案；推进施工团队进行施工",
+      "evidence": {
+        "text": "（1）硬件团队布线施工；\n（2）软件团队继续优化、深化软件方案；\n（3）推进施工团队进行施工",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4377,
+        "end_char": 4423,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人工智能研究院（科技发展中心）",
+      "work_section": "职能工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "编制AlphaMine产品线规划文件",
+      "content": "编制AlphaMine 产品线规划文件。",
+      "evidence": {
+        "text": "3.1 编制AlphaMine 产品线规划文件。",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4431,
+        "end_char": 4455,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人工智能研究院（科技发展中心）",
+      "work_section": "职能工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "编制产品线汇报概述部分汇报文件第一稿",
+      "content": "编制产品线汇报概述部分的汇报文件第一稿。",
+      "evidence": {
+        "text": "3.2 编制产品线汇报概述部分的汇报文件第一稿。",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4456,
+        "end_char": 4480,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人工智能研究院（科技发展中心）",
+      "work_section": "职能工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完成公司专利年费缴纳事宜",
+      "content": "完成公司专利年费缴纳事宜。",
+      "evidence": {
+        "text": "3.3 完成公司专利年费缴纳事宜。",
+        "page_start": 10,
+        "page_end": 10,
+        "start_char": 4481,
+        "end_char": 4498,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "市场经营部",
+      "delivery_group": null,
+      "project": "陶忽图煤矿智能化建设项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "沈凯"
+      ],
+      "title": "完成陶忽图煤矿智能化建设项目投标工作",
+      "content": "完成陶忽图煤矿智能化建设项目投标工作",
+      "evidence": {
+        "text": "（1）完成陶忽图煤矿智能化建设项目投标工作。（沈凯）",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4516,
+        "end_char": 4542,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "市场经营部",
+      "delivery_group": null,
+      "project": "鹰骏一矿智能化建设项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [
+        "高原"
+      ],
+      "title": "协同矿山部开展鹰骏一矿智能化建设项目商务文件、询价文件编制工作",
+      "content": "协同矿山部开展鹰骏一矿智能化建设项目商务文件、询价文件编制工作",
+      "evidence": {
+        "text": "（2）协同矿山部开展鹰骏一矿智能化建设项目商务文件、询价文件编制工作。（高原）",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4543,
+        "end_char": 4582,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "市场经营部",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [
+        "张博"
+      ],
+      "title": "淮北矿业智能制造意向项目沟通",
+      "content": "淮北矿业智能制造意向项目沟通",
+      "evidence": {
+        "text": "（3）淮北矿业智能制造意向项目沟通。（张博）",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4583,
+        "end_char": 4605,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "市场经营部",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [
+        "白天宇"
+      ],
+      "title": "签订消防检测合同",
+      "content": "签订消防检测合同",
+      "evidence": {
+        "text": "（4）签订消防检测合同。（白天宇）",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4606,
+        "end_char": 4623,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "榆鄂营销中心",
+      "delivery_group": null,
+      "project": "维修中心网络覆盖项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "跟进维修中心网络覆盖项目图纸定稿及编制商务文件",
+      "content": "持续跟进维修中心网络覆盖项目图纸定稿情况，编制商务文件。",
+      "evidence": {
+        "text": "（1）持续跟进维修中心网络覆盖项目图纸定稿情况，编制商务文件。",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4633,
+        "end_char": 4664,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "榆鄂营销中心",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "RESEARCH_TASK",
+      "assignee": [],
+      "title": "科研立项申报及流程衔接",
+      "content": "紧盯科研立项申报节点，配合业主做好后续流程衔接及材料补充。",
+      "evidence": {
+        "text": "（2）紧盯科研立项申报节点，配合业主做好后续流程衔接及材料补充。",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4665,
+        "end_char": 4697,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "宁夏营销中心",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完善储煤配煤功能资料并编制实施方案",
+      "content": "完善储煤和配煤功能资料，编制实施方案提交给矿方。",
+      "evidence": {
+        "text": "（1）完善储煤和配煤功能资料，编制实施方案提交给矿方。",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4707,
+        "end_char": 4734,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "宁夏营销中心",
+      "delivery_group": null,
+      "project": "鹰骏项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "沟通鹰骏项目进展并配合矿方工作",
+      "content": "前往维华公司沟通鹰骏项目进展，并配合矿方完成相关工作。",
+      "evidence": {
+        "text": "（2）前往维华公司沟通鹰骏项目进展，并配合矿方完成相关工作。",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4735,
+        "end_char": 4765,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "新疆营销中心",
+      "delivery_group": null,
+      "project": "特变电工南露天管控平台项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "特变电工南露天管控平台项目现场交流",
+      "content": "跟客户约时间到现场交流。",
+      "evidence": {
+        "text": "（1）特变电工南露天管控平台项目，跟客户约时间到现场交流。",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4775,
+        "end_char": 4804,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "新疆营销中心",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "矿博会及煤炭展信息深化",
+      "content": "就第16 届新疆矿博会、第21 届新疆煤碳展收集的信息进行深化。",
+      "evidence": {
+        "text": "（2）就第16 届新疆矿博会、第21 届新疆煤碳展收集的信息进行深化。",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4805,
+        "end_char": 4840,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "新疆营销中心",
+      "delivery_group": null,
+      "project": "天隆希望五彩湾智能供电项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "天隆希望五彩湾智能供电项目跟踪招标结果",
+      "content": "天隆希望五彩湾智能供电项目跟踪招标结果。",
+      "evidence": {
+        "text": "（3）天隆希望五彩湾智能供电项目跟踪招标结果。",
+        "page_start": 11,
+        "page_end": 11,
+        "start_char": 4841,
+        "end_char": 4864,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "新疆营销中心",
+      "delivery_group": null,
+      "project": "天隆希望五彩湾破碎机智能化改造项目",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "天隆希望五彩湾破碎机智能化改造项目完善方案",
+      "content": "天隆希望五彩湾破碎机智能化改造项目根据反馈完善方案",
+      "evidence": {
+        "text": "（4）天隆希望五彩湾破碎机智能化改造项目根据反馈完善方案",
+        "page_start": 11,
+        "page_end": 12,
+        "start_char": 4865,
+        "end_char": 4893,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "蒙东营销中心",
+      "delivery_group": null,
+      "project": "红庆河煤矿项目",
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "拜访伊泰集团推进红庆河煤矿项目合作",
+      "content": "拜访伊泰集团分管副总，推进红庆河煤矿项目合作机会。",
+      "evidence": {
+        "text": "（1）拜访伊泰集团分管副总，推进红庆河煤矿项目合作机会。",
+        "page_start": 12,
+        "page_end": 12,
+        "start_char": 4903,
+        "end_char": 4931,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "蒙东营销中心",
+      "delivery_group": null,
+      "project": "鄂尔多斯当地露天矿项目",
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "带领客户开展鄂尔多斯当地露天矿项目调研",
+      "content": "带领客户开展鄂尔多斯当地露天矿项目调研，汇报信息公司情况与项目承接能力。",
+      "evidence": {
+        "text": "（2）带领客户开展鄂尔多斯当地露天矿项目调研，汇报信息公司情况与项目承接能力。",
+        "page_start": 12,
+        "page_end": 12,
+        "start_char": 4932,
+        "end_char": 4971,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "市场经营部",
+      "work_section": "蒙东营销中心",
+      "delivery_group": null,
+      "project": "红庆河煤矿项目",
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完成红庆河煤矿项目投标工作",
+      "content": "完成红庆河煤矿项目投标工作，7 月16 号开标。",
+      "evidence": {
+        "text": "（3）完成红庆河煤矿项目投标工作，7 月16 号开标。",
+        "page_start": 12,
+        "page_end": 12,
+        "start_char": 4972,
+        "end_char": 4999,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "项目管理",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "跟进已逾期项目进展",
+      "content": "跟进已逾期项目进展。",
+      "evidence": {
+        "text": "（1）跟进已逾期项目进展。",
+        "page_start": 12,
+        "page_end": 12,
+        "start_char": 5016,
+        "end_char": 5029,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "项目管理",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "形成本次项目复盘总结报告并完善项目管理制度",
+      "content": "形成本次项目复盘总结报告，并应用搭建的项目管理台账系统进行分析，并将发现的问题形成的下一步强化进度、成本管理的措施融入项目管理制度。",
+      "evidence": {
+        "text": "（2）形成本次项目复盘总结报告，并应用搭建的项目管理台账系统进行分析，并将发现的问题形成的下一步强化进度、成本管理的措施融入项目管理制度。",
+        "page_start": 12,
+        "page_end": 12,
+        "start_char": 5030,
+        "end_char": 5099,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "采购管理",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_TASK_ITEM",
+      "assignee": [],
+      "title": "计划采购评审情况",
+      "content": "计划采购评审11 项，其中竞争性谈判5 项、单一来源1项，公开招标5 项，分别为：序号采购方式采购名称预算金额（万元）开标日期1单一来源宁煤智能排矸系统采购6387 月21 日2竞谈宁煤调度室及机房装修材料采购29.57 月23 日3竞谈科研煤炭行业专家智能体平台开发项目297 月23 日4竞谈宁煤调度室大屏采购",
+      "evidence": {
+        "text": "2.1 计划采购评审11 项，其中竞争性谈判5 项、单一来源1项，公开招标5 项，分别为：序号采购方式采购名称预算金额（万元）开标日期1单一来源宁煤智能排矸系统采购6387 月21 日2竞谈宁煤调度室及机房装修材料采购\n29.57 月23 日3竞谈科研煤炭行业专家智能体平台开发项目297 月23 日4竞谈宁煤调度室大屏采购",
+        "page_start": 12,
+        "page_end": 12,
+        "start_char": 5108,
+        "end_char": 5270,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "月22 日5竞谈宁煤模块化机房采购",
+      "delivery_group": null,
+      "project": "哈拉沟运维阶段现场配件消耗品采购项目",
+      "item_type": "NON_TASK_ITEM",
+      "assignee": [],
+      "title": "哈拉沟运维阶段现场配件消耗品采购项目招标信息",
+      "content": "月22 日6竞谈哈拉沟运维阶段现场配件消耗品采购项目",
+      "evidence": {
+        "text": "月22 日6竞谈哈拉沟运维阶段现场配件消耗品采购项目",
+        "page_start": 12,
+        "page_end": 13,
+        "start_char": 5296,
+        "end_char": 5329,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "月22 日5竞谈宁煤模块化机房采购",
+      "delivery_group": null,
+      "project": "宁煤信息化基础设施采购",
+      "item_type": "NON_TASK_ITEM",
+      "assignee": [],
+      "title": "宁煤信息化基础设施采购项目招标信息",
+      "content": "月21 日7公开招标宁煤信息化基础设施采购",
+      "evidence": {
+        "text": "月21 日7公开招标宁煤信息化基础设施采购",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5333,
+        "end_char": 5354,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "月22 日5竞谈宁煤模块化机房采购",
+      "delivery_group": null,
+      "project": "科研数据采集实施及能源管理系统定制开发",
+      "item_type": "NON_TASK_ITEM",
+      "assignee": [],
+      "title": "科研数据采集实施及能源管理系统定制开发采购项目招标信息",
+      "content": "月23 日8公开招标科研数据采集实施及能源管理系统定制开发",
+      "evidence": {
+        "text": "月23 日8公开招标科研数据采集实施及能源管理系统定制开发",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5355,
+        "end_char": 5392,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "月22 日5竞谈宁煤模块化机房采购",
+      "delivery_group": null,
+      "project": "宁煤一体化管控平台及APP采购项目",
+      "item_type": "NON_TASK_ITEM",
+      "assignee": [],
+      "title": "宁煤一体化管控平台及APP采购项目招标信息",
+      "content": "月23 日9公开招标宁煤一体化管控平台及APP采购项目",
+      "evidence": {
+        "text": "月23 日9公开招标宁煤一体化管控平台及APP采购项目",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5393,
+        "end_char": 5426,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "月22 日5竞谈宁煤模块化机房采购",
+      "delivery_group": null,
+      "project": "哈拉沟选煤厂人员定位系统优化升级采购项目",
+      "item_type": "NON_TASK_ITEM",
+      "assignee": [],
+      "title": "哈拉沟选煤厂人员定位系统优化升级采购项目招标信息",
+      "content": "月22 日10公开招标哈拉沟选煤厂人员定位系统优化升级采购项目",
+      "evidence": {
+        "text": "月22 日10公开招标哈拉沟选煤厂人员定位系统优化升级采购项目",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5427,
+        "end_char": 5464,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "月22 日5竞谈宁煤模块化机房采购",
+      "delivery_group": null,
+      "project": "集团财务数智化转型咨询服务",
+      "item_type": "NON_TASK_ITEM",
+      "assignee": [],
+      "title": "集团财务数智化转型咨询服务招标信息",
+      "content": "月21 日11公开招标集团财务数智化转型咨询服务",
+      "evidence": {
+        "text": "月21 日11公开招标集团财务数智化转型咨询服务",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5469,
+        "end_char": 5493,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": "安全管理",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "组织安全生产专题会并部署落实",
+      "content": "组织召开安全生产专题会，学习六部委“打非治违”行动通知，并部署落实。",
+      "evidence": {
+        "text": "（1）组织召开安全生产专题会，学习六部委“打非治违”行动通知，并部署落实。",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5511,
+        "end_char": 5548,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "资产财务部（业财数字中心）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "跟踪配合年中专项攻坚行动",
+      "content": "跟踪配合年中专项攻坚行动相关工作",
+      "evidence": {
+        "text": "1.跟踪配合年中专项攻坚行动相关工作；",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5566,
+        "end_char": 5585,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "资产财务部（业财数字中心）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "组织落实及报送资金计划",
+      "content": "组织各部门落实7 月份资金计划并报送8 月份资金计划",
+      "evidence": {
+        "text": "2.组织各部门落实7 月份资金计划并报送8 月份资金计划；",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5586,
+        "end_char": 5615,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "资产财务部（业财数字中心）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "梳理印花税并完善合同审批单字段",
+      "content": "组织梳理印花税等，并完善合同审批单税率对应合同额等相关字段",
+      "evidence": {
+        "text": "3.组织梳理印花税等，并完善合同审批单税率对应合同额等相关字段；",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5616,
+        "end_char": 5648,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "资产财务部（业财数字中心）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "开展财务小智AI+及合同管理AI+上线培训试运行",
+      "content": "组织开展财务小智AI+及合同管理AI+上线培训试运行工作",
+      "evidence": {
+        "text": "4.组织开展财务小智AI+及合同管理AI+上线培训试运行工作；",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5649,
+        "end_char": 5680,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "资产财务部（业财数字中心）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "编报2026年度固定资产投资调整建议计划",
+      "content": "组织编报2026 年度固定资产投资调整建议计划",
+      "evidence": {
+        "text": "5.组织编报2026 年度固定资产投资调整建议计划；",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5681,
+        "end_char": 5707,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "资产财务部（业财数字中心）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "开展重点项目经济效益分析",
+      "content": "联合相关部门开展重点项目经济效益分析工作",
+      "evidence": {
+        "text": "6.联合相关部门开展重点项目经济效益分析工作。",
+        "page_start": 13,
+        "page_end": 13,
+        "start_char": 5708,
+        "end_char": 5731,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "人力资源部",
+      "work_section": "开展集团高层次科技创新人才申报工作",
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "优化人力资源外包管理模块",
+      "content": "优化人力资源外包管理模块。",
+      "evidence": {
+        "text": "6.优化人力资源外包管理模块。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 5841,
+        "end_char": 5856,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "党建宣传部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "学习贯彻习近平总书记“七一”重要讲话精神",
+      "content": "按照树立和践行正确政绩观学习教育工作提示要求，认真学习贯彻习近平总书记“七一”重要讲话精神。",
+      "evidence": {
+        "text": "1.按照树立和践行正确政绩观学习教育工作提示要求，认真学习贯彻习近平总书记“七一”重要讲话精神。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 5867,
+        "end_char": 5915,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "党建宣传部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "筹备年中工作会议表彰决定及颁奖仪式",
+      "content": "筹备年中工作会议表彰决定、颁奖仪式。",
+      "evidence": {
+        "text": "2.筹备年中工作会议表彰决定、颁奖仪式。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 5916,
+        "end_char": 5936,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "党建宣传部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "开展党建和宣传类制度制修订",
+      "content": "开展信息公司党委党建和宣传类制度的制修订工作。",
+      "evidence": {
+        "text": "3.开展信息公司党委党建和宣传类制度的制修订工作。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 5937,
+        "end_char": 5962,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "党建宣传部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完成党费及奖金部分党费收取",
+      "content": "完成党费及奖金部分党费收取工作。",
+      "evidence": {
+        "text": "4.完成党费及奖金部分党费收取工作。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 5963,
+        "end_char": 5981,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "党建宣传部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "统计党组织、党员、职工基本情况",
+      "content": "统计公司党组织、党员、职工基本情况。",
+      "evidence": {
+        "text": "5.统计公司党组织、党员、职工基本情况。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 5982,
+        "end_char": 6002,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "纪检专干",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "组织召开招标采购专项监督检查整改会议",
+      "content": "组织召开招标采购专项监督检查整改会议",
+      "evidence": {
+        "text": "1.组织召开招标采购专项监督检查整改会议；",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 6012,
+        "end_char": 6033,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "纪检专干",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "组织召开党风廉政建设和反腐败工作协调小组会议",
+      "content": "组织召开党风廉政建设和反腐败工作协调小组会议",
+      "evidence": {
+        "text": "2.组织召开党风廉政建设和反腐败工作协调小组会议；",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 6034,
+        "end_char": 6059,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "纪检专干",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "制定廉洁风险排查工作方案并开展排查",
+      "content": "制定廉洁风险排查工作方案，开展廉洁风险排查",
+      "evidence": {
+        "text": "3.制定廉洁风险排查工作方案，开展廉洁风险排查。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 6060,
+        "end_char": 6084,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "综合办公室（董事会办公室）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "准备年中工作会会议材料",
+      "content": "持续准备年中工作会各项会议材料。",
+      "evidence": {
+        "text": "1.持续准备年中工作会各项会议材料。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 6103,
+        "end_char": 6121,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "综合办公室（董事会办公室）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完成2026年度第四次董事会相关工作",
+      "content": "完成2026 年度第四次董事会相关工作及材料准备。",
+      "evidence": {
+        "text": "2.完成2026 年度第四次董事会相关工作及材料准备。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 6122,
+        "end_char": 6149,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "综合办公室（董事会办公室）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "完成煤研大厦办公区房屋租赁采购及合同签订",
+      "content": "完成煤研大厦办公区房屋租赁采购及合同签订。",
+      "evidence": {
+        "text": "3.完成煤研大厦办公区房屋租赁采购及合同签订。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 6150,
+        "end_char": 6173,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "综合办公室（董事会办公室）",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "整理金刚楼库房移交信息网络部",
+      "content": "整理金刚楼库房移交信息网络部。",
+      "evidence": {
+        "text": "4.整理金刚楼库房移交信息网络部。",
+        "page_start": 14,
+        "page_end": 14,
+        "start_char": 6174,
+        "end_char": 6191,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "工会",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "组织开展省总工会女职工数字技能大赛选拔工作",
+      "content": "组织开展省总工会女职工数字技能大赛选拔工作。",
+      "evidence": {
+        "text": "1.组织开展省总工会女职工数字技能大赛选拔工作。",
+        "page_start": 15,
+        "page_end": 15,
+        "start_char": 6199,
+        "end_char": 6223,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "工会",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "组织参加省能化系统职工匹克球培训",
+      "content": "组织参加省能化系统职工匹克球培训。",
+      "evidence": {
+        "text": "2.组织参加省能化系统职工匹克球培训。",
+        "page_start": 15,
+        "page_end": 15,
+        "start_char": 6224,
+        "end_char": 6243,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "团支部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "筹备主题活动",
+      "content": "根据第五协作区工作安排，筹备主题活动。",
+      "evidence": {
+        "text": "1.根据第五协作区工作安排，筹备主题活动。",
+        "page_start": 15,
+        "page_end": 15,
+        "start_char": 6252,
+        "end_char": 6273,
+        "exact_match": true
+      }
+    },
+    {
+      "department": null,
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "年中经营指标攻坚与补齐",
+      "content": "会议通报了年中攻坚各项经营指标完成情况，深度剖析当前存在的进度差距，要求各部门在本月最后10 天，全力以赴深挖客户资源潜力，加大力度补齐指标缺口。",
+      "evidence": {
+        "text": "1.会议通报了年中攻坚各项经营指标完成情况，深度剖析当前存在的进度差距，要求各部门在本月最后10 天，全力以赴深挖客户资源潜力，加大力度补齐指标缺口。",
+        "page_start": 15,
+        "page_end": 15,
+        "start_char": 6284,
+        "end_char": 6359,
+        "exact_match": true
+      }
+    },
+    {
+      "department": null,
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "区域营销中心岗位竞聘组织",
+      "content": "针对区域营销中心岗位竞聘，各部门要引导员工踊跃参与、充分展示综合素养，便于公司全面掌握员工真实能力，择优储备骨干人才，持续健全干部人才梯队建设体系。",
+      "evidence": {
+        "text": "2.针对区域营销中心岗位竞聘，各部门要引导员工踊跃参与、充分展示综合素养，便于公司全面掌握员工真实能力，择优储备骨干人才，持续健全干部人才梯队建设体系。",
+        "page_start": 15,
+        "page_end": 15,
+        "start_char": 6360,
+        "end_char": 6436,
+        "exact_match": true
+      }
+    },
+    {
+      "department": null,
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "工作细节管控与精细化管理",
+      "content": "各部门要加强工作细节管控，推动工作标准由“简单完成”向“做细做优”转变，常态化复盘梳理工作短板弱项，以巡视整改为抓手深化精细化管理，确保全年各项考核指标高质量完成。",
+      "evidence": {
+        "text": "3.各部门要加强工作细节管控，推动工作标准由“简单完成”向“做细做优”转变，常态化复盘梳理工作短板弱项，以巡视整改为抓手深化精细化管理，确保全年各项考核指标高质量完成。",
+        "page_start": 15,
+        "page_end": 15,
+        "start_char": 6437,
+        "end_char": 6521,
+        "exact_match": true
+      }
+    },
+    {
+      "department": "安全生产部",
+      "work_section": null,
+      "delivery_group": null,
+      "project": null,
+      "item_type": "NON_PROJECT_WORK",
+      "assignee": [],
+      "title": "项目经济指标分析与供应商审核",
+      "content": "安全生产部一是要协同相关部门开展项目经济指标分析，全面梳理核算各类成本费用构成，为提升项目盈利水平夯实基础；二是要从严审核各项目供应商选用条件，加大商务谈判力度，始终将保障公司利润、维护整体利益作为首要准则，各级管理人员也要履职尽责、层层严格把关。",
+      "evidence": {
+        "text": "4.安全生产部一是要协同相关部门开展项目经济指标分析，全面梳理核算各类成本费用构成，为提升项目盈利水平夯实基础；二是要从严审核各项目供应商选用条件，加大商务谈判力度，始终将保障公司利润、维护整体利益作为首要准则，各级管理人员也要履职尽责、层层严格把关。",
+        "page_start": 15,
+        "page_end": 15,
+        "start_char": 6522,
+        "end_char": 6648,
+        "exact_match": true
+      }
+    }
+  ]
+}

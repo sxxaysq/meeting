@@ -1,0 +1,180 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://meeting.local/schemas/m2_output.schema.json",
+  "title": "M2 Semantic Consolidation Output",
+  "description": "M2 输出。items[] 与 M1 的九字段完全兼容（同一份 item 定义，禁止 additionalProperties）；M2 自己的信息全部放顶层。禁止出现 confidence / status / project_id / task_id / merge_group / CREATE / UPDATE / reasoning。",
+  "type": "object",
+  "required": ["source_mode", "items", "project_entities", "merge_trace", "validation"],
+  "additionalProperties": false,
+  "properties": {
+    "source_mode": { "type": "string", "enum": ["block", "generic"] },
+    "items": { "type": "array", "items": { "$ref": "#/definitions/item" } },
+    "project_entities": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/projectEntity" }
+    },
+    "merge_trace": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/mergeTrace" }
+    },
+    "validation": { "$ref": "#/definitions/validation" }
+  },
+  "definitions": {
+    "nullableString": { "type": ["string", "null"] },
+
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "department",
+        "work_section",
+        "delivery_group",
+        "project",
+        "item_type",
+        "assignee",
+        "title",
+        "content",
+        "evidence"
+      ],
+      "properties": {
+        "department": { "$ref": "#/definitions/nullableString" },
+        "work_section": { "$ref": "#/definitions/nullableString" },
+        "delivery_group": { "$ref": "#/definitions/nullableString" },
+        "project": { "$ref": "#/definitions/nullableString" },
+        "item_type": {
+          "type": "string",
+          "enum": [
+            "PROJECT_TASK",
+            "RESEARCH_TASK",
+            "NON_PROJECT_WORK",
+            "NON_TASK_ITEM"
+          ]
+        },
+        "assignee": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "content": { "type": "string", "minLength": 1 },
+        "evidence": { "$ref": "#/definitions/evidence" }
+      }
+    },
+
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "page_start",
+        "page_end",
+        "start_char",
+        "end_char",
+        "exact_match"
+      ],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "page_start": { "type": ["integer", "null"], "minimum": 1 },
+        "page_end": { "type": ["integer", "null"], "minimum": 1 },
+        "start_char": { "type": "integer", "minimum": 0 },
+        "end_char": { "type": "integer", "minimum": 0 },
+        "exact_match": { "type": "boolean" }
+      }
+    },
+
+    "projectEntity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "canonical_name", "aliases", "source_names", "decisions"],
+      "properties": {
+        "entity_id": { "type": "string", "minLength": 1 },
+        "canonical_name": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "source_names": { "type": "array", "items": { "type": "string" } },
+        "decisions": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/entityDecision" }
+        }
+      }
+    },
+
+    "entityDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "decision"],
+      "properties": {
+        "type": { "type": "string", "enum": ["intra_meeting", "catalog"] },
+        "left": { "$ref": "#/definitions/nullableString" },
+        "right": { "$ref": "#/definitions/nullableString" },
+        "name": { "$ref": "#/definitions/nullableString" },
+        "catalog_entity": { "$ref": "#/definitions/nullableString" },
+        "recall_rule": { "$ref": "#/definitions/nullableString" },
+        "decision": {
+          "type": "string",
+          "enum": ["SAME_ENTITY", "DIFFERENT_ENTITY", "UNCERTAIN"]
+        },
+        "reason": { "$ref": "#/definitions/nullableString" }
+      }
+    },
+
+    "mergeTrace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "item_index",
+        "source_indexes",
+        "merged",
+        "evidence_mode",
+        "evidence_contiguous",
+        "source_evidence"
+      ],
+      "properties": {
+        "item_index": { "type": "integer", "minimum": 0 },
+        "source_indexes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "integer", "minimum": 0 }
+        },
+        "merged": { "type": "boolean" },
+        "evidence_mode": {
+          "type": "string",
+          "enum": ["single", "bounding_span", "primary_source"]
+        },
+        "evidence_contiguous": { "type": "boolean" },
+        "source_evidence": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/evidence" }
+        },
+        "project_entity_id": { "$ref": "#/definitions/nullableString" },
+        "title_source": {
+          "type": "string",
+          "enum": ["source", "llm", "source_grounding_failed"]
+        },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "issues"],
+      "properties": {
+        "status": { "type": "string", "enum": ["PASS", "REVIEW", "ERROR"] },
+        "issues": { "type": "array", "items": { "$ref": "#/definitions/issue" } },
+        "issue_counts": { "type": "object" }
+      }
+    },
+
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "level", "message"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "level": { "type": "string", "enum": ["error", "review", "warning"] },
+        "message": { "type": "string" },
+        "item_index": { "type": "integer", "minimum": 0 },
+        "detail": { "type": "object" }
+      }
+    }
+  }
+}

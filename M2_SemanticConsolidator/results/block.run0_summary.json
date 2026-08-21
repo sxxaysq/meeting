@@ -1,0 +1,1003 @@
+{
+  "source_mode": "block",
+  "run_index": 0,
+  "documents": 10,
+  "m1_items": 1444,
+  "m2_items": 1436,
+  "gold_items": 1367,
+  "merge_operations": 8,
+  "merge_project_consistent": {
+    "predicted_pairs": 8,
+    "gold_pairs": 279,
+    "true_positive": 1,
+    "precision": 0.125,
+    "recall": 0.0036,
+    "f1": 0.007
+  },
+  "merge_full_annotation": {
+    "predicted_pairs": 8,
+    "gold_pairs": 1301,
+    "true_positive": 2,
+    "precision": 0.25,
+    "recall": 0.0015,
+    "f1": 0.0031
+  },
+  "over_merge": {
+    "pairs": 6,
+    "rate": 0.75,
+    "hard_negative_violations": 0,
+    "hard_negative_rate": 0.0
+  },
+  "under_merge": {
+    "pairs": 278,
+    "rate": 0.9964
+  },
+  "coverage_m1": 0.9495,
+  "coverage_m2": 0.9517,
+  "project_entity_m1": {
+    "pair_accuracy": 0.9525,
+    "wrongly_linked_pairs": 3,
+    "wrongly_split_pairs": 1095
+  },
+  "project_entity_m2": {
+    "pair_accuracy": 0.9529,
+    "wrongly_linked_pairs": 9,
+    "wrongly_split_pairs": 1066
+  },
+  "project_string_accuracy_m1": 0.6452,
+  "project_string_accuracy_m2": 0.7104,
+  "schema_violations": 0,
+  "review_rate": 0.0014,
+  "status_counts": {
+    "PASS": 0,
+    "REVIEW": 10,
+    "ERROR": 0
+  },
+  "total_seconds": 194.0,
+  "llm": {
+    "model": "Qwen/Qwen3.6-35B-A3B",
+    "base_url": "http://192.168.30.215:8000/v1",
+    "transport": "openai",
+    "calls": 1395,
+    "repairs": 0,
+    "failures": 0,
+    "truncations": 0,
+    "reasoning_fallbacks": 0
+  },
+  "per_document": [
+    {
+      "doc": "2026-04-07",
+      "seconds": 28.3,
+      "counts": {
+        "m1_items": 160,
+        "m2_items": 159,
+        "gold_items": 151,
+        "merge_operations": 1,
+        "granularity_ratio_m1": 1.06,
+        "granularity_ratio_m2": 1.053
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 1,
+        "gold_pairs": 47,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 1,
+        "gold_pairs": 64,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 63,
+        "pairs": 1953,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.6522,
+        "pair_accuracy": 0.9877,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 24
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 63,
+        "pairs": 1953,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.5217,
+        "pair_accuracy": 0.9831,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 33
+      },
+      "over_merge": {
+        "pairs": 1,
+        "rate": 1.0,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 47,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 151,
+        "gold_fully_covered": 144,
+        "gold_recall_full": 0.9536
+      },
+      "coverage_m1": {
+        "gold_items": 151,
+        "gold_fully_covered": 144,
+        "gold_recall_full": 0.9536
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 130,
+        "department": 1.0,
+        "work_section": 0.1923,
+        "delivery_group": 0.9462,
+        "project": 0.8,
+        "item_type": 0.6462
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 132,
+        "department": 1.0,
+        "work_section": 0.1894,
+        "delivery_group": 0.947,
+        "project": 0.803,
+        "item_type": 0.6515
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "MERGE_UNCERTAIN": 1,
+          "MERGED_EVIDENCE_NOT_CONTIGUOUS": 1,
+          "PROJECT_ENTITY_UNCERTAIN": 8
+        }
+      }
+    },
+    {
+      "doc": "2026-04-13",
+      "seconds": 23.9,
+      "counts": {
+        "m1_items": 170,
+        "m2_items": 168,
+        "gold_items": 164,
+        "merge_operations": 2,
+        "granularity_ratio_m1": 1.037,
+        "granularity_ratio_m2": 1.024
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 2,
+        "gold_pairs": 14,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 2,
+        "gold_pairs": 24,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 72,
+        "pairs": 2556,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.4519,
+        "pair_accuracy": 0.9777,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 57
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 72,
+        "pairs": 2556,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.3558,
+        "pair_accuracy": 0.9738,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 67
+      },
+      "over_merge": {
+        "pairs": 2,
+        "rate": 1.0,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 14,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 164,
+        "gold_fully_covered": 159,
+        "gold_recall_full": 0.9695
+      },
+      "coverage_m1": {
+        "gold_items": 164,
+        "gold_fully_covered": 159,
+        "gold_recall_full": 0.9695
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 147,
+        "department": 0.7755,
+        "work_section": 0.415,
+        "delivery_group": 1.0,
+        "project": 0.7143,
+        "item_type": 0.6667
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 150,
+        "department": 0.7733,
+        "work_section": 0.4133,
+        "delivery_group": 1.0,
+        "project": 0.76,
+        "item_type": 0.6733
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "MERGED_EVIDENCE_NOT_CONTIGUOUS": 1,
+          "PROJECT_ENTITY_UNCERTAIN": 1
+        }
+      }
+    },
+    {
+      "doc": "2026-04-20",
+      "seconds": 24.1,
+      "counts": {
+        "m1_items": 160,
+        "m2_items": 160,
+        "gold_items": 160,
+        "merge_operations": 0,
+        "granularity_ratio_m1": 1.0,
+        "granularity_ratio_m2": 1.0
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 0,
+        "gold_pairs": 60,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 0,
+        "gold_pairs": 169,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 84,
+        "pairs": 3486,
+        "same_entity_precision": 0.975,
+        "same_entity_recall": 0.2407,
+        "pair_accuracy": 0.9644,
+        "wrongly_linked_pairs": 1,
+        "wrongly_split_pairs": 123
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 84,
+        "pairs": 3486,
+        "same_entity_precision": 0.9688,
+        "same_entity_recall": 0.1914,
+        "pair_accuracy": 0.9621,
+        "wrongly_linked_pairs": 1,
+        "wrongly_split_pairs": 131
+      },
+      "over_merge": {
+        "pairs": 0,
+        "rate": null,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": null
+      },
+      "under_merge": {
+        "pairs": 60,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 160,
+        "gold_fully_covered": 137,
+        "gold_recall_full": 0.8562
+      },
+      "coverage_m1": {
+        "gold_items": 160,
+        "gold_fully_covered": 137,
+        "gold_recall_full": 0.8562
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 121,
+        "department": 0.9752,
+        "work_section": 0.2479,
+        "delivery_group": 1.0,
+        "project": 0.6198,
+        "item_type": 0.7355
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 121,
+        "department": 0.9752,
+        "work_section": 0.2479,
+        "delivery_group": 1.0,
+        "project": 0.5868,
+        "item_type": 0.7355
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "PROJECT_ENTITY_UNCERTAIN": 3,
+          "PROJECT_ALIAS_CONFLICT": 4
+        }
+      }
+    },
+    {
+      "doc": "2026-04-27",
+      "seconds": 19.0,
+      "counts": {
+        "m1_items": 132,
+        "m2_items": 132,
+        "gold_items": 120,
+        "merge_operations": 0,
+        "granularity_ratio_m1": 1.1,
+        "granularity_ratio_m2": 1.1
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 0,
+        "gold_pairs": 22,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 0,
+        "gold_pairs": 130,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 65,
+        "pairs": 2080,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.0741,
+        "pair_accuracy": 0.9519,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 100
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 65,
+        "pairs": 2080,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.0556,
+        "pair_accuracy": 0.951,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 102
+      },
+      "over_merge": {
+        "pairs": 0,
+        "rate": null,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": null
+      },
+      "under_merge": {
+        "pairs": 22,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 120,
+        "gold_fully_covered": 117,
+        "gold_recall_full": 0.975
+      },
+      "coverage_m1": {
+        "gold_items": 120,
+        "gold_fully_covered": 117,
+        "gold_recall_full": 0.975
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 105,
+        "department": 0.8857,
+        "work_section": 0.2762,
+        "delivery_group": 0.9143,
+        "project": 0.6381,
+        "item_type": 0.7429
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 105,
+        "department": 0.8857,
+        "work_section": 0.2762,
+        "delivery_group": 0.9143,
+        "project": 0.5524,
+        "item_type": 0.7429
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "PROJECT_ENTITY_UNCERTAIN": 6,
+          "PROJECT_ALIAS_CONFLICT": 1
+        }
+      }
+    },
+    {
+      "doc": "2026-05-11",
+      "seconds": 14.7,
+      "counts": {
+        "m1_items": 129,
+        "m2_items": 127,
+        "gold_items": 119,
+        "merge_operations": 2,
+        "granularity_ratio_m1": 1.084,
+        "granularity_ratio_m2": 1.067
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 2,
+        "gold_pairs": 21,
+        "true_positive": 1,
+        "precision": 0.5,
+        "recall": 0.0476,
+        "f1": 0.087
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 2,
+        "gold_pairs": 141,
+        "true_positive": 2,
+        "precision": 1.0,
+        "recall": 0.0142,
+        "f1": 0.028
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 62,
+        "pairs": 1891,
+        "same_entity_precision": 0.8,
+        "same_entity_recall": 0.0357,
+        "pair_accuracy": 0.9424,
+        "wrongly_linked_pairs": 1,
+        "wrongly_split_pairs": 108
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 61,
+        "pairs": 1830,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.01,
+        "pair_accuracy": 0.9459,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 99
+      },
+      "over_merge": {
+        "pairs": 0,
+        "rate": 0.0,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 20,
+        "rate": 0.9524
+      },
+      "coverage_m2": {
+        "gold_items": 119,
+        "gold_fully_covered": 116,
+        "gold_recall_full": 0.9748
+      },
+      "coverage_m1": {
+        "gold_items": 119,
+        "gold_fully_covered": 116,
+        "gold_recall_full": 0.9748
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 106,
+        "department": 1.0,
+        "work_section": 0.2075,
+        "delivery_group": 1.0,
+        "project": 0.7358,
+        "item_type": 0.783
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 106,
+        "department": 1.0,
+        "work_section": 0.2075,
+        "delivery_group": 1.0,
+        "project": 0.6509,
+        "item_type": 0.7642
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 1,
+        "review_rate": 0.0079,
+        "issue_counts": {
+          "ITEM_TYPE_CONFLICT": 1,
+          "MERGED_EVIDENCE_NOT_CONTIGUOUS": 1,
+          "PROJECT_ENTITY_UNCERTAIN": 2,
+          "PROJECT_ALIAS_CONFLICT": 2
+        }
+      }
+    },
+    {
+      "doc": "2026-05-25",
+      "seconds": 16.2,
+      "counts": {
+        "m1_items": 131,
+        "m2_items": 131,
+        "gold_items": 125,
+        "merge_operations": 0,
+        "granularity_ratio_m1": 1.048,
+        "granularity_ratio_m2": 1.048
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 0,
+        "gold_pairs": 17,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 0,
+        "gold_pairs": 147,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 70,
+        "pairs": 2415,
+        "same_entity_precision": 0.7778,
+        "same_entity_recall": 0.0603,
+        "pair_accuracy": 0.954,
+        "wrongly_linked_pairs": 2,
+        "wrongly_split_pairs": 109
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 70,
+        "pairs": 2415,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.0431,
+        "pair_accuracy": 0.954,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 111
+      },
+      "over_merge": {
+        "pairs": 0,
+        "rate": null,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": null
+      },
+      "under_merge": {
+        "pairs": 17,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 125,
+        "gold_fully_covered": 123,
+        "gold_recall_full": 0.984
+      },
+      "coverage_m1": {
+        "gold_items": 125,
+        "gold_fully_covered": 123,
+        "gold_recall_full": 0.984
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 101,
+        "department": 1.0,
+        "work_section": 0.2673,
+        "delivery_group": 1.0,
+        "project": 0.7426,
+        "item_type": 0.7822
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 101,
+        "department": 1.0,
+        "work_section": 0.2673,
+        "delivery_group": 1.0,
+        "project": 0.6634,
+        "item_type": 0.7822
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "STRUCTURE_CONFLICT_VETO": 1,
+          "PROJECT_ENTITY_UNCERTAIN": 2,
+          "PROJECT_ALIAS_CONFLICT": 1
+        }
+      }
+    },
+    {
+      "doc": "2026-06-15",
+      "seconds": 20.8,
+      "counts": {
+        "m1_items": 151,
+        "m2_items": 150,
+        "gold_items": 135,
+        "merge_operations": 1,
+        "granularity_ratio_m1": 1.119,
+        "granularity_ratio_m2": 1.111
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 1,
+        "gold_pairs": 33,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 1,
+        "gold_pairs": 189,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 69,
+        "pairs": 2346,
+        "same_entity_precision": 0.95,
+        "same_entity_recall": 0.118,
+        "pair_accuracy": 0.939,
+        "wrongly_linked_pairs": 1,
+        "wrongly_split_pairs": 142
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 69,
+        "pairs": 2346,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.118,
+        "pair_accuracy": 0.9395,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 142
+      },
+      "over_merge": {
+        "pairs": 1,
+        "rate": 1.0,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 33,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 135,
+        "gold_fully_covered": 133,
+        "gold_recall_full": 0.9852
+      },
+      "coverage_m1": {
+        "gold_items": 135,
+        "gold_fully_covered": 130,
+        "gold_recall_full": 0.963
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 109,
+        "department": 0.945,
+        "work_section": 0.2202,
+        "delivery_group": 0.9817,
+        "project": 0.7064,
+        "item_type": 0.789
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 111,
+        "department": 0.9459,
+        "work_section": 0.2252,
+        "delivery_group": 0.982,
+        "project": 0.6396,
+        "item_type": 0.7928
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 1,
+        "review_rate": 0.0067,
+        "issue_counts": {
+          "WORK_SECTION_CONFLICT": 1,
+          "MERGED_EVIDENCE_NOT_CONTIGUOUS": 1,
+          "PROJECT_ENTITY_UNCERTAIN": 3
+        }
+      }
+    },
+    {
+      "doc": "2026-06-22",
+      "seconds": 16.2,
+      "counts": {
+        "m1_items": 139,
+        "m2_items": 138,
+        "gold_items": 131,
+        "merge_operations": 1,
+        "granularity_ratio_m1": 1.061,
+        "granularity_ratio_m2": 1.053
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 1,
+        "gold_pairs": 18,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 1,
+        "gold_pairs": 154,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 72,
+        "pairs": 2556,
+        "same_entity_precision": 0.5,
+        "same_entity_recall": 0.014,
+        "pair_accuracy": 0.9441,
+        "wrongly_linked_pairs": 2,
+        "wrongly_split_pairs": 141
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 72,
+        "pairs": 2556,
+        "same_entity_precision": 0.3333,
+        "same_entity_recall": 0.007,
+        "pair_accuracy": 0.9437,
+        "wrongly_linked_pairs": 2,
+        "wrongly_split_pairs": 142
+      },
+      "over_merge": {
+        "pairs": 1,
+        "rate": 1.0,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 18,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 131,
+        "gold_fully_covered": 121,
+        "gold_recall_full": 0.9237
+      },
+      "coverage_m1": {
+        "gold_items": 131,
+        "gold_fully_covered": 121,
+        "gold_recall_full": 0.9237
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 105,
+        "department": 0.9905,
+        "work_section": 0.3238,
+        "delivery_group": 1.0,
+        "project": 0.7429,
+        "item_type": 0.8857
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 106,
+        "department": 0.9906,
+        "work_section": 0.3208,
+        "delivery_group": 1.0,
+        "project": 0.6981,
+        "item_type": 0.8868
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "PROJECT_ENTITY_UNCERTAIN": 4
+        }
+      }
+    },
+    {
+      "doc": "2026-06-29",
+      "seconds": 15.5,
+      "counts": {
+        "m1_items": 138,
+        "m2_items": 138,
+        "gold_items": 127,
+        "merge_operations": 0,
+        "granularity_ratio_m1": 1.087,
+        "granularity_ratio_m2": 1.087
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 0,
+        "gold_pairs": 32,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 0,
+        "gold_pairs": 157,
+        "true_positive": 0,
+        "precision": null,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 74,
+        "pairs": 2701,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.0789,
+        "pair_accuracy": 0.9482,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 140
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 74,
+        "pairs": 2701,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.0724,
+        "pair_accuracy": 0.9478,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 141
+      },
+      "over_merge": {
+        "pairs": 0,
+        "rate": null,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": null
+      },
+      "under_merge": {
+        "pairs": 32,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 127,
+        "gold_fully_covered": 123,
+        "gold_recall_full": 0.9685
+      },
+      "coverage_m1": {
+        "gold_items": 127,
+        "gold_fully_covered": 123,
+        "gold_recall_full": 0.9685
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 101,
+        "department": 1.0,
+        "work_section": 0.2772,
+        "delivery_group": 0.9604,
+        "project": 0.6931,
+        "item_type": 0.8515
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 101,
+        "department": 1.0,
+        "work_section": 0.2772,
+        "delivery_group": 0.9604,
+        "project": 0.6139,
+        "item_type": 0.8515
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "PROJECT_ENTITY_UNCERTAIN": 1
+        }
+      }
+    },
+    {
+      "doc": "2026-07-13",
+      "seconds": 15.3,
+      "counts": {
+        "m1_items": 134,
+        "m2_items": 133,
+        "gold_items": 135,
+        "merge_operations": 1,
+        "granularity_ratio_m1": 0.993,
+        "granularity_ratio_m2": 0.985
+      },
+      "_note": "merge_* 两个视图仅供参照：标注的合并语义是源段落粒度，含需求禁止的同项目跨子系统合并。主指标看 over_merge.hard_negative_violations 与 project_entity_pairs。",
+      "merge_project_consistent": {
+        "predicted_pairs": 1,
+        "gold_pairs": 15,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 1,
+        "gold_pairs": 126,
+        "true_positive": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": null
+      },
+      "project_entity_pairs_m2": {
+        "comparable_items": 79,
+        "pairs": 3081,
+        "same_entity_precision": 0.8462,
+        "same_entity_recall": 0.0827,
+        "pair_accuracy": 0.9598,
+        "wrongly_linked_pairs": 2,
+        "wrongly_split_pairs": 122
+      },
+      "project_entity_pairs_m1": {
+        "comparable_items": 79,
+        "pairs": 3081,
+        "same_entity_precision": 1.0,
+        "same_entity_recall": 0.0451,
+        "pair_accuracy": 0.9588,
+        "wrongly_linked_pairs": 0,
+        "wrongly_split_pairs": 127
+      },
+      "over_merge": {
+        "pairs": 1,
+        "rate": 1.0,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 15,
+        "rate": 1.0
+      },
+      "coverage_m2": {
+        "gold_items": 135,
+        "gold_fully_covered": 128,
+        "gold_recall_full": 0.9481
+      },
+      "coverage_m1": {
+        "gold_items": 135,
+        "gold_fully_covered": 128,
+        "gold_recall_full": 0.9481
+      },
+      "field_accuracy_m2": {
+        "matched_pairs": 107,
+        "department": 0.9813,
+        "work_section": 0.4299,
+        "delivery_group": 0.8785,
+        "project": 0.6262,
+        "item_type": 0.785
+      },
+      "field_accuracy_m1": {
+        "matched_pairs": 109,
+        "department": 0.9817,
+        "work_section": 0.422,
+        "delivery_group": 0.8807,
+        "project": 0.5505,
+        "item_type": 0.789
+      },
+      "validation": {
+        "status": "REVIEW",
+        "schema_violations": 0,
+        "review_items": 0,
+        "review_rate": 0.0,
+        "issue_counts": {
+          "MERGED_EVIDENCE_NOT_CONTIGUOUS": 1,
+          "PROJECT_ENTITY_UNCERTAIN": 4,
+          "PROJECT_ALIAS_CONFLICT": 1
+        }
+      }
+    }
+  ]
+}

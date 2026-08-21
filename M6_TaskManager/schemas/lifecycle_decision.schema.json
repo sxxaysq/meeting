@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meeting.local/schemas/lifecycle_decision.schema.json",
+  "title": "M6 lifecycle decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "decision",
+    "target_task_id",
+    "reason",
+    "event_summary",
+    "changes",
+    "department_change"
+  ],
+  "properties": {
+    "decision": {
+      "enum": [
+        "CREATE",
+        "PROGRESS_UPDATE",
+        "MODIFY",
+        "COMPLETE",
+        "CANCEL",
+        "REOPEN",
+        "TRANSFER",
+        "REVIEW"
+      ]
+    },
+    "target_task_id": {"type": ["string", "null"], "minLength": 1},
+    "reason": {"type": "string", "minLength": 1, "maxLength": 500},
+    "event_summary": {"type": ["string", "null"], "maxLength": 500},
+    "changes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": {"type": ["string", "null"]},
+        "description": {"type": ["string", "null"]},
+        "work_section": {"type": ["string", "null"]},
+        "delivery_group": {"type": ["string", "null"]},
+        "assignees": {
+          "type": ["array", "null"],
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "department_change": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["from_department", "to_department", "evidence"],
+      "properties": {
+        "from_department": {"type": ["string", "null"]},
+        "to_department": {"type": "string", "minLength": 1},
+        "evidence": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

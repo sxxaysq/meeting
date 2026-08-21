@@ -1,0 +1,215 @@
+{
+  "source_mode": "block",
+  "runs": 3,
+  "median": {
+    "merge_precision_project_consistent": 0.125,
+    "merge_recall_project_consistent": 0.0036,
+    "over_merge_rate": 0.75,
+    "hard_negative_violations": 0.0,
+    "m2_items": 1436.0,
+    "coverage_m2": 0.9517
+  },
+  "runs_detail": [
+    {
+      "source_mode": "block",
+      "run_index": 0,
+      "documents": 10,
+      "m1_items": 1444,
+      "m2_items": 1436,
+      "gold_items": 1367,
+      "merge_operations": 8,
+      "merge_project_consistent": {
+        "predicted_pairs": 8,
+        "gold_pairs": 279,
+        "true_positive": 1,
+        "precision": 0.125,
+        "recall": 0.0036,
+        "f1": 0.007
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 8,
+        "gold_pairs": 1301,
+        "true_positive": 2,
+        "precision": 0.25,
+        "recall": 0.0015,
+        "f1": 0.0031
+      },
+      "over_merge": {
+        "pairs": 6,
+        "rate": 0.75,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 278,
+        "rate": 0.9964
+      },
+      "coverage_m1": 0.9495,
+      "coverage_m2": 0.9517,
+      "project_entity_m1": {
+        "pair_accuracy": 0.9525,
+        "wrongly_linked_pairs": 3,
+        "wrongly_split_pairs": 1095
+      },
+      "project_entity_m2": {
+        "pair_accuracy": 0.9529,
+        "wrongly_linked_pairs": 9,
+        "wrongly_split_pairs": 1066
+      },
+      "project_string_accuracy_m1": 0.6452,
+      "project_string_accuracy_m2": 0.7104,
+      "schema_violations": 0,
+      "review_rate": 0.0014,
+      "status_counts": {
+        "PASS": 0,
+        "REVIEW": 10,
+        "ERROR": 0
+      },
+      "total_seconds": 194.0,
+      "llm": {
+        "model": "Qwen/Qwen3.6-35B-A3B",
+        "base_url": "http://192.168.30.215:8000/v1",
+        "transport": "openai",
+        "calls": 1395,
+        "repairs": 0,
+        "failures": 0,
+        "truncations": 0,
+        "reasoning_fallbacks": 0
+      }
+    },
+    {
+      "source_mode": "block",
+      "run_index": 1,
+      "documents": 10,
+      "m1_items": 1444,
+      "m2_items": 1436,
+      "gold_items": 1367,
+      "merge_operations": 8,
+      "merge_project_consistent": {
+        "predicted_pairs": 8,
+        "gold_pairs": 279,
+        "true_positive": 1,
+        "precision": 0.125,
+        "recall": 0.0036,
+        "f1": 0.007
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 8,
+        "gold_pairs": 1301,
+        "true_positive": 2,
+        "precision": 0.25,
+        "recall": 0.0015,
+        "f1": 0.0031
+      },
+      "over_merge": {
+        "pairs": 6,
+        "rate": 0.75,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 278,
+        "rate": 0.9964
+      },
+      "coverage_m1": 0.9495,
+      "coverage_m2": 0.9517,
+      "project_entity_m1": {
+        "pair_accuracy": 0.9525,
+        "wrongly_linked_pairs": 3,
+        "wrongly_split_pairs": 1095
+      },
+      "project_entity_m2": {
+        "pair_accuracy": 0.9529,
+        "wrongly_linked_pairs": 9,
+        "wrongly_split_pairs": 1066
+      },
+      "project_string_accuracy_m1": 0.6452,
+      "project_string_accuracy_m2": 0.7104,
+      "schema_violations": 0,
+      "review_rate": 0.0014,
+      "status_counts": {
+        "PASS": 0,
+        "REVIEW": 10,
+        "ERROR": 0
+      },
+      "total_seconds": 192.7,
+      "llm": {
+        "model": "Qwen/Qwen3.6-35B-A3B",
+        "base_url": "http://192.168.30.215:8000/v1",
+        "transport": "openai",
+        "calls": 1395,
+        "repairs": 0,
+        "failures": 0,
+        "truncations": 0,
+        "reasoning_fallbacks": 0
+      }
+    },
+    {
+      "source_mode": "block",
+      "run_index": 2,
+      "documents": 10,
+      "m1_items": 1444,
+      "m2_items": 1436,
+      "gold_items": 1367,
+      "merge_operations": 8,
+      "merge_project_consistent": {
+        "predicted_pairs": 8,
+        "gold_pairs": 279,
+        "true_positive": 1,
+        "precision": 0.125,
+        "recall": 0.0036,
+        "f1": 0.007
+      },
+      "merge_full_annotation": {
+        "predicted_pairs": 8,
+        "gold_pairs": 1301,
+        "true_positive": 2,
+        "precision": 0.25,
+        "recall": 0.0015,
+        "f1": 0.0031
+      },
+      "over_merge": {
+        "pairs": 6,
+        "rate": 0.75,
+        "hard_negative_violations": 0,
+        "hard_negative_rate": 0.0
+      },
+      "under_merge": {
+        "pairs": 278,
+        "rate": 0.9964
+      },
+      "coverage_m1": 0.9495,
+      "coverage_m2": 0.9517,
+      "project_entity_m1": {
+        "pair_accuracy": 0.9525,
+        "wrongly_linked_pairs": 3,
+        "wrongly_split_pairs": 1095
+      },
+      "project_entity_m2": {
+        "pair_accuracy": 0.9525,
+        "wrongly_linked_pairs": 10,
+        "wrongly_split_pairs": 1067
+      },
+      "project_string_accuracy_m1": 0.6452,
+      "project_string_accuracy_m2": 0.7104,
+      "schema_violations": 0,
+      "review_rate": 0.0014,
+      "status_counts": {
+        "PASS": 0,
+        "REVIEW": 10,
+        "ERROR": 0
+      },
+      "total_seconds": 181.2,
+      "llm": {
+        "model": "Qwen/Qwen3.6-35B-A3B",
+        "base_url": "http://192.168.30.215:8000/v1",
+        "transport": "openai",
+        "calls": 1396,
+        "repairs": 0,
+        "failures": 0,
+        "truncations": 0,
+        "reasoning_fallbacks": 0
+      }
+    }
+  ]
+}
