@@ -41,6 +41,7 @@ backups/
 recovery_backup*/
 candidate_before*/
 logs/
+pilot_inputs/
 数据集/
 
 # Models, datasets, and dependency bundles
