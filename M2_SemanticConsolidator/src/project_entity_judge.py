@@ -6,7 +6,7 @@
     名称规范化 → 已有 alias 精确匹配 → 候选项目召回 → LLM Entity Judge
     → SAME_ENTITY / DIFFERENT_ENTITY / UNCERTAIN
 
-只有 SAME_ENTITY 才写永久 alias；UNCERTAIN 进 REVIEW。
+只有 SAME_ENTITY 才写永久 alias；UNCERTAIN 保持独立并记录 warning。
 LLM 的 reason 只进 decisions 记录里的结构化字段，不把原始推理写进正式 items。
 """
 
@@ -142,6 +142,7 @@ class ProjectEntityJudge:
         union = UnionFind([normalize_name(n) for n in names])
         decisions: List[Dict[str, object]] = []
         canonical_vote: Dict[str, str] = {}
+        pair_canonical: Dict[frozenset, str] = {}
         # 本次会议里被判"不是同一个"的名字对。这个结论不许在后面
         # 通过项目主表绕过去——否则 UNCERTAIN 会被 catalog 悄悄合掉。
         blocked: set = set()
@@ -167,6 +168,8 @@ class ProjectEntityJudge:
                 blocked.add(frozenset((normalize_name(left), normalize_name(right))))
                 continue
             decision, canonical, reason = self.judge_pair(contexts[left], contexts[right])
+            if decision == SAME_ENTITY and canonical:
+                pair_canonical[frozenset((normalize_name(left), normalize_name(right)))] = canonical
             decisions.append(
                 {
                     "type": "intra_meeting",
@@ -177,13 +180,27 @@ class ProjectEntityJudge:
                     "reason": reason,
                 }
             )
-            if decision == SAME_ENTITY and canonical:
-                union.union(normalize_name(left), normalize_name(right))
-                canonical_vote[union.find(normalize_name(left))] = canonical
-            else:
+            if decision != SAME_ENTITY:
                 blocked.add(frozenset((normalize_name(left), normalize_name(right))))
                 if decision == ENTITY_UNCERTAIN:
                     self.uncertain.append({"left": left, "right": right, "reason": reason})
+
+        # 所有否决先收齐，再合确定对，避免 A≈B≈C 绕过 A/C 不确定或矿号冲突。
+        for row in decisions:
+            if row['decision'] != SAME_ENTITY:
+                continue
+            left, right = normalize_name(row['left']), normalize_name(row['right'])
+            a = [n for n in names if union.find(normalize_name(n)) == union.find(left)]
+            b = [n for n in names if union.find(normalize_name(n)) == union.find(right)]
+            if any(frozenset((normalize_name(x), normalize_name(y))) in blocked
+                   or ordinal_conflict(x, y) for x in a for y in b):
+                row['decision'] = ENTITY_UNCERTAIN
+                row['reason'] = '合并会跨越已拆开的项目，保持独立'
+                blocked.add(frozenset((left, right)))
+                self.uncertain.append({'left': row['left'], 'right': row['right'], 'reason': row['reason']})
+                continue
+            union.union(left, right)
+            canonical_vote[union.find(left)] = pair_canonical[frozenset((left, right))]
 
         # 2) 成组，选 canonical
         groups: Dict[str, List[str]] = {}
@@ -206,6 +223,10 @@ class ProjectEntityJudge:
                 blocked=blocked,
                 skip_catalog=any(member in ambiguous for member in members),
             )
+            if entity.entity_id in entities:
+                previous = entities[entity.entity_id]
+                entity.members = sorted(set(previous.members + entity.members))
+                entity.aliases = sorted(set(previous.aliases + entity.aliases))
             entities[entity.entity_id] = entity
             for member in members:
                 name_to_entity[normalize_name(member)] = entity.entity_id

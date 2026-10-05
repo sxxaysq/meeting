@@ -117,15 +117,16 @@ class TaskRepository:
             for task in tasks:
                 rows = connection.execute(
                     """
-                    SELECT event_type, content, created_at
+                    SELECT event_id, event_type, content, created_at
                     FROM task_events
                     WHERE task_id = ?
-                    ORDER BY created_at DESC, event_id DESC
+                    ORDER BY rowid DESC
                     LIMIT ?
                     """,
                     (task["task_id"], recent_event_limit),
                 ).fetchall()
                 task["recent_events"] = [dict(row) for row in rows]
+                task['last_event_id'] = rows[0]['event_id'] if rows else None
         return tasks
 
     def get_processing_record(

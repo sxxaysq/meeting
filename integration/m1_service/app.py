@@ -24,7 +24,7 @@ from fastapi import FastAPI, File, Form, UploadFile
 from fastapi.responses import JSONResponse
 
 HERE = Path(__file__).resolve().parent
-M1_ROOT = HERE.parents[1] / "meeting-m2-work" / "M1_Extraction"
+M1_ROOT = HERE.parents[1] / "M1_Extraction"
 sys.path.insert(0, str(M1_ROOT / "src"))
 
 from llm_client import LLMClient, LLMConfig, LLMError  # noqa: E402

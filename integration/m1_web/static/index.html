@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M1 会议文档抽取面板</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f7fa; color: #333; }
+.header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 32px; }
+.header h1 { font-size: 22px; font-weight: 600; }
+.header p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+.container { max-width: 1200px; margin: 24px auto; padding: 0 24px; }
+.card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 20px; }
+.card-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #1a1a2e; display: flex; align-items: center; gap: 8px; }
+.card-title .badge { font-size: 11px; background: #e8f5e9; color: #2e7d32; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+
+/* Upload Area */
+.upload-area { border: 2px dashed #d0d5dd; border-radius: 10px; padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s; }
+.upload-area:hover, .upload-area.dragover { border-color: #667eea; background: #f8f9ff; }
+.upload-area .icon { font-size: 40px; margin-bottom: 12px; }
+.upload-area .text { font-size: 15px; color: #555; }
+.upload-area .hint { font-size: 12px; color: #999; margin-top: 6px; }
+.file-info { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #f0f4ff; border-radius: 8px; margin-top: 12px; }
+.file-info .name { font-weight: 500; flex: 1; }
+.file-info .size { color: #888; font-size: 13px; }
+.file-info .remove { color: #e53935; cursor: pointer; font-size: 18px; }
+
+/* Controls */
+.controls { display: flex; gap: 12px; margin-top: 16px; align-items: center; flex-wrap: wrap; }
+.controls label { font-size: 14px; color: #555; }
+.controls select { padding: 8px 12px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 14px; }
+.btn { padding: 10px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+.btn-primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+.btn-success { background: linear-gradient(135deg, #43a047, #2e7d32); color: white; }
+.btn-success:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(46,125,50,0.4); }
+.btn-outline { background: white; color: #667eea; border: 1px solid #667eea; }
+.btn-outline:hover:not(:disabled) { background: #f8f9ff; }
+
+/* Status */
+.status { padding: 12px 16px; border-radius: 8px; margin-top: 16px; font-size: 14px; display: none; }
+.status.show { display: block; }
+.status.info { background: #e3f2fd; color: #1565c0; }
+.status.success { background: #e8f5e9; color: #2e7d32; }
+.status.error { background: #ffebee; color: #c62828; }
+.status .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 6px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Stats */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.stat-item { background: #f8f9fa; border-radius: 8px; padding: 14px; text-align: center; }
+.stat-item .value { font-size: 24px; font-weight: 700; color: #667eea; }
+.stat-item .label { font-size: 12px; color: #888; margin-top: 2px; }
+
+/* Table */
+.table-wrap { overflow-x: auto; max-height: 600px; overflow-y: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead { position: sticky; top: 0; z-index: 1; }
+th { background: #f1f3f5; padding: 10px 12px; text-align: left; font-weight: 600; color: #555; border-bottom: 2px solid #e0e0e0; white-space: nowrap; }
+td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+tr:hover td { background: #fafbff; }
+.type-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+.type-PROJECT_TASK { background: #e3f2fd; color: #1565c0; }
+.type-RESEARCH_TASK { background: #f3e5f5; color: #7b1fa2; }
+.type-NON_PROJECT_WORK { background: #fff3e0; color: #e65100; }
+.type-NON_TASK_ITEM { background: #f5f5f5; color: #757575; }
+.evidence-text { max-width: 300px; font-size: 12px; color: #888; font-style: italic; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+.evidence-text:hover { white-space: normal; word-break: break-all; }
+.assignee-tag { display: inline-block; background: #e8eaf6; color: #283593; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin: 1px; }
+
+/* Filter */
+.filter-bar { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+.filter-bar input, .filter-bar select { padding: 6px 10px; border: 1px solid #d0d5dd; border-radius: 6px; font-size: 13px; }
+.filter-bar input { flex: 1; min-width: 200px; }
+.filter-bar .count { font-size: 13px; color: #888; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 0 12px; }
+  .card { padding: 16px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>M1 会议文档抽取面板</h1>
+  <p>上传会议 PDF/DOCX → LLM 结构化抽取 → 查看结果 → 一键入库</p>
+</div>
+
+<div class="container">
+  <!-- Upload Card -->
+  <div class="card">
+    <div class="card-title">📄 上传文档</div>
+    <div class="upload-area" id="uploadArea">
+      <div class="icon">📁</div>
+      <div class="text">点击或拖拽文件到此处</div>
+      <div class="hint">支持 PDF、DOCX、TXT 格式</div>
+    </div>
+    <input type="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" style="display:none">
+    <div id="fileInfo" style="display:none" class="file-info">
+      <span>📎</span>
+      <span class="name" id="fileName"></span>
+      <span class="size" id="fileSize"></span>
+      <span class="remove" id="removeFile" title="移除">✕</span>
+    </div>
+    <div class="controls">
+      <label>抽取模式：</label>
+      <select id="modeSelect">
+        <option value="block">分块抽取（推荐，适合长文档）</option>
+        <option value="generic">整篇抽取（适合短文档）</option>
+      </select>
+      <button class="btn btn-primary" id="extractBtn" disabled>🚀 开始抽取</button>
+    </div>
+    <div class="status" id="extractStatus"></div>
+  </div>
+
+  <!-- Results Card -->
+  <div class="card" id="resultsCard" style="display:none">
+    <div class="card-title">
+      📊 抽取结果
+      <span class="badge" id="resultBadge"></span>
+    </div>
+    <div class="stats" id="statsArea"></div>
+    <div class="filter-bar">
+      <input type="text" id="searchInput" placeholder="搜索标题、内容、项目...">
+      <select id="typeFilter">
+        <option value="">全部类型</option>
+        <option value="PROJECT_TASK">项目任务</option>
+        <option value="RESEARCH_TASK">科研任务</option>
+        <option value="NON_PROJECT_WORK">非项目工作</option>
+        <option value="NON_TASK_ITEM">非任务项</option>
+      </select>
+      <span class="count" id="filteredCount"></span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>类型</th>
+            <th>部门</th>
+            <th>项目</th>
+            <th>责任人</th>
+            <th>标题</th>
+            <th>内容</th>
+            <th>证据</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+      </table>
+    </div>
+    <div class="controls" style="margin-top: 16px;">
+      <button class="btn btn-success" id="ingestBtn">💾 入库到数据中台</button>
+      <button class="btn btn-outline" id="exportBtn">📥 导出 JSON</button>
+    </div>
+    <div class="status" id="ingestStatus"></div>
+  </div>
+</div>
+
+<script>
+let selectedFile = null;
+let extractResult = null;
+
+const $ = id => document.getElementById(id);
+const uploadArea = $('uploadArea');
+const fileInput = $('fileInput');
+const fileInfo = $('fileInfo');
+const extractBtn = $('extractBtn');
+const resultsCard = $('resultsCard');
+const ingestBtn = $('ingestBtn');
+
+// Upload handlers
+uploadArea.addEventListener('click', () => fileInput.click());
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadArea.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', () => { if (fileInput.files.length) handleFile(fileInput.files[0]); });
+$('removeFile').addEventListener('click', () => {
+  selectedFile = null;
+  fileInput.value = '';
+  fileInfo.style.display = 'none';
+  uploadArea.style.display = '';
+  extractBtn.disabled = true;
+});
+
+function handleFile(file) {
+  selectedFile = file;
+  $('fileName').textContent = file.name;
+  $('fileSize').textContent = formatSize(file.size);
+  fileInfo.style.display = 'flex';
+  uploadArea.style.display = 'none';
+  extractBtn.disabled = false;
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+// Extract
+extractBtn.addEventListener('click', async () => {
+  if (!selectedFile) return;
+  extractBtn.disabled = true;
+  const status = $('extractStatus');
+  status.className = 'status show info';
+  status.innerHTML = '<span class="spinner"></span>正在抽取中，请耐心等待（通常需要 30-120 秒）...';
+
+  const formData = new FormData();
+  formData.append('file', selectedFile);
+  formData.append('mode', $('modeSelect').value);
+
+  try {
+    const resp = await fetch('/api/extract', { method: 'POST', body: formData });
+    const data = await resp.json();
+    if (!resp.ok) {
+      status.className = 'status show error';
+      status.textContent = '抽取失败：' + (data.detail || JSON.stringify(data.errors || data));
+      extractBtn.disabled = false;
+      return;
+    }
+    extractResult = data;
+    status.className = 'status show success';
+    status.textContent = '✅ 抽取完成！共 ' + data.items.length + ' 条事项';
+    renderResults(data);
+  } catch (e) {
+    status.className = 'status show error';
+    status.textContent = '请求失败：' + e.message;
+  }
+  extractBtn.disabled = false;
+});
+
+// Render results
+function renderResults(data) {
+  resultsCard.style.display = '';
+  $('resultBadge').textContent = data.items.length + ' 条事项';
+
+  // Stats
+  const typeCounts = {};
+  const projects = new Set();
+  const depts = new Set();
+  let exactCount = 0;
+  data.items.forEach(item => {
+    typeCounts[item.item_type] = (typeCounts[item.item_type] || 0) + 1;
+    if (item.project) projects.add(item.project);
+    if (item.department) depts.add(item.department);
+    if (item.evidence && item.evidence.exact_match) exactCount++;
+  });
+
+  $('statsArea').innerHTML = [
+    statHTML(data.items.length, '总事项'),
+    statHTML(Object.keys(typeCounts).length, '类型数'),
+    statHTML(projects.size, '项目数'),
+    statHTML(depts.size, '部门数'),
+    statHTML(Math.round(exactCount / data.items.length * 100) + '%', '精确匹配'),
+  ].join('');
+
+  renderTable(data.items);
+}
+
+function statHTML(value, label) {
+  return '<div class="stat-item"><div class="value">' + value + '</div><div class="label">' + label + '</div></div>';
+}
+
+function renderTable(items) {
+  const search = $('searchInput').value.toLowerCase();
+  const typeFilter = $('typeFilter').value;
+
+  const filtered = items.filter(item => {
+    if (typeFilter && item.item_type !== typeFilter) return false;
+    if (search) {
+      const text = [item.title, item.content, item.project, item.department,
+                     (item.assignee || []).join(' ')].join(' ').toLowerCase();
+      if (!text.includes(search)) return false;
+    }
+    return true;
+  });
+
+  $('filteredCount').textContent = '显示 ' + filtered.length + ' / ' + items.length + ' 条';
+
+  $('resultsBody').innerHTML = filtered.map((item, i) => {
+    const typeLabel = { PROJECT_TASK: '项目任务', RESEARCH_TASK: '科研任务',
+                        NON_PROJECT_WORK: '非项目工作', NON_TASK_ITEM: '非任务项' };
+    const assignees = (item.assignee || []).map(a => '<span class="assignee-tag">' + a + '</span>').join('');
+    const evidenceText = item.evidence ? item.evidence.text : '';
+    return '<tr>' +
+      '<td>' + (i + 1) + '</td>' +
+      '<td><span class="type-tag type-' + item.item_type + '">' + (typeLabel[item.item_type] || item.item_type) + '</span></td>' +
+      '<td>' + (item.department || '-') + '</td>' +
+      '<td>' + (item.project || '-') + '</td>' +
+      '<td>' + (assignees || '-') + '</td>' +
+      '<td style="max-width:200px;font-weight:500">' + esc(item.title) + '</td>' +
+      '<td style="max-width:300px">' + esc(truncate(item.content, 120)) + '</td>' +
+      '<td><div class="evidence-text" title="' + esc(evidenceText) + '">' + esc(truncate(evidenceText, 60)) + '</div></td>' +
+      '</tr>';
+  }).join('');
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+function truncate(s, n) { return (s || '').length > n ? s.slice(0, n) + '...' : s; }
+
+$('searchInput').addEventListener('input', () => { if (extractResult) renderTable(extractResult.items); });
+$('typeFilter').addEventListener('change', () => { if (extractResult) renderTable(extractResult.items); });
+
+// Ingest
+ingestBtn.addEventListener('click', async () => {
+  if (!extractResult) return;
+  ingestBtn.disabled = true;
+  const status = $('ingestStatus');
+  status.className = 'status show info';
+  status.innerHTML = '<span class="spinner"></span>正在入库...';
+
+  const docId = extractResult.source_document_id || ('doc:' + (selectedFile ? selectedFile.name : 'unknown'));
+  const payload = {
+    source_document_id: docId,
+    file_name: selectedFile ? selectedFile.name : 'unknown',
+    meeting_date: null,
+    mode: $('modeSelect').value,
+    items: extractResult.items,
+  };
+
+  try {
+    const resp = await fetch('/api/ingest', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await resp.json();
+    if (data.status === 'ok') {
+      status.className = 'status show success';
+      status.textContent = '✅ 入库成功！' + data.item_count + ' 条事项已写入数据中台';
+    } else {
+      status.className = 'status show error';
+      status.textContent = '入库失败：' + JSON.stringify(data);
+    }
+  } catch (e) {
+    status.className = 'status show error';
+    status.textContent = '请求失败：' + e.message;
+  }
+  ingestBtn.disabled = false;
+});
+
+// Export JSON
+$('exportBtn').addEventListener('click', () => {
+  if (!extractResult) return;
+  const blob = new Blob([JSON.stringify(extractResult, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (selectedFile ? selectedFile.name.replace(/\.\w+$/, '') : 'result') + '.items.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>

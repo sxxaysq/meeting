@@ -141,14 +141,14 @@ alias 采用独立节点方案（`ProjectAlias -[:ALIAS_OF]-> Project`），便�
 /home/yty/neo4j/neo4j_ctl.sh stop     # 停止
 ```
 
-认证默认：`neo4j / m3graph2026`（可用环境变量覆盖，见下）。
+认证默认：`neo4j / YOUR_PASSWORD`（可用环境变量覆盖，见下）。
 
 ### 2. 环境变量（全部有默认值，可按需覆盖）
 
 ```bash
 export M3_NEO4J_URI="bolt://127.0.0.1:7687"
 export M3_NEO4J_USER="neo4j"
-export M3_NEO4J_PASSWORD="m3graph2026"
+export M3_NEO4J_PASSWORD="your-password"
 export M3_LLM_BASE_URL="http://192.168.30.215:8000/v1"   # 仅 --graphiti-episode 需要
 export M3_LLM_MODEL="Qwen/Qwen3.6-35B-A3B"
 ```

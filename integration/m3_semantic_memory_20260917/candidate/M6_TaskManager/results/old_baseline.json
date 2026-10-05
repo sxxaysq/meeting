@@ -1,0 +1,666 @@
+{
+  "mode": "old",
+  "metrics": {
+    "sample_count": 28,
+    "decision_accuracy": 0.17857142857142858,
+    "per_action": {
+      "CREATE": {
+        "support": 8,
+        "precision": 0.23809523809523808,
+        "recall": 0.625
+      },
+      "PROGRESS_UPDATE": {
+        "support": 7,
+        "precision": 0.0,
+        "recall": 0.0
+      },
+      "MODIFY": {
+        "support": 2,
+        "precision": null,
+        "recall": 0.0
+      },
+      "COMPLETE": {
+        "support": 2,
+        "precision": null,
+        "recall": 0.0
+      },
+      "CANCEL": {
+        "support": 2,
+        "precision": null,
+        "recall": 0.0
+      },
+      "REOPEN": {
+        "support": 2,
+        "precision": null,
+        "recall": 0.0
+      },
+      "TRANSFER": {
+        "support": 1,
+        "precision": null,
+        "recall": 0.0
+      },
+      "REVIEW": {
+        "support": 4,
+        "precision": 0.0,
+        "recall": 0.0
+      }
+    },
+    "target_task_id_accuracy": 0.1875,
+    "wrong_target_rate": 0.0,
+    "false_update_rate": 0.03571428571428571,
+    "false_create_rate": 0.5714285714285714,
+    "review_rate": 0.10714285714285714,
+    "department_routing_accuracy": 0.0,
+    "confusion": {
+      "CANCEL->CREATE": 1,
+      "CANCEL->PROGRESS_UPDATE": 1,
+      "COMPLETE->PROGRESS_UPDATE": 1,
+      "COMPLETE->REVIEW": 1,
+      "CREATE->CREATE": 5,
+      "CREATE->PROGRESS_UPDATE": 1,
+      "CREATE->REVIEW": 2,
+      "MODIFY->CREATE": 1,
+      "MODIFY->PROGRESS_UPDATE": 1,
+      "PROGRESS_UPDATE->CREATE": 7,
+      "REOPEN->CREATE": 2,
+      "REVIEW->CREATE": 4,
+      "TRANSFER->CREATE": 1
+    },
+    "error_cases": {
+      "false_updates": [
+        "CREATE_HIGH_SIMILARITY_DIFFERENT_PHASE"
+      ],
+      "false_creates": [
+        "PROGRESS_PERCENT",
+        "PROGRESS_WAITING",
+        "PROGRESS_DIFFERENT_WORDING",
+        "PROGRESS_RESEARCH_STAGE",
+        "PROGRESS_NON_PROJECT",
+        "PROGRESS_CHILD_STEP_COMPLETE",
+        "PROGRESS_RECENT_EVENT_LINK",
+        "MODIFY_SCOPE",
+        "CANCEL_TERMINATE_RESEARCH",
+        "REOPEN_COMPLETED",
+        "REOPEN_CANCELLED",
+        "TRANSFER_EXPLICIT",
+        "REVIEW_TWO_PLAUSIBLE_TARGETS",
+        "REVIEW_DEPARTMENT_CONFLICT",
+        "REVIEW_ONE_ITEM_MULTIPLE_TASKS",
+        "REVIEW_COMPLETE_AND_NEW_GOAL"
+      ],
+      "wrong_targets": [],
+      "reviews": [
+        "CREATE_SIMILAR_TITLE_DIFFERENT_DELIVERABLE",
+        "COMPLETE_ACCEPTED",
+        "CREATE_HIGH_SIMILARITY_DIFFERENT_SUBSYSTEM"
+      ]
+    }
+  },
+  "predictions": [
+    {
+      "sample_id": "CREATE_SAME_PROJECT_DIFFERENT_SYSTEM",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同项目但业务目标是不同子系统。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.211",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_SAME_ASSIGNEE_DIFFERENT_GOAL",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同负责人不能替代业务目标判断。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.028",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_NO_HISTORY",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "历史库没有候选。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:no_active_candidate",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_RESEARCH_TASK",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同为科研但研究目标不同。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.301",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_NON_PROJECT_WORK",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "同类制度工作但交付物不同。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.281",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_SIMILAR_TITLE_DIFFERENT_DELIVERABLE",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "字面相似但交付物和子系统都不同。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "old:dice_ambiguous:0.488",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_PERCENT",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "子步骤进度，不是新任务。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.323",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_WAITING",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "等待事项属于持续任务事件。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.318",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_DIFFERENT_WORDING",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "表述改变但业务目标连续。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.021",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_RESEARCH_STAGE",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-MULTIMODAL",
+        "annotator_note": "科研任务阶段成果。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.331",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_NON_PROJECT",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-SECRET-RULE",
+        "annotator_note": "非项目工作同样有持续生命周期。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.299",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_CHILD_STEP_COMPLETE",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "子步骤完成不等于整体 COMPLETE。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.274",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "PROGRESS_RECENT_EVENT_LINK",
+      "gold": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-TIANJIN-FACTORY",
+        "annotator_note": "近期事件提供任务身份连续性。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.120",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "MODIFY_SCOPE",
+      "gold": {
+        "decision": "MODIFY",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "任务身份不变，范围有明确调整。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.353",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "MODIFY_ASSIGNEE",
+      "gold": {
+        "decision": "MODIFY",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "明确负责人调整，不是 TRANSFER。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "old:dice_update:0.771",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "COMPLETE_WHOLE_GOAL",
+      "gold": {
+        "decision": "COMPLETE",
+        "target_task_id": "TASK-DATACENTER",
+        "annotator_note": "完成对象与任务总目标一致。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER",
+        "reason": "old:dice_update:0.571",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "COMPLETE_ACCEPTED",
+      "gold": {
+        "decision": "COMPLETE",
+        "target_task_id": "TASK-PLATFORM",
+        "annotator_note": "明确最终验收。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "old:dice_ambiguous:0.433",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CANCEL_EXPLICIT",
+      "gold": {
+        "decision": "CANCEL",
+        "target_task_id": "TASK-DRONE",
+        "annotator_note": "存在明确取消与不再开展语义。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DRONE",
+        "reason": "old:dice_update:0.699",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CANCEL_TERMINATE_RESEARCH",
+      "gold": {
+        "decision": "CANCEL",
+        "target_task_id": "TASK-TIMESERIES",
+        "annotator_note": "科研任务也支持明确终止。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.378",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REOPEN_COMPLETED",
+      "gold": {
+        "decision": "REOPEN",
+        "target_task_id": "TASK-EXPANSION",
+        "annotator_note": "已完成任务被明确再次启动。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:no_active_candidate",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REOPEN_CANCELLED",
+      "gold": {
+        "decision": "REOPEN",
+        "target_task_id": "TASK-DRONE",
+        "annotator_note": "已取消任务被明确恢复。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:no_active_candidate",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "TRANSFER_EXPLICIT",
+      "gold": {
+        "decision": "TRANSFER",
+        "target_task_id": "TASK-DATACENTER",
+        "from_department": "智能矿山事业部",
+        "to_department": "研发中心",
+        "transfer_evidence": "数据中心建设任务后续移交研发中心负责",
+        "annotator_note": "原文明示责任部门迁移。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.377",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REVIEW_TWO_PLAUSIBLE_TARGETS",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "两个历史目标都合理，无法唯一锁定。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.220",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REVIEW_DEPARTMENT_CONFLICT",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "部门冲突但没有移交原文。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.397",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REVIEW_ONE_ITEM_MULTIPLE_TASKS",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "一个 Item 同时触及两个历史 Task。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.354",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "REVIEW_COMPLETE_AND_NEW_GOAL",
+      "gold": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "annotator_note": "同时包含旧任务完成和新独立目标，不能单命令处理。"
+      },
+      "prediction": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "reason": "old:dice_create:0.349",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_PHASE",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "一期和二期是可独立验收的不同业务目标，字面高度相似也不能更新一期。"
+      },
+      "prediction": {
+        "decision": "PROGRESS_UPDATE",
+        "target_task_id": "TASK-DATACENTER-PHASE1",
+        "reason": "old:dice_update:0.777",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_SUBSYSTEM",
+      "gold": {
+        "decision": "CREATE",
+        "target_task_id": null,
+        "annotator_note": "交付动作相同但目标子系统不同。"
+      },
+      "prediction": {
+        "decision": "REVIEW",
+        "target_task_id": null,
+        "reason": "old:dice_ambiguous:0.514",
+        "event_summary": null,
+        "changes": {},
+        "department_change": null
+      }
+    }
+  ],
+  "audits": [
+    {
+      "sample_id": "CREATE_SAME_PROJECT_DIFFERENT_SYSTEM",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CREATE_SAME_ASSIGNEE_DIFFERENT_GOAL",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CREATE_NO_HISTORY",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CREATE_RESEARCH_TASK",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CREATE_NON_PROJECT_WORK",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CREATE_SIMILAR_TITLE_DIFFERENT_DELIVERABLE",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "PROGRESS_PERCENT",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "PROGRESS_WAITING",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "PROGRESS_DIFFERENT_WORDING",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "PROGRESS_RESEARCH_STAGE",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "PROGRESS_NON_PROJECT",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "PROGRESS_CHILD_STEP_COMPLETE",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "PROGRESS_RECENT_EVENT_LINK",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "MODIFY_SCOPE",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "MODIFY_ASSIGNEE",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "COMPLETE_WHOLE_GOAL",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "COMPLETE_ACCEPTED",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CANCEL_EXPLICIT",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CANCEL_TERMINATE_RESEARCH",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "REOPEN_COMPLETED",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "REOPEN_CANCELLED",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "TRANSFER_EXPLICIT",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "REVIEW_TWO_PLAUSIBLE_TARGETS",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "REVIEW_DEPARTMENT_CONFLICT",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "REVIEW_ONE_ITEM_MULTIPLE_TASKS",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "REVIEW_COMPLETE_AND_NEW_GOAL",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_PHASE",
+      "model": "old_dice_matcher"
+    },
+    {
+      "sample_id": "CREATE_HIGH_SIMILARITY_DIFFERENT_SUBSYSTEM",
+      "model": "old_dice_matcher"
+    }
+  ]
+}

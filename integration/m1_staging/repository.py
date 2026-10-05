@@ -6,7 +6,7 @@
   单事务 upsert、重复 ingest 行数不变、updated_at 刷新。
 
 DSN 形态：
-    mysql://user:password@host:port/dbname
+    mysql://user:YOUR_PASSWORD@host:port/dbname
     sqlite:////absolute/path/m1_staging.db
     sqlite:///relative/path/m1_staging.db   （相对 integration/ 目录）
 """
@@ -219,6 +219,13 @@ class SqliteRepository(StagingRepository):
                     doc_sql,
                     (source_document_id, file_name, meeting_date, mode, len(rows), now, now),
                 )
+                # 重灌时条目可能变少（LLM 有方差）：不清尾行就会把上一轮的
+                # 残留当成当前数据，造成 doc.item_count 与 items 实际行数不一致。
+                self._conn.execute(
+                    "DELETE FROM ods_m1_meeting_items "
+                    "WHERE source_document_id = ? AND item_seq >= ?",
+                    (source_document_id, len(rows)),
+                )
                 for row in rows:
                     values = [row[col] for col in _ITEM_COLUMNS] + [now, now]
                     self._conn.execute(item_sql, values)
@@ -264,6 +271,9 @@ class MysqlRepository(StagingRepository):
 
         self._pymysql = pymysql
         self._lock = threading.Lock()
+        # autocommit=True：只读路径（stats）从不 commit，若用 autocommit=False 会一直
+        # 挂着长事务，MySQL 默认 REPEATABLE READ 下快照被冻在事务开始那一刻，
+        # /m1/stats 会长期返回陈旧计数。写入路径用 conn.begin() 开显式事务。
         self._conn = pymysql.connect(
             host=host,
             port=port,
@@ -271,7 +281,19 @@ class MysqlRepository(StagingRepository):
             password=password,
             database=dbname,
             charset="utf8mb4",
-            autocommit=False,
+            autocommit=True,
+        )
+
+    def _cursor(self, dict_rows: bool = False):
+        """取 cursor 前先 ping 重连。
+
+        本服务持一条长连接，而 MySQL wait_timeout=28800（8 小时）；隔夜里没人调
+        就会被服务端单方面关掉，下次请求直接 `pymysql.err.InterfaceError: (0, '')`
+        并给客户端返回 500。ingest 路径也一样会挂，不只是 stats。
+        """
+        self._conn.ping(reconnect=True)
+        return self._conn.cursor(
+            self._pymysql.cursors.DictCursor if dict_rows else self._pymysql.cursors.Cursor
         )
 
     def upsert_batch(
@@ -302,12 +324,21 @@ class MysqlRepository(StagingRepository):
             "meeting_date=VALUES(meeting_date), mode=VALUES(mode), "
             "item_count=VALUES(item_count), updated_at=VALUES(updated_at)"
         )
-        cursor = self._conn.cursor()
+        cursor = self._cursor()
         try:
             with self._lock:
+                self._conn.begin()   # 显式事务：本文档全部写入要么全成要么全滚
                 cursor.execute(
                     doc_sql,
                     (source_document_id, file_name, meeting_date, mode, len(rows), now, now),
+                )
+                # 重灌时条目可能变少（LLM 有方差）：不清尾行就会把上一轮的
+                # 残留当成当前数据，造成 doc.item_count 与 items 实际行数不一致，
+                # 下游（m2 的输入指纹、中台数据服务 API）全部跟着错。
+                cursor.execute(
+                    "DELETE FROM ods_m1_meeting_items "
+                    "WHERE source_document_id = %s AND item_seq >= %s",
+                    (source_document_id, len(rows)),
                 )
                 for row in rows:
                     values = [row[col] for col in _ITEM_COLUMNS] + [now, now]
@@ -321,7 +352,7 @@ class MysqlRepository(StagingRepository):
         return {"item_count": len(rows)}
 
     def stats(self, source_document_id: str) -> dict:
-        cursor = self._conn.cursor(self._pymysql.cursors.DictCursor)
+        cursor = self._cursor(dict_rows=True)
         try:
             with self._lock:
                 cursor.execute(

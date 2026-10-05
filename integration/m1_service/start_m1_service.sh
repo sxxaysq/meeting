@@ -4,14 +4,14 @@
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PY=/home/yty/m1x_venv/bin/python
+PY=/home/yty-s/venv/bin/python
 LOG_DIR="$HERE/data/logs"
 PID_FILE="$HERE/data/m1_service.pid"
 mkdir -p "$LOG_DIR"
 
-# 主 vLLM（192.168.30.215:8000），模型名以 /v1/models 实测为准：Qwen/Qwen3.6-35B-A3B
+# 主 vLLM（192.168.30.215:8000），模型名以 /v1/models 实测为准：qwen3.8-27b
 export LLM_BASE_URL="${LLM_BASE_URL:-http://192.168.30.215:8000/v1}"
-export LLM_MODEL="${LLM_MODEL:-Qwen/Qwen3.6-35B-A3B}"
+export LLM_MODEL="${LLM_MODEL:-qwen3.8-27b}"
 export LLM_API_KEY="${LLM_API_KEY:-EMPTY}"
 export LLM_TEMPERATURE="${LLM_TEMPERATURE:-0}"
 export LLM_MAX_TOKENS="${LLM_MAX_TOKENS:-65536}"   # generic 模式整篇单调用需要大输出上限

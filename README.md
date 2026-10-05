@@ -1,84 +1,37 @@
 # Meeting Task Manager
 
-煤矿班前会／调度会材料到项目级任务待办的演示系统。
+会议材料抽取、项目语义记忆、任务生命周期判断及人工复核系统。
 
-## 当前主链路
+本分支 snapshot/latest-20261005 保存 2026-10-05 从 216 服务器 /home/yty-s/meeting-m2-work 读取的最新源码。它基于仓库已有的 baseline-m1-m2-m3-m6-integration 提交 890ddf4，包含服务器尚未提交的更新。
 
-```text
-M1_Preprocess
-  文档读取、字符分片、LLM 项目级任务候选抽取
-    ↓
-M2_TaskClassifier/src/m1_task_gate.py
-  字段、状态和置信度准入门控
-    ↓
-M1_5_ProjectNormalizer
-  项目主表和别名归并，补充 project_id
-    ↓
-M6_TaskManager_Demo
-  历史任务匹配、CREATE/UPDATE/REVIEW、校验、事务执行和审计
-```
+## 当前代码入口
 
-## 目录
+| 功能 | 路径 |
+| --- | --- |
+| M1 文档抽取与原文证据 | M1_Extraction/ |
+| M3 项目语义记忆与历史任务检索 | integration/m3_semantic_memory_20260917/candidate/M3_KnowledgeGraph/ |
+| M6 生命周期判断、校验与事务执行 | integration/m3_semantic_memory_20260917/candidate/M6_TaskManager/ |
+| 语义批处理入口 | integration/m3_semantic_memory_20260917/candidate/integration/m6_service/native_full_dataset.py |
+| 结果导出 | integration/m3_semantic_memory_20260917/export_semantic_demo.py |
+| 页面、人工复核、组织与部门工作台 | M6_TaskManager_Demo/ |
+| HTTP 服务及 M4 招投标旁路 | integration/ 下的 m1_service、m1_staging、m2_service、m4_bidding、m6_service |
 
-- `M1_Preprocess/`：会议材料读取、分片和项目级任务候选抽取。
-- `M2_TaskClassifier/`：当前 task gate，以及保留的七分类提示词基线。
-- `M1_5_ProjectNormalizer/`：项目主数据、别名和项目归并。
-- `M6_TaskManager_Demo/`：FastAPI、前端、SQLite Schema、任务历史匹配和事务执行。
+当前语义批处理采用 M1 → M3 → M6，M4 在准入阶段旁路处理。语义版仍保留在上述 candidate 目录；根目录 M3_KnowledgeGraph/、M6_TaskManager/ 是较早实现，不应当作语义版入口。
 
-## 安装
+M6_TaskManager_Demo 提供已有结果查询和人工处理。其旧上传编排尚未接入完整语义批处理，不应据页面在线推断新材料上传推理已闭环。
 
-建议为各模块创建独立 Python 虚拟环境：
+## 运行与配置
 
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r M6_TaskManager_Demo/requirements.txt
-pip install -r M1_Preprocess/requirements.txt
-pip install -r M2_TaskClassifier/requirements.txt
-pip install -r M1_5_ProjectNormalizer/requirements.txt
-```
+各模块的 README、requirements、配置模板和测试随源码保留。模型、向量服务、Neo4j、运行数据库及真实会议输入需要按目标环境单独配置；服务器路径和内网地址可能需要调整。
 
-模型服务使用 OpenAI Chat Completions 兼容接口。仓库不包含任何 API 凭据，默认模型
-配置为本机 Qwen 兼容服务；需要认证时通过环境变量配置。
+- [页面使用说明](M6_TaskManager_Demo/USER_GUIDE.md)
+- [内网部署说明](M6_TaskManager_Demo/deploy/README.md)
+- [集成交接记录](integration/HANDOFF.md)
+- [M1 抽取说明](M1_Extraction/README.md)
+- [旧版根目录 README](docs/README_legacy.md)
 
-## 运行
+本次上传排除本地环境文件、密钥、运行数据库、缓存、备份、原始会议数据集和新增运行结果。原基线已跟踪的样例与评测工件继续保留。部署环境文件须在目标机器上自行创建。
 
-```bash
-cd M6_TaskManager_Demo
-uvicorn app.main:app --host 0.0.0.0 --port 8016
-```
+## 本次核验范围
 
-主要环境变量：
-
-```text
-M6_LLM_BASE_URL
-M6_LLM_MODEL
-M6_LLM_API_KEY
-M6_DATABASE_PATH
-M6_RUNS_DIR
-M6_PIPELINE_PYTHON
-```
-
-## 测试
-
-```bash
-cd M1_5_ProjectNormalizer
-PYTHONPATH=src python -m unittest discover -s tests -v
-
-cd ../M2_TaskClassifier
-python -m unittest discover -s tests -v
-
-cd ../M6_TaskManager_Demo
-python -m unittest discover -s tests -v
-```
-
-## 未包含内容
-
-仓库只包含源码、配置模板、提示词、前端、迁移脚本和测试，不包含：
-
-- 会议原文、训练样本或其他数据集；
-- SQLite 数据库及备份；
-- 模型权重、checkpoint 或向量索引；
-- 运行产物、日志和上传文件；
-- 虚拟环境、wheelhouse 和依赖压缩包；
-- API Key、Token、私钥或其他凭据。
+上传前核对服务器文件哈希，并检查 Python 语法和 JSON 格式。本次仅同步项目，未重新运行模型服务或端到端回放；历史回放记录不代表全部现行源码已重新验收。

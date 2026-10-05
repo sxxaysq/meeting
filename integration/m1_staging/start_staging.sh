@@ -4,11 +4,11 @@
 #
 # DB 方言由 M1_STAGING_DSN 决定：
 #   未设置        → SQLite 自测库 data/m1_staging.db
-#   mysql://u:p@host:port/dbname → MySQL 8（正式形态，DDL 见 schema.sql）
+#   mysql://u:YOUR_PASSWORD@host:port/dbname → MySQL 8（正式形态，DDL 见 schema.sql）
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PY=/home/yty/m1x_venv/bin/python
+PY=/home/yty-s/venv/bin/python
 LOG_DIR="$HERE/data/logs"
 PID_FILE="$HERE/data/m1_staging.pid"
 mkdir -p "$LOG_DIR"

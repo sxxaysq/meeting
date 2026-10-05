@@ -1,0 +1,19 @@
+[Unit]
+Description=Meeting task management LAN service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=yty-s
+WorkingDirectory=/home/yty-s/meeting-m2-work/M6_TaskManager_Demo
+EnvironmentFile=/home/yty-s/meeting-m2-work/M6_TaskManager_Demo/deploy/service.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/home/yty-s/meeting-m2-work/M6_TaskManager_Demo/.venv/bin/python -m uvicorn app.asgi:app --host 127.0.0.1 --port 18098 --workers 1
+ExecStartPost=/bin/sh -c 'echo "$MAINPID" > /home/yty-s/meeting-m2-work/M6_TaskManager_Demo/data/display-service.pid'
+Restart=always
+RestartSec=3
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target

@@ -135,3 +135,35 @@ def test_meeting_date_derived_from_doc_id(client):
             ("doc:test-002",),
         ).fetchone()
     assert row2["meeting_date"] is None
+
+
+def test_reingest_with_fewer_items_clears_stale_tail(client):
+    """重灌条目变少时必须清掉上一轮的尾行。
+
+    回归背景（2026-09-04 数据集端到端测试实测踩到）：upsert 只按 item_id 更新，
+    条目从 159 变 147 时 item_seq 147..158 的旧行留在表里，于是
+    `ods_m1_source_documents.item_count`(147) 与 items 实际行数(159) 打架，
+    下游 m2 的输入指纹、中台数据服务 API 全部跟着错。
+    """
+    three = [make_item(title="甲"), make_item(title="乙"), make_item(title="丙")]
+    assert client.post("/m1/ingest", json=make_body(items=three)).status_code == 200
+    stats = client.get("/m1/stats", params={"source_document_id": "doc:test-001"}).json()
+    assert stats["item_count"] == 3
+    assert stats["document"]["item_count"] == 3
+
+    one = [make_item(title="甲乙丙合并成一条")]
+    assert client.post("/m1/ingest", json=make_body(items=one)).status_code == 200
+    stats = client.get("/m1/stats", params={"source_document_id": "doc:test-001"}).json()
+    # 两个口径必须一致：实际行数 == 文档声称数
+    assert stats["item_count"] == 1
+    assert stats["document"]["item_count"] == 1
+
+
+def test_reingest_with_more_items_keeps_growing(client):
+    """反方向也要对：条目变多时正常追加，不能被清理逻辑误删。"""
+    assert client.post("/m1/ingest", json=make_body(items=[make_item(title="甲")])).status_code == 200
+    three = [make_item(title="甲"), make_item(title="乙"), make_item(title="丙")]
+    assert client.post("/m1/ingest", json=make_body(items=three)).status_code == 200
+    stats = client.get("/m1/stats", params={"source_document_id": "doc:test-001"}).json()
+    assert stats["item_count"] == 3
+    assert stats["document"]["item_count"] == 3

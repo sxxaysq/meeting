@@ -59,14 +59,14 @@ def test_same_project_different_subsystems_are_not_merged():
     assert all(not entry.merged for entry in result.merge_trace)
 
 
-def test_uncertain_pair_stays_separate_and_enters_review():
+def test_uncertain_pair_stays_separate_with_warning():
     items = [
         make_item(start=0, end=20, content="推进数据中心建设。"),
         make_item(start=25, end=48, content="完成综合管控平台研发。"),
     ]
     result = run_pipeline(_payload(items), "block", client=_client("UNCERTAIN"))
     assert len(result.items) == 2
-    assert result.validation["status"] == REVIEW
+    assert result.validation["status"] == PASS
     assert "MERGE_UNCERTAIN" in result.validation["issue_counts"]
 
 
@@ -197,9 +197,8 @@ def test_generic_null_work_section_is_not_an_error():
     )
 
 
-def test_review_output_includes_document_level_issues():
-    """项目实体 UNCERTAIN 之类没有 item_index，但它是 REVIEW 的主要来源，
-    必须出现在人工 REVIEW 样本里，否则人工打开文件是空的。"""
+def test_uncertain_projects_are_audited_without_human_review():
+    """独立处理已消除合并风险，warning 保留在 validation 而非人工队列。"""
     entity = {"decision": "UNCERTAIN", "canonical_name": None, "reason": "指代不明"}
     items = [
         make_item(start=0, end=20, project="红沙泉项目", content="推进红沙泉工作。"),
@@ -211,12 +210,10 @@ def test_review_output_includes_document_level_issues():
     result = run_pipeline(
         _payload(items), "block", client=_client("KEEP_SEPARATE", entity=entity)
     )
-    scopes = {sample["scope"] for sample in result.review}
-    assert "document" in scopes
-    codes = {
-        issue["code"] for sample in result.review for issue in sample["issues"]
-    }
+    assert result.review == []
+    codes = {issue['code'] for issue in result.validation['issues']}
     assert "PROJECT_ENTITY_UNCERTAIN" in codes
+    assert all(issue['level'] == 'warning' for issue in result.validation['issues'])
 
 
 def test_source_mode_is_not_guessed():

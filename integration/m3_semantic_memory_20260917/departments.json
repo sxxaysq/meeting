@@ -1,0 +1,209 @@
+[
+  {
+    "department_id": "TEST-70ed02f876354325",
+    "name": "人力资源部",
+    "route": "test://new-m6-never-send/TEST-70ed02f876354325",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-9eee0ca7a033695c",
+    "name": "人工智能研究院",
+    "route": "test://new-m6-never-send/TEST-9eee0ca7a033695c",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-aa3bd024ffca4cac",
+    "name": "人工智能研究院（科技发展中心）",
+    "route": "test://new-m6-never-send/TEST-aa3bd024ffca4cac",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-5b72c743d8478526",
+    "name": "党建宣传部",
+    "route": "test://new-m6-never-send/TEST-5b72c743d8478526",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-15106c5d97861c24",
+    "name": "北京分公司",
+    "route": "test://new-m6-never-send/TEST-15106c5d97861c24",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-11dc03e742d0489e",
+    "name": "北京分公司（信息网络部）",
+    "route": "test://new-m6-never-send/TEST-11dc03e742d0489e",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-ba30f1d784810ea0",
+    "name": "团支部",
+    "route": "test://new-m6-never-send/TEST-ba30f1d784810ea0",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-57c605c756c13450",
+    "name": "安全生产部",
+    "route": "test://new-m6-never-send/TEST-57c605c756c13450",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-088df342996b6059",
+    "name": "工会",
+    "route": "test://new-m6-never-send/TEST-088df342996b6059",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-6c2792a861d519ca",
+    "name": "市场经营部",
+    "route": "test://new-m6-never-send/TEST-6c2792a861d519ca",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-56e9c89a3daf24f2",
+    "name": "市场经营部, 智能矿山事业部",
+    "route": "test://new-m6-never-send/TEST-56e9c89a3daf24f2",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-8baa2faadc6008d6",
+    "name": "市场经营部, 资产财务部（业财数字中心）",
+    "route": "test://new-m6-never-send/TEST-8baa2faadc6008d6",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-37234fb08d43ba7c",
+    "name": "数字化技术服务事业部",
+    "route": "test://new-m6-never-send/TEST-37234fb08d43ba7c",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-7d4c21c707434dd8",
+    "name": "数字咨询规划研究院",
+    "route": "test://new-m6-never-send/TEST-7d4c21c707434dd8",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-28f64fbb5ca3c1dc",
+    "name": "数维智能事业部",
+    "route": "test://new-m6-never-send/TEST-28f64fbb5ca3c1dc",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-6cf8278134dbfe5f",
+    "name": "智能制造部",
+    "route": "test://new-m6-never-send/TEST-6cf8278134dbfe5f",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-52665315e649b667",
+    "name": "智能矿山事业部",
+    "route": "test://new-m6-never-send/TEST-52665315e649b667",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-9fb14eaec0081129",
+    "name": "纪检专干",
+    "route": "test://new-m6-never-send/TEST-9fb14eaec0081129",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-621259db348ae117",
+    "name": "综合办公室",
+    "route": "test://new-m6-never-send/TEST-621259db348ae117",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-77ef2db55f34c077",
+    "name": "综合办公室（董事会办公室）",
+    "route": "test://new-m6-never-send/TEST-77ef2db55f34c077",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-c710e780964955d5",
+    "name": "资产财务部",
+    "route": "test://new-m6-never-send/TEST-c710e780964955d5",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-4b4abaf591807982",
+    "name": "资产财务部（业财数字中心）",
+    "route": "test://new-m6-never-send/TEST-4b4abaf591807982",
+    "aliases_json": "[]",
+    "active": 1,
+    "created_at": "2026-09-15T01:32:56+00:00",
+    "updated_at": "2026-09-15T01:32:56+00:00"
+  },
+  {
+    "department_id": "TEST-b86cc4c235cf4d56",
+    "name": "公司级",
+    "route": "test://new-m6-never-send/TEST-b86cc4c235cf4d56",
+    "aliases_json": "[\"各部门\", \"全公司\", \"公司各部门\"]",
+    "active": 1,
+    "created_at": "2026-09-18T07:23:17+00:00",
+    "updated_at": "2026-09-18T07:23:17+00:00"
+  }
+]

@@ -246,7 +246,7 @@ class TaskRepository:
                 WHERE task_id = ?
                   AND execution_status = 'applied'
                   AND db_action IN (
-                      'CREATE', 'UPDATE_FIELDS', 'UPDATE_STATUS', 'HUMAN_CREATE'
+                      'CREATE', 'UPDATE_FIELDS', 'UPDATE_STATUS', 'HUMAN_CREATE', 'HUMAN_UPDATE'
                   )
                   AND after_json IS NOT NULL
                 """,
@@ -410,7 +410,7 @@ class TaskRepository:
     def update_review_candidate(self, candidate_id: str, fields: dict[str, Any]) -> dict:
         allowed = {
             "title", "description", "work_items", "assignee", "deadline",
-            "department", "project", "priority", "initial_status", "reviewer_note",
+            "department", "project", "priority", "initial_status", "reviewer_note", "operations",
         }
         unknown = set(fields) - allowed
         if unknown:
@@ -477,6 +477,7 @@ class TaskRepository:
                     "source_segment_id", "source_subsegment_id", "evidence_text", "created_at", "updated_at",
                 )),
             )
+            task = dict(connection.execute('SELECT * FROM tasks WHERE task_id=?', (task_id,)).fetchone())
             connection.execute(
                 """INSERT INTO task_events (
                     event_id, event_key, run_id, task_id, source_meeting_id,
@@ -491,7 +492,10 @@ class TaskRepository:
             connection.commit()
         return _decode_task(task)
 
-    def update_task_by_human(self, task_id: str, fields: dict[str, Any]) -> dict:
+    def update_task_by_human(self, task_id: str, fields: dict[str, Any], *,
+                             expected_department: str | None = None,
+                             expected_version: int | None = None,
+                             progress_note: str | None = None) -> dict:
         allowed = {
             "title", "description", "work_items", "assignee_raw", "deadline_raw",
             "department", "project", "priority", "status",
@@ -501,12 +505,26 @@ class TaskRepository:
             raise ValueError(f"不允许修改任务字段：{sorted(unknown)}")
         if not fields:
             raise ValueError("至少提供一个待修改字段")
+        fields = dict(fields)
         with connect(self.database_path) as connection:
+            connection.execute('BEGIN IMMEDIATE')
             row = connection.execute("SELECT * FROM tasks WHERE task_id = ?", (task_id,)).fetchone()
             if row is None:
                 raise KeyError("task not found")
             if row["is_deleted"]:
                 raise KeyError("task is deleted")
+            if expected_department is not None:
+                if row['department'] != expected_department:
+                    raise KeyError('task is not in this department')
+                if set(fields) - {'status'}:
+                    raise ValueError('部门处理只能修改状态和追加进展')
+                if row['status'] not in {'open', 'in_progress', 'blocked'}:
+                    raise ValueError('任务已结束，请刷新待办清单')
+            if expected_version is not None and row['version'] != expected_version:
+                raise ValueError('任务已被修改，请重新打开并核对最新内容')
+            if progress_note:
+                previous = row['description'] or ''
+                fields['description'] = previous + ('\n' if previous else '') + progress_note
             before = dict(row)
             assignments: list[str] = []
             values: list[Any] = []

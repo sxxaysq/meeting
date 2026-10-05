@@ -14,6 +14,7 @@ from .models import (
     TaskStatus,
 )
 from .repository import TaskRepository, decode_task, utc_now
+from .state_machine import next_status
 
 
 def _identifier(prefix: str, length: int = 16) -> str:
@@ -215,10 +216,13 @@ class TaskExecutor:
                 f"当前 {before['version']}"
             )
         action = command.action
+        next_status(before['status'],action)  # Commit-time state check, after authoritative reread.
         now = utc_now()
         route = command.changes["department_route"]
         if action is LifecycleAction.PROGRESS_UPDATE:
-            after = before
+            connection.execute('UPDATE tasks SET version=version+1, updated_at=? WHERE task_id=? AND version=?',
+                               (now,before['task_id'],before['version']))
+            after = self._load_after(connection,before['task_id'])
         elif action is LifecycleAction.MODIFY:
             self._update_fields(connection, before, command.changes, now)
             after = self._load_after(connection, before["task_id"])

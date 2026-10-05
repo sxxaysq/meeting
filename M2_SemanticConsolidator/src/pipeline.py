@@ -12,7 +12,8 @@
     {"source_mode", "items", "project_entities", "merge_trace", "validation"}
 
 保守原则贯穿全流程：只有 pair 判 MERGE **且** 整簇校验通过的才真正合并；
-任何 UNCERTAIN 都保持拆开并进 REVIEW，不靠阈值把"拿不准"糊成"合"。
+UNCERTAIN 保持拆开并记录 warning；只有未解决的实际冲突进入 REVIEW。
+项目卡在 report 中聚合，items 保留可独立更新的子事项。
 """
 
 from __future__ import annotations
@@ -34,6 +35,7 @@ from models import (
     ERROR,
     Issue,
     LEVEL_REVIEW,
+    LEVEL_WARNING,
     MERGE_UNCERTAIN,
     MergeTraceEntry,
     PairJudgement,
@@ -103,6 +105,9 @@ class M2Result:
             "validation_status": self.validation["status"],
             "issue_counts": self.validation.get("issue_counts", {}),
             "schema_errors": self.schema_errors,
+            "project_cards": provenance.build_project_cards(
+                self.items, self.project_entities, self.merge_trace
+            ),
         }
 
 
@@ -122,6 +127,17 @@ def run_pipeline(
     raw_items = m1_payload.get("items")
     if not isinstance(raw_items, list):
         raise ValueError("输入不是 M1 的 {'items': [...]} 结构")
+
+    input_errors = []
+    for index, raw in enumerate(raw_items):
+        schema_validator.validate_item(raw, 'items[{}]'.format(index), input_errors)
+        if isinstance(raw, dict) and isinstance(raw.get('evidence'), dict):
+            evidence = raw['evidence']
+            start, end = evidence.get('start_char'), evidence.get('end_char')
+            if isinstance(start, int) and isinstance(end, int) and end <= start:
+                input_errors.append('items[{}] 来源区间为空或倒置'.format(index))
+    if input_errors:
+        raise ValueError('M1 Schema/来源错误：' + '; '.join(input_errors[:5]))
 
     items = [SourceItem(index=i, raw=raw) for i, raw in enumerate(raw_items)]
     catalog = catalog or ProjectCatalog()
@@ -157,6 +173,10 @@ def run_pipeline(
     extra_issues: List[Issue] = []
     final_clusters: List[Cluster] = []
     for cluster in clusters:
+        if any(j.decision == MERGE_UNCERTAIN and j.left in cluster.members and j.right in cluster.members
+               for j in judgements):
+            cluster.decision = CLUSTER_REVIEW
+            cluster.reason = "簇内包含未解决的 UNCERTAIN 对，禁止通过传递关系合并"
         conflict = _structural_conflict(cluster, items)
         if conflict:
             # 结构字段冲突是**合并否决**，不是"合并后把字段置空"。
@@ -167,7 +187,7 @@ def run_pipeline(
             extra_issues.append(
                 Issue(
                     "STRUCTURE_CONFLICT_VETO",
-                    LEVEL_REVIEW,
+                    LEVEL_WARNING,
                     "簇内结构字段冲突，已否决合并并保持拆开：{}".format(conflict),
                     None,
                     {"sources": cluster.members},
@@ -180,7 +200,7 @@ def run_pipeline(
             extra_issues.append(
                 Issue(
                     "CLUSTER_REVIEW",
-                    LEVEL_REVIEW,
+                    LEVEL_WARNING,
                     "整簇校验未通过，已保持拆开：{}".format(cluster.reason or "无理由"),
                     None,
                     {"sources": cluster.members},
@@ -190,13 +210,13 @@ def run_pipeline(
             final_clusters.append(cluster)
     final_clusters.sort(key=lambda c: c.members[0])
 
-    # UNCERTAIN 的 pair 也要显式进 REVIEW，不能悄悄当成 KEEP_SEPARATE
+    # 不确定对已拆开：保留诊断，不能把安全的不合并变成人工工作。
     for judgement in judgements:
         if judgement.decision == MERGE_UNCERTAIN:
             extra_issues.append(
                 Issue(
                     "MERGE_UNCERTAIN",
-                    LEVEL_REVIEW,
+                    LEVEL_WARNING,
                     "两两判定为 UNCERTAIN，已保持拆开",
                     None,
                     {
@@ -252,6 +272,13 @@ def run_pipeline(
                 alias_conflicts.append(
                     {"alias": alias, "entity_id": other, "claimed_by": entity.entity_id}
                 )
+    # 旧主表若已经把本轮不确定对连在一起，不能声称“已独立”然后放行。
+    for row in entity_judge.uncertain:
+        left = name_to_entity.get(normalize_name(row['left']))
+        right = name_to_entity.get(normalize_name(row['right']))
+        if left and right and left == right:
+            alias_conflicts.append({'alias': row['left'], 'entity_id': left,
+                                    'claimed_by': right, 'reason': '已有别名关系阻止独立处理'})
 
     project_entities = provenance.build_project_entities(entities, used_entities)
     draft = {
@@ -273,7 +300,28 @@ def run_pipeline(
         alias_conflicts=alias_conflicts,
         alias_pool=alias_pool,
         extra_issues=extra_issues,
+        project_mapping=name_to_entity,
     )
+
+    # Scope diagnostics to output items without changing the nine-field Item contract.
+    for issue in validation["issues"]:
+        detail = issue.setdefault("detail", {})
+        names = {normalize_name(n) for n in detail.get("project_names", []) if n}
+        entity_ids = {name_to_entity[n] for n in names if n in name_to_entity}
+        if issue["code"] == "PROJECT_ALIAS_CONFLICT":
+            entity_ids.update(str(detail[k]) for k in ("entity_id", "claimed_by") if detail.get(k))
+        source_indexes = set(detail.get("sources", []))
+        indexes = {issue["item_index"]} if "item_index" in issue else set()
+        if "other_item_index" in detail:
+            indexes.add(detail["other_item_index"])
+        for entry in trace:
+            if (entity_ids and entry.project_entity_id in entity_ids) or source_indexes.intersection(entry.source_indexes):
+                indexes.add(entry.item_index)
+            if names and any(normalize_name(by_index[i].project or "") in names for i in entry.source_indexes):
+                indexes.add(entry.item_index)
+        detail["item_indexes"] = sorted(indexes)
+        if entity_ids:
+            detail["entity_ids"] = sorted(entity_ids)
 
     result = M2Result(
         source_mode=source_mode,

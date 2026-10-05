@@ -12,6 +12,7 @@ venv/
 # Secrets and local configuration
 .env
 .env.*
+*.env
 !.env.example
 *.pem
 *.key
@@ -34,6 +35,13 @@ backups/
 *.bak
 *.bak_*
 *.tmp
+*.before-*
+*.before_*
+.bak*/
+recovery_backup*/
+candidate_before*/
+logs/
+数据集/
 
 # Models, datasets, and dependency bundles
 datasets/

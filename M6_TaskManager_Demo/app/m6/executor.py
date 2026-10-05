@@ -8,6 +8,8 @@ import uuid
 from pathlib import Path
 
 from ..database import connect, utc_now
+from ..review_plan import validate_operations
+from .model_client import empty_patch
 
 
 class CommandExecutionError(RuntimeError):
@@ -29,6 +31,68 @@ def _task_dict(row: sqlite3.Row | None) -> dict | None:
 class CommandExecutor:
     def __init__(self, database_path: Path | str) -> None:
         self.database_path = Path(database_path)
+
+    def execute_review(self, candidate_id: str, operations: list, reviewer_note: str = '') -> dict:
+        """Apply all human-approved children and resolve their parent atomically."""
+        with connect(self.database_path) as connection:
+            connection.execute('BEGIN IMMEDIATE')
+            row = connection.execute('SELECT * FROM review_candidates WHERE candidate_id=?', (candidate_id,)).fetchone()
+            if row is None:
+                raise KeyError('复核记录不存在')
+            candidate = json.loads(row['candidate_json'])
+            if row['status'] != 'pending':
+                if row['status'] == 'approved' and candidate.get('operations') == operations and candidate.get('review_results'):
+                    return {'execution_status': 'duplicate', 'results': candidate['review_results']}
+                raise CommandExecutionError('复核记录已处理，不能再次提交不同方案')
+            validate_operations(operations, candidate)
+            evidence = str(candidate.get('evidence') or candidate.get('source_text') or '').strip()
+            if not evidence:
+                raise ValueError('复核记录缺少原文证据')
+            results = []
+            for index, op in enumerate(operations, 1):
+                target = op.get('target_task_id')
+                description = op['description'].strip()
+                work_items = []
+                if target:
+                    task = connection.execute('SELECT * FROM tasks WHERE task_id=?', (target,)).fetchone()
+                    if task is None:
+                        raise CommandExecutionError('关联任务不存在，请重新选择')
+                    previous = task['description'] or ''
+                    if description not in previous:
+                        description = previous + ('\n' if previous else '') + description
+                    else:
+                        description = previous
+                    work_items = json.loads(task['work_items_json'] or '[]')
+                work_items = list(dict.fromkeys([*work_items, op['description'].strip()]))
+                source_key = f"{row['meeting_id']}:review_{candidate_id}:split"
+                command = {'command_index': index, 'db_action': op['action'], 'target_task_id': target,
+                           'expected_version': op.get('expected_version'),
+                           'task_patch': empty_patch(title=op['title'].strip(), description=description,
+                               work_items=work_items, assignee_raw=op['assignee_raw'],
+                               deadline_raw=op['deadline_raw'], status=op['status']),
+                           'evidence': {'segment_id': f'review_{candidate_id}', 'subsegment_id': str(index), 'text': evidence}}
+                result = self._apply(connection, source_key, command, row['meeting_id'])
+                task_id = result['task_id']
+                connection.execute('UPDATE tasks SET department=?,project=?,priority=?,status=? WHERE task_id=?',
+                                   (op['department'] or None, op['project'] or None, op['priority'] or None, op['status'], task_id))
+                if result['before'] and result['before'].get('project') != (op['project'] or None):
+                    connection.execute('UPDATE tasks SET project_id=NULL WHERE task_id=?', (task_id,))
+                result['after'] = dict(connection.execute('SELECT * FROM tasks WHERE task_id=?', (task_id,)).fetchone())
+                event_id = _event_id()
+                connection.execute('''INSERT INTO task_events
+                    (event_id,event_key,run_id,task_id,source_meeting_id,db_action,execution_status,
+                     before_json,after_json,evidence_text,failure_reason,created_at)
+                    VALUES (?,?,?,?,?,?,'applied',?,?,?,NULL,?)''',
+                    (event_id, f'{source_key}:{index}', row['run_id'], task_id, row['meeting_id'], op['action'],
+                     json.dumps(result['before'], ensure_ascii=False) if result['before'] else None,
+                     json.dumps(result['after'], ensure_ascii=False), evidence, utc_now()))
+                results.append({'task_id': task_id, 'event_id': event_id, 'db_action': op['action'], 'execution_status': 'applied'})
+            candidate.update(operations=operations, review_results=results)
+            connection.execute('''UPDATE review_candidates SET status='approved',task_id=?,reviewer_note=?,
+                reviewed_at=?,candidate_json=? WHERE candidate_id=?''',
+                (results[0]['task_id'], reviewer_note or None, utc_now(), json.dumps(candidate, ensure_ascii=False), candidate_id))
+            connection.commit()
+            return {'execution_status': 'applied', 'results': results}
 
     def execute_batch(
         self,

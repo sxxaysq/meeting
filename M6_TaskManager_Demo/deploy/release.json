@@ -1,0 +1,18 @@
+{
+  "url": "http://192.168.30.216/meeting/",
+  "service": "meeting-taskmanager.service",
+  "backup": "/home/yty-s/meeting-m2-work/integration/m3_semantic_memory_20260917/backups/lan_release_20260921_154414",
+  "vue_source": "https://unpkg.com/vue@3.5.43/dist/vue.global.prod.js",
+  "vue_sha256": "b72394052eef1eeda1752db3758ce1be6f88016903f22e5241cc732ea307478e",
+  "environment_keys": [
+    "LANG",
+    "M6_DATABASE_PATH",
+    "M6_LLM_MODEL",
+    "M6_SEED_DEMO_DATA",
+    "PATH"
+  ],
+  "proxy_backup": "/home/yty-s/meeting-m2-work/integration/m3_semantic_memory_20260917/backups/lan_proxy_20260921_155144",
+  "nginx_config": "/mnt/data/smartcore/frontend/nginx/main.conf",
+  "container": "frontend-main",
+  "local_backend": "http://127.0.0.1:18098"
+}

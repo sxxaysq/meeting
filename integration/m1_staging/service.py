@@ -34,7 +34,7 @@ from repository import (
 
 HERE = Path(__file__).resolve().parent
 SCHEMA_PATH = (
-    HERE.parents[1] / "meeting-m2-work" / "M1_Extraction" / "schemas" / "m1_items.schema.json"
+    HERE.parents[1] / "M1_Extraction" / "schemas" / "m1_items.schema.json"
 )
 DEFAULT_DSN = "sqlite:///" + str(HERE / "data" / "m1_staging.db")
 REJECT_DIR = HERE / "data" / "rejected"

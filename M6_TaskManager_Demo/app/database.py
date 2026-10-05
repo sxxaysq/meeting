@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
+from .organization import initialize_organization
 
 
 SCHEMA_SQL = """
@@ -151,6 +152,7 @@ def initialize_database(
     with connect(database_path) as connection:
         connection.executescript(SCHEMA_SQL)
         _migrate_schema(connection)
+        initialize_organization(connection)
         if seed_demo_data:
             _seed_demo_tasks(connection)
         connection.commit()

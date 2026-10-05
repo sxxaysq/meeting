@@ -50,7 +50,8 @@ def test_progress_adds_event_without_overwriting_task(tmp_path) -> None:
     result = TaskExecutor(repo).execute(command)
     after = repo.get_task("TASK-001")
     assert result["execution_status"] == "APPLIED"
-    assert before == after
+    assert after['version']==before['version']+1
+    assert {k:v for k,v in before.items() if k not in ('version','updated_at')}=={k:v for k,v in after.items() if k not in ('version','updated_at')}
     assert len(repo.list_events("TASK-001")) == 1
 
 

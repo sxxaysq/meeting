@@ -137,6 +137,7 @@ def check_over_merge(
     trace: List[MergeTraceEntry],
     by_index: Dict[int, SourceItem],
     source_mode: str,
+    project_mapping: Optional[Dict[str, str]] = None,
 ) -> List[Issue]:
     """最重要的一类：不同业务目标被合成一条。"""
     issues: List[Issue] = []
@@ -170,7 +171,8 @@ def check_over_merge(
 
         # 来源项目名归一前就分属不同实体（Resolver 已判 DIFFERENT）
         projects = {normalize_name(s.project) for s in sources if s.project}
-        if len(projects) > 1:
+        resolved = {(project_mapping or {}).get(p) for p in projects}
+        if len(projects) > 1 and (None in resolved or len(resolved) != 1):
             issues.append(
                 Issue(
                     "OVER_MERGE_PROJECT",
@@ -247,7 +249,7 @@ def check_under_merge(items: List[Dict[str, Any]]) -> List[Issue]:
                 issues.append(
                     Issue(
                         "UNDER_MERGE_SUSPECT",
-                        LEVEL_REVIEW,
+                        LEVEL_WARNING,
                         "两条 Item 语义重合度 {:.3f}，疑似仍未归并".format(score),
                         i,
                         {"other_item_index": j, "titles": [left.get("title"), right.get("title")]},
@@ -262,10 +264,10 @@ def check_project_conflict(
     issues = [
         Issue(
             "PROJECT_ENTITY_UNCERTAIN",
-            LEVEL_REVIEW,
-            "项目实体判定为 UNCERTAIN：{} / {}".format(row.get("left"), row.get("right")),
+            LEVEL_WARNING,
+            "项目称谓拿不准，保持独立：{} / {}".format(row.get("left"), row.get("right")),
             None,
-            {"reason": row.get("reason")},
+            {"reason": row.get("reason"), "project_names": [row.get("left"), row.get("right")]},
         )
         for row in uncertain
     ]
@@ -316,6 +318,7 @@ def run(
     alias_conflicts: List[Dict[str, Any]],
     alias_pool: set,
     extra_issues: Optional[List[Issue]] = None,
+    project_mapping: Optional[Dict[str, str]] = None,
 ) -> Dict[str, Any]:
     by_index = {item.index: item for item in source_items}
     issues: List[Issue] = list(extra_issues or [])
@@ -323,7 +326,7 @@ def run(
         Issue("SCHEMA_VIOLATION", LEVEL_ERROR, message) for message in schema_errors
     )
     issues.extend(check_grounding(items, trace, by_index, alias_pool))
-    issues.extend(check_over_merge(items, trace, by_index, source_mode))
+    issues.extend(check_over_merge(items, trace, by_index, source_mode, project_mapping))
     issues.extend(check_under_merge(items))
     issues.extend(check_project_conflict(uncertain_projects, alias_conflicts))
     issues.extend(check_generic_compatibility(items, source_mode))

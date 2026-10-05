@@ -77,3 +77,109 @@
 1. 开发机触发：`curl -X POST http://192.168.30.214:8090/m1/ingest-file -H 'Content-Type: application/json' -d '{"path":"/home/yty/m1x/meeting-m2-work/M1_Extraction/out_v14/generic/2026-04-13.items.json"}'`
 2. 中台侧 `m1-items-by-doc?source_document_id=2026-04-13` 应返回该批 items；
 3. 智能问数抽样问题："2026-04-13 会议各项目任务数"应可由 `dws_meeting_item_stat` 回答。
+
+---
+
+## 9. M2 语义归并接入（2026-09-03 已执行完成，本节为实测记录）
+
+> 与 §1–§8 不同：本节**不再需要管理员在 UI 上点**。开发侧已用平台自己的 REST API
+> 全部执行完毕并逐项验证，脚本 `integration/srt_m2_onboard.py` 幂等可重跑。
+> 之所以走 API 而不是直接改 `srt_cloud` 元数据库：直连改库会漏掉平台的联动写入
+> （列节点、path 重建、缓存、版本号），后患比收益大。
+
+### 9.1 一键复现
+
+```bash
+cd /home/yty-s/meeting-m2-work/integration
+python srt_m2_onboard.py all --run     # api + metadata + quality + assets + qa
+python srt_m2_onboard.py verify        # 只跑数据服务 API 自测
+python srt_m2_onboard.py api --dry     # 只看将提交的 payload，不写平台
+```
+
+登录沿用 `srt_login.py`（验证码 OCR）；token 缓存在 `/tmp/srt_token`，过期自动重登。
+
+### 9.2 已完成的五项接入（实测结果）
+
+| 模块 | 对象 | 实测结果 |
+|---|---|---|
+| 数据源 | 复用 ID:42 `M1 Staging (会议数据贴源层)` | 未新增数据源（与 M1/M4 同库 `m1_staging`） |
+| 数据服务 API | 目录 `M2业务目录`(id=7) / `M2语义归并API目录`(id=8)；API id=9/10/11 | 三个全部 `code=0`：`m2-items-by-doc` **156 行**、`m2-merge-lineage-by-doc` **159 行 6 列**、`m2-stat-by-doc` **1 行 16 列** |
+| 元数据 | 采集任务 id=11，9 个对象 + 143 个列节点 | 采集日志 `All 9 tables processed, success: 9`；4 张基表列数 17/27/8/8 与 MySQL 逐个对上 |
+| 数据质量 | 6 条规则（id 会变，认 name：`M2 item_id 前缀与非空校验` 等），共 14 条列级规则 | 已上线并试跑，`check_data_count` 2052/2052/2052/2052/15/2052，**err_col 与 err_row 全为 0** |
+| 资产目录 | 9 个资产 id=11–19 挂到既有目录「会议数据」(id=5) | `data_assets_resource_mount` 有 **9 条真实挂载行**(id=36–44)，每条指向的元数据节点名与资产 code 逐一相符 |
+| 智能问数 | 白名单 4 张视图 id=6–9（databaseId=42） | `/qa/manage/assets` 能看到 9 个 M2 资产 `mountStatus=1`；`/qa/metadata/schema` 对 4 张视图返回 code=0，列数 22/16/8/6 |
+
+三个数据服务 API 的运行时地址（实测两种都通）：
+
+```
+http://192.168.30.216:8086/api/m2-items-by-doc?source_document_id=2026-04-07
+http://192.168.30.216:8082/data-service/api/m2-stat-by-doc?source_document_id=2026-04-07
+```
+
+响应结构：`{code, msg, data:{ifQuery, success, errorMsg, columns:[...], rowData:[{列名:值}]}}`，
+**行数组的键是 `rowData`**（不是 data/list）。
+
+### 9.3 平台行为坑位（全部实测确认，改配置前必读）
+
+| # | 坑 | 现象 | 正确做法 |
+|---|---|---|---|
+| 1 | 鉴权头 | 网关 `:8082` 对 `Authorization: Bearer <t>` 返回 **401** | 用**裸 token**：`Authorization: <t>` |
+| 2 | 项目标识 | 只带 token 会报「缺少项目标识」 | 必须再加 `X-Srt-Project-Id: 10002` |
+| 3 | 分页参数 | `pageNo/pageSize` 报「页码不能为空」 | 用 **`page` / `limit`** |
+| 4 | API 发布 | `POST /data-service/api-config` 建出来的 API 即使 payload 给了 `status:1`，`release_time` 仍是 NULL，运行时 `GET :8086/api/<path>` **404** | 必须再调 `PUT /data-service/api-config/{id}/online` |
+| 5 | 元数据采集器把视图名写成 `VIEW` | 5 个视图的节点 `name` 全变成字面量 `VIEW`（真实视图名只落在 `code` 里），UI 上无法区分 | 采集后 `PUT /data-governance/metadata` 把 `name` 纠正为 `code`，平台会自动重建 `path` |
+| 6 | 范围校验必须给两端 | `ruleId=12` 只给 `rangeStart` 时后端不报错也不拦，而是把 **100% 行判为异常**（实测 2055/2055 全红） | `rangeStart` 与 `rangeEnd` **都要给**；给全后同一列 0 违例 |
+| 7 | `TINYINT(1)` 被当成 Boolean | JDBC 驱动默认 `tinyInt1isBit=true`，`exact_match`/`merged` 取到的是 `true/false`；数值范围 `[0,1]` 与正则 `^[01]$` **全红**，`^(true|false)$` → 0 违例 | 本项目三个 `TINYINT(1)` 列（`exact_match`/`merged`/`evidence_contiguous`）一律用布尔正则 |
+| 8 | `note` 列宽 | `data_governance_quality_config.note` 是 `varchar(255)`，超长报 `Data truncation` | 长 SQL 写进本文档，note 只留摘要（脚本内置 255 字守卫） |
+| 9 | 删除契约不统一 | `quality-config`：`DELETE` **基地址 + JSON 数组 body** `[id]`（带 id 的路径形式报 method not supported）；`resource`：`DELETE /{id}`；`qa/manage/table-config`：`DELETE /{id}` | 见 `srt_m2_onboard.py` 各方法的 docstring |
+| 10 | 软删标记不是 0 | `data_assets_resource_mount.deleted` 实际是 **NULL**，用 `WHERE deleted=0` 会把有效挂载行全过滤掉 | 核对挂载时不要加 `deleted=0` |
+| 11 | 改质量规则会**追加**列规则 | `PUT /data-governance/quality-config` 对 `columnConfig` 是追加而不是替换：同一配置改 N 次，列规则变成 N 倍（实测重跑 6 次后 2 条变 12 条） | 幂等的正确做法是**先 DELETE 同名旧配置再 POST 建新的**；副作用是 id 每次重建都变，**认 name 不要硬编码 id**（`srt_m2_onboard.py` 已改成先删后建） |
+
+### 9.4 列级规则表达不了、需人工核对的约束
+
+平台的列级规则库只有 11 种（唯一性/长度/非空/正则/范围/及时性/格式类），
+**跨列比较与聚合占比都表达不了**。以下 4 条已写进对应规则的 `note`，核对 SQL 如下
+（2026-09-03 实测全部 0 违例）：
+
+```sql
+-- 1) 证据坐标有序
+SELECT COUNT(*) FROM ods_m2_meeting_items WHERE evidence_start_char > evidence_end_char;
+-- 2) merged 与 source_count 自洽
+SELECT COUNT(*) FROM ods_m2_meeting_items WHERE merged <> (source_count > 1);
+-- 3) 每文档条目行数 = doc.item_count
+SELECT d.source_document_id FROM ods_m2_consolidated_documents d
+ WHERE d.item_count <> (SELECT COUNT(*) FROM ods_m2_meeting_items i
+                         WHERE i.source_document_id = d.source_document_id);
+-- 4) exact_match 占比（阈值 0.8）
+SELECT ROUND(SUM(exact_match)/COUNT(*), 4) FROM ods_m2_meeting_items;
+-- 5) 血缘完整性：孤儿应为 0，且 M1 每条都被覆盖（实测 2077/2077，孤儿 0）
+SELECT COUNT(*) FROM dwd_m2_item_lineage l
+  LEFT JOIN ods_m1_meeting_items m ON m.item_id = l.origin_item_id WHERE m.item_id IS NULL;
+SELECT COUNT(*) FROM ods_m1_meeting_items m
+  LEFT JOIN dwd_m2_item_lineage l ON l.origin_item_id = m.item_id WHERE l.origin_item_id IS NULL;
+```
+
+### 9.5 建视图必须显式 COLLATE（否则血缘视图不可用）
+
+`JSON_TABLE` 派生的字符串列在 MySQL 8 里**恒为 `utf8mb4_0900_ai_ci`**，无视库/表的
+`utf8mb4_unicode_ci` 默认值。不显式 COLLATE 时，`dwd_m2_item_lineage.origin_item_id`
+去 JOIN `ods_m1_meeting_items.item_id` 直接报
+`1267 Illegal mix of collations`——血缘视图的根本用途就废了。
+`m2_service/schema.sql` §A.5/A.6 已对 `assignee` 与 `origin_item_id` 加了
+`COLLATE utf8mb4_unicode_ci`，改视图时不要漏。
+
+### 9.6 顺带发现的 M1 侧既存缺口（本次未改，交管理员决定）
+
+1. **元数据登记不全**：`data_governance_metadata` 里 M1 只有 `ods_m1_meeting_items`
+   一个节点（采集任务 id=10 的 `tableNameArr` 只列了它），
+   `ods_m1_source_documents` / `dwd_meeting_item_detail` / `dws_meeting_item_stat` 均未登记。
+   补法：把这三个名字加进采集任务 id=10 的 `tableNameArr` 再 `PUT hand-run/10`。
+2. **资产没有真实挂载行**：M1 的 4 个资产(id=6–9) `mount_status=1`，但
+   `data_assets_resource_mount` 里**没有对应记录**（M2 的 9 个已补齐）。
+3. **智能问数 remark 是复制粘贴残留**：`qa_table_config` id=3/4 的表是
+   `dwd_meeting_item_detail`，remark 却写着「设备告警明细表」「设备维度表（设备字典）」，
+   且 id=3(db=42) 与 id=4(db=41) 指向同一张视图、重复登记。
+4. **数据服务 API 截断**：`m1-items-by-doc` / `m1-items-by-project` 的 `sqlMaxRow=100`，
+   而单份会议最多 159 条，查询结果被静默截断（M2 三个 API 已设 1000）。
+   建议把 M1 两个 API 的 `sqlMaxRow` 也调到 1000。
+

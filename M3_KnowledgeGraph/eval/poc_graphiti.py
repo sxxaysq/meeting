@@ -32,7 +32,7 @@ from neo4j import GraphDatabase
 
 NEO4J_URI = os.environ.get("M3_NEO4J_URI", "bolt://127.0.0.1:7687")
 NEO4J_USER = os.environ.get("M3_NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.environ.get("M3_NEO4J_PASSWORD", "m3graph2026")
+NEO4J_PASSWORD = os.environ.get("M3_NEO4J_PASSWORD", "YOUR_PASSWORD")
 LLM_BASE_URL = os.environ.get("M3_LLM_BASE_URL", "http://192.168.30.215:8000/v1")
 LLM_MODEL = os.environ.get("M3_LLM_MODEL", "Qwen/Qwen3.6-35B-A3B")
 

@@ -52,6 +52,14 @@ class ExecutionConflict(M6Error):
     """A task changed after the lifecycle decision was produced."""
 
 
+class BusinessAmbiguity(M6Error):
+    """Facts are valid but the requested business operation remains ambiguous."""
+
+
+class TechnicalFailure(M6Error):
+    """Retryable model/format failure, never a business review."""
+
+
 @dataclass(frozen=True)
 class SourceContext:
     source_document_id: str
@@ -83,6 +91,9 @@ class LifecycleDecision:
     event_summary: str | None
     changes: dict[str, Any]
     department_change: dict[str, Any] | None
+    scope: str = 'same_task'
+    completion_evidence: str | None = None
+    expand: bool = False
 
     @classmethod
     def from_dict(cls, payload: dict[str, Any]) -> "LifecycleDecision":
@@ -93,6 +104,9 @@ class LifecycleDecision:
             event_summary=payload.get("event_summary"),
             changes=dict(payload.get("changes") or {}),
             department_change=payload.get("department_change"),
+            scope=payload.get('scope','same_task'),
+            completion_evidence=payload.get('completion_evidence'),
+            expand=payload.get('expand',False),
         )
 
     def as_dict(self) -> dict[str, Any]:
@@ -103,6 +117,9 @@ class LifecycleDecision:
             "event_summary": self.event_summary,
             "changes": self.changes,
             "department_change": self.department_change,
+            "scope": self.scope,
+            "completion_evidence": self.completion_evidence,
+            "expand": self.expand,
         }
 
 

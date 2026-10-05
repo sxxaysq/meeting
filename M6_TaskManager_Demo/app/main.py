@@ -26,7 +26,8 @@ from fastapi.staticfiles import StaticFiles
 
 from .config import Settings
 from .database import initialize_database
-from .m6.executor import CommandExecutor
+from .m6.executor import CommandExecutor, CommandExecutionError
+from .review_plan import suggest_operations, validate_operations
 from .m6.model_client import M6Client, OpenAICompatibleM6Client
 from .m6.service import TaskAutomationService
 from .m6.target_matcher import TargetMatcher
@@ -34,6 +35,7 @@ from .m6.validator import CommandValidator
 from .m6.model_client import empty_patch
 from .orchestrator import PipelineOrchestrator
 from .task_repository import TaskRepository
+from .department_workbench import register_department_routes
 
 
 ALLOWED_SUFFIXES = {".pdf", ".docx"}
@@ -244,6 +246,7 @@ def create_app(
     app.state.settings = resolved
     app.state.repository = repository
     app.state.orchestrator = orchestrator
+    register_department_routes(app, repository, resolved.static_dir)
     app.mount(
         "/static",
         StaticFiles(directory=resolved.static_dir),
@@ -485,6 +488,14 @@ def create_app(
 
     @app.patch("/api/review-candidates/{candidate_id}")
     def update_review_candidate(candidate_id: str, payload: dict) -> dict:
+        if 'operations' in payload:
+            review = repository.get_review_candidate(candidate_id)
+            if review is None:
+                raise HTTPException(status_code=404, detail='复核记录不存在')
+            try:
+                validate_operations(payload['operations'], review['candidate'])
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc)) from exc
         if payload.get("initial_status") not in {None, "open", "in_progress"}:
             raise HTTPException(status_code=400, detail="复核任务初始状态只能是 open/in_progress")
         if "work_items" in payload and (
@@ -499,8 +510,40 @@ def create_app(
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+    @app.post('/api/review-candidates/{candidate_id}/plan')
+    def get_review_plan(candidate_id: str) -> dict:
+        review = repository.get_review_candidate(candidate_id)
+        if review is None:
+            raise HTTPException(status_code=404, detail='复核记录不存在')
+        if review['status'] != 'pending':
+            raise HTTPException(status_code=409, detail='复核记录已处理')
+        tasks = {task['task_id']: task for task in repository.list_tasks(include_deleted=True)}
+        if 'operations' in review['candidate']:
+            return {'operations': review['candidate']['operations'], 'saved': True,
+                    'tasks': [tasks[t['task_id']] for t in review['candidate'].get('candidate_tasks', []) if t.get('task_id') in tasks]}
+        try:
+            operations = suggest_operations(review, tasks, client)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        except Exception as exc:
+            raise HTTPException(status_code=503, detail='建议生成服务暂不可用，可手工添加表单或重试') from exc
+        return {'operations': operations, 'saved': False,
+                'tasks': [tasks[t['task_id']] for t in review['candidate'].get('candidate_tasks', []) if t.get('task_id') in tasks]}
+
     @app.post("/api/review-candidates/{candidate_id}/approve")
     def approve_review_candidate(candidate_id: str, payload: dict) -> dict:
+        if 'operations' in payload:
+            try:
+                note = payload.get('reviewer_note') or ''
+                if not isinstance(note, str):
+                    raise ValueError('复核备注必须是文本')
+                return automation.executor.execute_review(candidate_id, payload['operations'], note)
+            except KeyError as exc:
+                raise HTTPException(status_code=404, detail=str(exc)) from exc
+            except CommandExecutionError as exc:
+                raise HTTPException(status_code=409, detail=str(exc)) from exc
+            except ValueError as exc:
+                raise HTTPException(status_code=400, detail=str(exc)) from exc
         review = repository.get_review_candidate(candidate_id)
         if review is None:
             raise HTTPException(status_code=404, detail="review candidate not found")

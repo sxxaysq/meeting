@@ -4,15 +4,18 @@ from __future__ import annotations
 
 import json
 import re
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
 from jsonschema import Draft202012Validator
 
-from .candidate_retriever import normalize_text
+from .candidate_retriever import normalize_text, project_compatible, same_goal
 from .department_router import DepartmentRouter
 from .models import (
     DecisionValidationError,
+    BusinessAmbiguity,
+    ExecutionConflict,
     LifecycleAction,
     LifecycleDecision,
     SourceContext,
@@ -21,6 +24,7 @@ from .models import (
 )
 from .repository import TaskRepository
 from .state_machine import next_status
+from .input_policy import restriction, pending_restriction
 
 
 TRANSFER_PATTERN = re.compile(
@@ -62,11 +66,11 @@ class CommandValidator:
             command = self._build(source, decision, candidates)
             self._validate_schema(command)
             return command
-        except DecisionValidationError as error:
+        except BusinessAmbiguity as error:
             command = self._review_command(
                 source,
                 candidates,
-                f"DETERMINISTIC_SAFETY_REVIEW: {error}",
+                f"BUSINESS_REVIEW: {error}",
             )
             self._validate_schema(command)
             return command
@@ -110,6 +114,9 @@ class CommandValidator:
             candidate["task_id"]: candidate for candidate in candidates
         }
         action = decision.decision
+        blocked = restriction(source, action.value) or pending_restriction(source, self.repository, action.value)
+        if blocked:
+            return self._review_command(source, candidates, blocked)
         if action is LifecycleAction.REVIEW:
             if decision.target_task_id is not None:
                 raise DecisionValidationError("REVIEW 不允许锁定目标任务")
@@ -117,6 +124,8 @@ class CommandValidator:
         if action is LifecycleAction.CREATE:
             if decision.target_task_id is not None:
                 raise DecisionValidationError("CREATE 不允许指定目标任务")
+            if any(same_goal(item,c) for c in candidates if project_compatible(source,c)):
+                raise BusinessAmbiguity('DUPLICATE_GOAL: 具体业务目标已存在，不能重复新建')
             route = self._route(item.get("department"))
             changes = self._create_changes(source, route)
             return self._command(
@@ -136,18 +145,73 @@ class CommandValidator:
         if current is None:
             raise DecisionValidationError("目标任务不存在")
         if current["version"] != candidate["version"]:
-            raise DecisionValidationError("目标任务版本已变化")
+            raise ExecutionConflict("目标任务版本已变化")
         self._validate_project(source, current)
-        self._validate_department_consistency(source, current, action)
+        if decision.scope == 'uncertain':
+            raise BusinessAmbiguity('TARGET_SCOPE: 无法确认该目标的业务身份')
+        if action is LifecycleAction.MODIFY and decision.scope=='subtask':
+            decision=replace(decision,decision=LifecycleAction.PROGRESS_UPDATE,changes={},
+                             reason=decision.reason+'；子事项只追加进展，不修改父任务定义')
+            action=decision.decision
+        repeated = normalize_text(item['content']) in {
+            normalize_text(current['description']),
+            *(normalize_text(e['content']) for e in candidate.get('recent_events',[]))}
+        if action is LifecycleAction.SKIP:
+            if repeated:
+                return replace(self.skip(source),reason='同一目标的完全重复事实；'+decision.reason)
+            decision=replace(decision,decision=LifecycleAction.PROGRESS_UPDATE,
+                             reason=decision.reason+'；原文不是完全重复，保留为新进展')
+            action=decision.decision
+        if action is LifecycleAction.COMPLETE:
+            evidence=decision.completion_evidence or ''
+            if evidence and evidence not in item['content'] and evidence not in item['evidence']['text']:
+                raise DecisionValidationError('COMPLETE evidence 不是当前来源原文')
+            # Only explicit whole-goal completion can close a task. Partial/future statements are progress.
+            definite=bool(re.search(r'已(?:经)?完成|已经?通过.{0,12}验收|验收通过|已交付|已结题|全部完成',evidence))
+            surrounding=self._evidence_context(source,evidence)
+            future=bool(re.search(r'计划|拟|下周|要求|确保|如果|假如|若|待完成|需完成|未.{0,4}(?:完成|验收|交付|结题|通过)|没有.{0,3}完成|[1-9]?\d(?:\.\d+)?%(?!\d)',surrounding.replace('100%','')))
+            parent=normalize_text(current['title'])==normalize_text(current.get('project'))
+            parent_mismatch=parent and normalize_text(item['title'])!=normalize_text(current['title'])
+            project=normalize_text(current.get('project'))
+            stem=re.sub(r'项目$','',project)
+            strip=lambda text: re.sub(r'建设|完成|推进|工作|任务|研发|开发|测试|验收|安装|及|与|和','',normalize_text(text).replace(stem,'') if stem else normalize_text(text))
+            goal=strip(current['title'])
+            scope_missing=bool(goal) and goal not in strip(evidence)
+            whole_project=not parent or bool(re.search(r'项目整体|全部子系统|全部工作|整体验收',evidence))
+            phases=set(re.findall(r'装修|安装|研发|开发|测试|验收|施工|调试',current['title']))
+            missing_phase=len(phases)>1 and any(phase not in evidence for phase in phases)
+            if decision.scope!='same_task' or not definite or future or parent_mismatch or scope_missing or not whole_project or missing_phase:
+                decision=replace(decision,decision=LifecycleAction.PROGRESS_UPDATE,
+                    reason=decision.reason+'；未证明整个目标完成，保留为进展')
+                action=decision.decision
+        if action in (LifecycleAction.CANCEL,LifecycleAction.REOPEN):
+            evidence=decision.completion_evidence or ''
+            pattern=r'取消|终止|不再开展' if action is LifecycleAction.CANCEL else r'重新启动|重新开展|重启|恢复开展'
+            negative=bool(re.search(r'不(?:得|应|要|再)?(?:取消|终止|重启|恢复|重新)|暂不|无需|禁止|避免|尚未',self._evidence_context(source,evidence)))
+            if not evidence or negative or (evidence not in item['content'] and evidence not in item['evidence']['text']) or not re.search(pattern,evidence):
+                raise DecisionValidationError(action.value+' 缺少原文明示的状态变更依据')
         next_status(current["status"], action)
 
         changes: dict[str, Any] = {}
         department_change = None
         if action is LifecycleAction.MODIFY:
             changes = self._grounded_changes(source, decision.changes)
+            # Additive changes preserve valid history. Reporting labels do not replace task identity.
+            if 'description' in changes:
+                incoming=changes['description']
+                changes['description']=current['description'] if normalize_text(incoming) in normalize_text(current['description']) else current['description']+'\n'+incoming
+            if 'assignees' in changes:
+                changes['assignees']=list(dict.fromkeys(current.get('assignees',[])+changes['assignees']))
+            for field in ('title','work_section','delivery_group'):
+                if field in changes and not re.search(r'更名|名称.*改为|调整为|变更为',item['content']):
+                    changes.pop(field)
+            changes={k:v for k,v in changes.items() if v != current.get(k)}
             if not changes:
-                raise DecisionValidationError("MODIFY 没有有依据的稳定字段变化")
-            route_name = item.get("department") or current.get("department")
+                if repeated:
+                    return replace(self.skip(source),reason='MODIFY 无字段变化且事实重复；'+decision.reason)
+                decision=replace(decision,decision=LifecycleAction.PROGRESS_UPDATE,
+                    reason=decision.reason+'；无稳定字段变化，追加进展')
+            route_name = current.get("department")
             route = self._route(route_name)
             changes.update(
                 {
@@ -166,7 +230,7 @@ class CommandValidator:
                 "department_route": route["route"],
             }
         else:
-            route_name = item.get("department") or current.get("department")
+            route_name = current.get("department")
             route = self._route(route_name)
             changes = {
                 "department_id": route["department_id"],
@@ -285,44 +349,8 @@ class CommandValidator:
         source: SourceContext,
         target: dict[str, Any],
     ) -> None:
-        if source.item["item_type"] != "PROJECT_TASK":
-            return
-        if source.project_entity_id and target.get("project_entity_id"):
-            if source.project_entity_id != target["project_entity_id"]:
-                raise DecisionValidationError("PROJECT_TASK 项目实体冲突")
-            return
-        current_project = normalize_text(source.item.get("project"))
-        target_project = normalize_text(target.get("project"))
-        if not current_project or not target_project:
-            raise DecisionValidationError("PROJECT_TASK 项目信息不足")
-        if current_project != target_project:
-            raise DecisionValidationError("PROJECT_TASK canonical project 冲突")
-
-    def _validate_department_consistency(
-        self,
-        source: SourceContext,
-        target: dict[str, Any],
-        action: LifecycleAction,
-    ) -> None:
-        if action is LifecycleAction.TRANSFER:
-            return
-        current_department = normalize_text(source.item.get("department"))
-        target_department = normalize_text(target.get("department"))
-        if (
-            current_department
-            and target_department
-            and current_department != target_department
-        ):
-            current_route = self.router.resolve(source.item.get("department"))
-            target_route = self.router.resolve(target.get("department"))
-            if (
-                current_route
-                and target_route
-                and current_route["department_id"]
-                == target_route["department_id"]
-            ):
-                return
-            raise DecisionValidationError("部门冲突且没有明确 TRANSFER")
+        if not project_compatible(source,target):
+            raise DecisionValidationError('项目/矿号/期次/业务范围不兼容')
 
     def _validate_transfer(
         self,
@@ -339,6 +367,8 @@ class CommandValidator:
             raise DecisionValidationError("TRANSFER evidence 不是原文逐字片段")
         if not TRANSFER_PATTERN.search(evidence):
             raise DecisionValidationError("TRANSFER 原文没有明确移交语义")
+        if re.search(r'不(?:得|应|要)?(?:移交|转交|改由)|暂不|无需|禁止|避免|尚未',self._evidence_context(source,evidence)):
+            raise DecisionValidationError('TRANSFER 原文否定了移交操作')
         to_department = str(change.get("to_department") or "").strip()
         if not to_department or normalize_text(to_department) not in normalize_text(
             evidence
@@ -362,10 +392,19 @@ class CommandValidator:
     def _route(self, department: str | None) -> dict[str, Any]:
         route = self.router.resolve(department)
         if route is None:
-            raise DecisionValidationError(
+            raise BusinessAmbiguity(
                 f"部门无法唯一映射到 Department Master：{department!r}"
             )
         return route
+
+    @staticmethod
+    def _evidence_context(source,evidence):
+        """Include immediate negation/condition prefix; a quote cannot trim away 不/未."""
+        if not evidence:return ''
+        for text in (source.item['content'],source.item['evidence']['text']):
+            position=text.find(evidence)
+            if position>=0:return text[max(0,position-6):position+len(evidence)]
+        return evidence
 
     @staticmethod
     def _provenance(

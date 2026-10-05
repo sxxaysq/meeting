@@ -23,7 +23,7 @@ def _store() -> Neo4jStore:
     return Neo4jStore(
         uri=os.environ.get("M3_NEO4J_URI", "bolt://127.0.0.1:7687"),
         user=os.environ.get("M3_NEO4J_USER", "neo4j"),
-        password=os.environ.get("M3_NEO4J_PASSWORD", "m3graph2026"),
+        password=os.environ.get("M3_NEO4J_PASSWORD", "YOUR_PASSWORD"),
     )
 
 

@@ -12,8 +12,48 @@
 from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
+import re
 
 from models import Issue, MergeTraceEntry, ProjectEntity
+from text_utils import normalize_name
+
+
+def build_project_cards(items, entities, trace):
+    """一个明确父项目一张卡，子事项继续通过原 items/trace 独立处理。
+
+    只接受同部门/交付组内已出现的完整父项目称谓和显式分隔符；
+    不截断矿号、期次，不凭公共前缀猜父项目，不写永久别名。
+    """
+    entity_by_id = {e['entity_id']: e for e in entities}
+    names_by_scope = {}
+    rows = []
+    for item, entry in zip(items, trace):
+        scope = (item.get('department'), item.get('delivery_group'))
+        names = entity_by_id.get(entry.project_entity_id, {}).get('source_names', [])
+        names = set(names) | {item.get('project')}
+        names.discard(None)
+        names_by_scope.setdefault(scope, set()).update(names)
+        rows.append((item, entry, scope, names))
+    cards = {}
+    for item, entry, scope, names in rows:
+        parent_candidates = set()
+        for name in names:
+            # ponytail: explicit 项目-子项 hierarchy only; add source-heading IDs
+            # if M1 later exposes hierarchy without an explicit project label.
+            match = re.fullmatch(r'(.+项目)\s*[-—–:：]\s*(.+)', name)
+            if match and match[1].strip() in names_by_scope[scope]:
+                parent_candidates.add(match[1].strip())
+        parent = next(iter(parent_candidates)) if len(parent_candidates) == 1 else None
+        project = parent or item.get('project')
+        key = (*scope, normalize_name(project)) if project else (*scope, None, entry.item_index)
+        card = cards.setdefault(key, {
+            'project': project, 'department': scope[0], 'delivery_group': scope[1],
+            'item_indexes': [], 'source_indexes': [], 'source_projects': [],
+        })
+        card['item_indexes'].append(entry.item_index)
+        card['source_indexes'].extend(entry.source_indexes)
+        card['source_projects'] = sorted(set(card['source_projects']) | names)
+    return list(cards.values())
 
 
 def build_merge_trace(entries: List[MergeTraceEntry]) -> List[Dict[str, Any]]:
@@ -39,6 +79,7 @@ def review_samples(
 ) -> List[Dict[str, Any]]:
     """把需要人工判断的条目整理成可直接看的样本。"""
     by_item: Dict[int, List[Issue]] = {}
+    issues = [issue for issue in issues if issue.level in ('review', 'error')]
     for issue in issues:
         if issue.item_index is None:
             continue

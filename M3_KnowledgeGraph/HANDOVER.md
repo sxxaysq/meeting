@@ -31,7 +31,7 @@
 | 工作仓库 | `/home/yty/m1x/meeting-m2-work/` |
 | Neo4j | `/home/yty/neo4j`（5.26.29 community，用户态部署），`bolt://127.0.0.1:7687` / `http://127.0.0.1:7474` |
 | Java | `/home/yty/java_env`（conda-forge OpenJDK 21） |
-| Neo4j 认证 | `neo4j / m3graph2026` |
+| Neo4j 认证 | `neo4j / YOUR_PASSWORD` |
 | LLM | vLLM `http://192.168.30.215:8000/v1`，`Qwen/Qwen3.6-35B-A3B` |
 
 已安装关键依赖（venv 内）：

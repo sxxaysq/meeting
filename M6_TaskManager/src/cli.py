@@ -51,7 +51,7 @@ def build_parser() -> argparse.ArgumentParser:
     history.add_argument("input", type=Path)
     history.add_argument("--database", type=Path, required=True)
 
-    process = subparsers.add_parser("process", help="处理一份 M2 PASS 输出")
+    process = subparsers.add_parser("process", help="处理 M2 输出：条目级复核，硬错误拒绝")
     process.add_argument("input", type=Path)
     process.add_argument("--database", type=Path, required=True)
     process.add_argument("--output", type=Path, required=True)

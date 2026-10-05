@@ -398,3 +398,19 @@ tests/    81 项，全部用假模型替身，不依赖在线模型
    全部来自项目实体 UNCERTAIN（保守设计的预期行为），ERROR 是 0。
 4. **以为 `evidence.text` 可以直接给下游用** → 非连续合并的 evidence 目前是包络区间，
    含大量无关内容，见第 5 节 ③。修好之前下游应该读 `merge_trace[].source_evidence`。
+
+
+## 2026-09-14 最新：M2 项目卡与减少复核已完成
+
+详见 integration/M2_PROJECT_POLICY_FIX_20260914.md（仓库根目录相对路径）。
+M2 已改为不确定保持独立并记录 warning；实际别名冲突继续 REVIEW，Schema/来源硬错误拒绝。
+report.project_cards 提供父项目卡和子事项引用，正式五字段 payload / 九字段 Item 保持兼容。
+0407 原始条目 5–13 已聚成同一父项目卡，九项来源完整，无 M2 复核。
+15 场真实 qwen3.8-27b 复测：M2 复核涉及子事项 304→8，平均 0.53/场，14 PASS / 1 REVIEW。
+余下 0420 是一个实际旧别名冲突。M2 核心 92、接入 66、M6 兼容 36 项测试通过；
+15 份新结果通过 M6 输入契约及来源校验，未执行新的 M6 生命周期全量推理。
+结果位于 integration/m2_service/data/project_policy_20260914/。
+原 M6 全量 V2 结果与 867 条复核保持原样，不可冒充本轮 M2 结果。
+18093 M2 已重载并通过健康检查。中台代码未改动，未派发任务，未提交或推送 Git。
+备份在 integration/backups/m2-project-policy-20260914-1720/。
+本地查看页 http://127.0.0.1:18797/，本地目录 C:/Users/Lenovo/Documents/会议/m2-project-policy。

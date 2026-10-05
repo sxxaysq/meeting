@@ -1,141 +1,71 @@
-"""LLM lifecycle judge constrained to program-retrieved candidates."""
-
-from __future__ import annotations
-
+"""Compact model proposal; program resolves IDs and source-backed field values."""
 import json
 from pathlib import Path
-from typing import Any
-
 from jsonschema import Draft202012Validator
-
-from .llm_client import LifecycleClient
-from .models import LifecycleDecision, SourceContext
+from .models import LifecycleAction, LifecycleDecision, TechnicalFailure
 
 
 class LifecycleJudge:
-    def __init__(self, client: LifecycleClient) -> None:
-        root = Path(__file__).resolve().parents[1]
-        self.client = client
-        self.system_prompt = (
-            root / "prompts" / "lifecycle_judge.md"
-        ).read_text(encoding="utf-8")
-        schema = json.loads(
-            (root / "schemas" / "lifecycle_decision.schema.json").read_text(
-                encoding="utf-8"
-            )
-        )
-        self.validator = Draft202012Validator(schema)
+    def __init__(self, client):
+        root=Path(__file__).resolve().parents[1]
+        self.client=client
+        self.calls=0
+        self.format_retries=0
+        self.service_failures=0
+        self.system_prompt=(root/'prompts/lifecycle_judge.md').read_text(encoding='utf-8')
+        self.validator=Draft202012Validator(json.loads((root/'schemas/lifecycle_decision.schema.json').read_text()))
 
-    def judge(
-        self,
-        source: SourceContext,
-        candidates: list[dict[str, Any]],
-    ) -> tuple[LifecycleDecision, dict[str, Any]]:
-        payload = self._payload(source, candidates)
-        decision_payload, audit = self.client.decide(
-            self.system_prompt, payload
-        )
-        decision_payload = self._normalize_shape(decision_payload)
-        errors = self._errors(decision_payload)
-        if errors:
-            decision_payload, retry_audit = self.client.decide(
-                self.system_prompt,
-                payload,
-                correction="; ".join(errors),
-            )
-            decision_payload = self._normalize_shape(decision_payload)
-            retry_errors = self._errors(decision_payload)
-            if retry_errors:
-                raise ValueError(
-                    "生命周期 JSON 校验失败：" + "; ".join(retry_errors)
-                )
-            audit["format_retry"] = retry_audit
-        return LifecycleDecision.from_dict(decision_payload), audit
+    def judge(self, source, candidates, *, expanded=False, correction=None):
+        payload=self._payload(source,candidates)
+        payload['retrieval_expanded']=expanded
+        audit={'calls':[],'format_retries':0}
+        for attempt in range(2):
+            try:
+                self.calls+=1
+                response,call_audit=self.client.decide(self.system_prompt,payload,correction=correction)
+                audit['calls'].append(call_audit)
+            except (json.JSONDecodeError,ValueError) as error:
+                response=None;correction='JSON解析错误：'+str(error)[:250]
+            except Exception as error:
+                self.service_failures+=1
+                raise TechnicalFailure('MODEL_SERVICE: '+type(error).__name__) from error
+            if isinstance(response,dict):
+                response=self._normalize_shape(response)
+                errors=self._errors(response)
+                index=response.get('target_index')
+                if isinstance(index,int) and not isinstance(index,bool) and not 0<=index<len(candidates):
+                    errors.append('target_index 不在已提供的候选范围')
+                if not errors:
+                    fields={'title':source.item['title'],'description':source.item['content'],
+                        'assignees':source.item.get('assignee') or [],'work_section':source.item.get('work_section'),
+                        'delivery_group':source.item.get('delivery_group')}
+                    target=candidates[index] if index is not None else None
+                    change=None
+                    if response['decision']=='TRANSFER':
+                        change={'from_department':target.get('department') if target else None,
+                                'to_department':response.get('transfer_to'),'evidence':response['evidence']}
+                    return LifecycleDecision(
+                        decision=LifecycleAction.REVIEW if response['decision']=='EXPAND' else LifecycleAction(response['decision']),
+                        target_task_id=target['task_id'] if target else None,reason=response['reason'],event_summary=None,
+                        changes={name:fields[name] for name in response['fields']},department_change=change,
+                        scope=response['scope'],completion_evidence=response['evidence'],expand=response['decision']=='EXPAND'),audit
+                correction='; '.join(errors)
+            if attempt==0:
+                audit['format_retries']+=1
+                self.format_retries+=1
+        raise TechnicalFailure('MODEL_FORMAT: finite repair exhausted; '+str(correction)[:300])
 
     @staticmethod
-    def _normalize_shape(payload: dict[str, Any]) -> dict[str, Any]:
-        """Accept two common JSON-mode wrappers without changing semantics."""
-        if set(payload) == {"lifecycle_decision"} and isinstance(
-            payload["lifecycle_decision"], dict
-        ):
-            payload = dict(payload["lifecycle_decision"])
-        if payload.get("department_change") == {}:
-            payload["department_change"] = None
-        payload.setdefault("event_summary", None)
-        payload.setdefault("changes", {})
-        payload.setdefault("department_change", None)
+    def _normalize_shape(payload):
+        if set(payload)=={'lifecycle_decision'} and isinstance(payload['lifecycle_decision'],dict):
+            payload=payload['lifecycle_decision']
         return payload
 
-    def _errors(self, payload: dict[str, Any]) -> list[str]:
-        return [
-            f"{'/'.join(map(str, error.absolute_path)) or '<root>'}: "
-            f"{error.message}"
-            for error in sorted(
-                self.validator.iter_errors(payload),
-                key=lambda error: list(error.absolute_path),
-            )[:5]
-        ]
+    def _errors(self,payload):
+        return [e.message for e in self.validator.iter_errors(payload)][:5]
 
     @staticmethod
-    def _payload(
-        source: SourceContext,
-        candidates: list[dict[str, Any]],
-    ) -> dict[str, Any]:
-        candidate_fields = (
-            "task_id",
-            "item_type",
-            "project_entity_id",
-            "project",
-            "department",
-            "work_section",
-            "delivery_group",
-            "title",
-            "description",
-            "assignees",
-            "status",
-            "version",
-            "created_at",
-            "updated_at",
-            "recent_events",
-        )
-        return {
-            "current_item": {
-                **source.item,
-                "canonical_project_entity_id": source.project_entity_id,
-                "source_document_id": source.source_document_id,
-                "source_item_id": source.source_item_id,
-            },
-            "historical_candidates": [
-                {field: candidate.get(field) for field in candidate_fields}
-                for candidate in candidates
-            ],
-            "allowed_decisions": [
-                "CREATE",
-                "PROGRESS_UPDATE",
-                "MODIFY",
-                "COMPLETE",
-                "CANCEL",
-                "REOPEN",
-                "TRANSFER",
-                "REVIEW",
-            ],
-            "allowed_grounded_changes": {
-                "title": source.item.get("title"),
-                "description": source.item.get("content"),
-                "work_section": source.item.get("work_section"),
-                "delivery_group": source.item.get("delivery_group"),
-                "assignees": source.item.get("assignee") or [],
-            },
-            "required_output_shape": {
-                "decision": "CREATE|PROGRESS_UPDATE|MODIFY|COMPLETE|CANCEL|REOPEN|TRANSFER|REVIEW",
-                "target_task_id": None,
-                "reason": "简短可审计理由",
-                "event_summary": None,
-                "changes": {},
-                "department_change": None,
-            },
-            "output_warning": (
-                "直接输出 required_output_shape 对象本身；"
-                "禁止增加 lifecycle_decision 等外层包装。"
-            ),
-        }
+    def _payload(source,candidates):
+        fields=('item_type','project','department','work_section','delivery_group','title','description','assignees','status','recent_events')
+        return {'current_item':source.item,'historical_candidates':[
+            {'index':i,**{k:c.get(k) for k in fields}} for i,c in enumerate(candidates)]}

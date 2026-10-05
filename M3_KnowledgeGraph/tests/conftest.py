@@ -24,7 +24,7 @@ from M3_KnowledgeGraph.tests.helpers import wipe  # noqa: E402
 
 NEO4J_URI = os.environ.get("M3_NEO4J_URI", "bolt://127.0.0.1:7687")
 NEO4J_USER = os.environ.get("M3_NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.environ.get("M3_NEO4J_PASSWORD", "m3graph2026")
+NEO4J_PASSWORD = os.environ.get("M3_NEO4J_PASSWORD", "YOUR_PASSWORD")
 
 
 @pytest.fixture(scope="session")
