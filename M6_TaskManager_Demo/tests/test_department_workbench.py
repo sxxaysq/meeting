@@ -8,7 +8,8 @@ from fastapi.testclient import TestClient
 from app.config import Settings
 from app.department_workbench import department_key
 from app.main import create_app
-from app.m6.model_client import RuleBasedM6Client
+
+from tests.helpers import OfflineReviewClient
 
 
 class DepartmentWorkbenchTest(unittest.TestCase):
@@ -16,7 +17,7 @@ class DepartmentWorkbenchTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
         settings = replace(Settings.load(), database_path=root/'tasks.sqlite', runs_dir=root/'runs', seed_demo_data=False)
-        self.client = TestClient(create_app(settings, RuleBasedM6Client()))
+        self.client = TestClient(create_app(settings, OfflineReviewClient()))
         self.repo = self.client.app.state.repository
         for meeting in ('A', 'B'):
             self.repo.create_run('RUN'+meeting, 'M'+meeting, meeting+'.pdf', '2026-09-20', '周例会',

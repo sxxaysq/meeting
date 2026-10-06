@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS runs (
     leader_requirements TEXT,
     status TEXT NOT NULL,
     m1_count INTEGER NOT NULL DEFAULT 0,
+    -- Retained for compatibility with existing exported result databases only.
     m2_count INTEGER NOT NULL DEFAULT 0,
     command_count INTEGER NOT NULL DEFAULT 0,
     applied_count INTEGER NOT NULL DEFAULT 0,

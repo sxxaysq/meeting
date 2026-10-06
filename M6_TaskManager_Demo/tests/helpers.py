@@ -1,33 +1,15 @@
-"""测试命令和 M2 记录构造。"""
+"""Offline model stub and source-grounded command fixtures."""
 
 from __future__ import annotations
 
 from app.m6.model_client import empty_patch
 
 
-def source_record(
-    text: str,
-    category: str,
-    segment_id: str = "seg_001",
-    subsegment_id: str = "001",
-    speaker_id: str | None = "机电队",
-) -> dict:
-    missing = ["start_ms", "end_ms", "asr_confidence", "nbest"]
-    if speaker_id is None:
-        missing.append("speaker_id")
-    return {
-        "segment_id": segment_id,
-        "subsegment_id": subsegment_id,
-        "speaker_id": speaker_id,
-        "speaker_confidence": 0.9 if speaker_id else 0.0,
-        "start_ms": None,
-        "end_ms": None,
-        "text_raw": text,
-        "asr_confidence": None,
-        "nbest": [],
-        "missing_fields": missing,
-        "task_category": category,
-    }
+class OfflineReviewClient:
+    """Make unexpected advisory-model requests fail without network access."""
+
+    model = "offline-review-test"
+    client = None
 
 
 def command_batch(

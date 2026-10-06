@@ -26,25 +26,23 @@ def native_item(project='新河二矿项目-数据中心'):
         'evidence':{'text':'推进数据中心施工。','page_start':1,'page_end':1,'start_char':0,'end_char':10,'exact_match':True}}
 
 
-def test_native_m1_one_to_one_without_m2(tmp_path,monkeypatch):
-    from M6_TaskManager.src import m2_input
-    monkeypatch.setattr(m2_input,'load_m2_payload',lambda *_a,**_k:pytest.fail('M2 must not run'))
+def test_native_m1_one_to_one_provenance(tmp_path):
     p=tmp_path/'m1.json';original={'items':[native_item(),native_item('新河二矿项目-集控中心')],'mode':'generic','source_document_id':'原始会议.pdf'}
     p.write_text(json.dumps(original))
     doc,contexts=load_m1_payload(p,document_id='E2E-FULL-2026-04-07')
     assert [c.item for c in contexts]==original['items']
-    assert [c.merge_trace['source_indexes'] for c in contexts]==[[0],[1]]
-    assert all(not c.merge_trace['merged'] and c.input_stage=='M1' for c in contexts)
-    assert all('m2_validation' not in c.provenance for c in contexts)
+    assert [c.source_trace['source_indexes'] for c in contexts]==[[0],[1]]
+    assert all(c.input_stage=='M1' for c in contexts)
+    assert all(c.provenance['input_validation']['status'] == 'PASS' for c in contexts)
     assert all(c.provenance['origin_document_id']=='原始会议.pdf' for c in contexts)
     original['items'][0]['task_id']='model-injected'
     p.write_text(json.dumps(original))
     with pytest.raises(InputContractError):load_m1_payload(p,document_id=doc)
 
 
-def test_m1_hard_source_error_and_m2_envelope_rejected(tmp_path):
+def test_m1_hard_source_error_and_unsupported_metadata_rejected(tmp_path):
     p=tmp_path/'bad.json'
-    for payload in [{'items':[native_item()],'merge_trace':[]},
+    for payload in [{'items':[native_item()],'validation':[]},
                     {'items':[{**native_item(),'evidence':{**native_item()['evidence'],'text':' '}}]}]:
         p.write_text(json.dumps(payload))
         with pytest.raises(InputContractError):load_m1_payload(p,document_id='2026-04-07')
@@ -96,7 +94,7 @@ def test_sibling_subsystems_share_one_family_scope():
     project, and separation has to come from a genuinely different family.
     """
     raw=native_item('新河二矿项目-数据中心')
-    context=SourceContext('2026-04-07','S','generic',0,{**raw,'project':'新河二矿项目'}, {},None,[],{'status':'PASS','issues':[]},admission={'original_item':raw},input_stage='M1')
+    context=SourceContext('2026-04-07','S','generic',0,{**raw,'project':'新河二矿项目'}, {},None,{'status':'PASS','issues':[]},admission={'original_item':raw},input_stage='M1')
     sibling={'project':'新河二矿项目','project_entity_id':None,'source_project':'新河二矿项目-集控中心'}
     same={'project':'新河二矿项目','project_entity_id':None,'source_project':'新河二矿项目-数据中心'}
     configure_semantics(HashEmbedder(),family_lookup=family_lookup({
@@ -113,7 +111,7 @@ def test_sibling_subsystems_share_one_family_scope():
 
 def test_no_specific_project_is_not_an_uncertain_named_project():
     raw={**native_item(None),'item_type':'NON_PROJECT_WORK','title':'年度报告编制'}
-    context=SourceContext('2026-04-07','S','generic',0,raw,{},None,[],{'status':'PASS','issues':[]},
+    context=SourceContext('2026-04-07','S','generic',0,raw,{},None,{'status':'PASS','issues':[]},
         admission={'original_item':raw,'scope_validated':False},input_stage='M1')
     assert project_compatible(context,{'project':None,'project_entity_id':None})
     assert not project_compatible(context,{'project':'某具体项目','project_entity_id':'PARENT-X'})

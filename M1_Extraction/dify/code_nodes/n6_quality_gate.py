@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Dify Code 节点 6：基础 Quality Gate。
 
-只做 M1 该做的基础检查，不做 M2 的深度语义归并。
+只做 M1 该做的基础检查，不做下游的历史任务关联与生命周期判断。
 检查不通过时不静默修正，而是产出 issues 与 has_error 供后续分支判断。
 
 输入：items_json、doc_text

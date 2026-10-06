@@ -334,7 +334,7 @@ class MysqlRepository(StagingRepository):
                 )
                 # 重灌时条目可能变少（LLM 有方差）：不清尾行就会把上一轮的
                 # 残留当成当前数据，造成 doc.item_count 与 items 实际行数不一致，
-                # 下游（m2 的输入指纹、中台数据服务 API）全部跟着错。
+                # 下游输入指纹及中台数据服务 API 都会读取到错误来源。
                 cursor.execute(
                     "DELETE FROM ods_m1_meeting_items "
                     "WHERE source_document_id = %s AND item_seq >= %s",
@@ -390,13 +390,14 @@ def build_repository(dsn: str, base_dir: str) -> StagingRepository:
     parsed = urllib.parse.urlsplit(dsn)
     scheme = parsed.scheme.lower()
     if scheme.startswith("sqlite"):
-        path = parsed.path
-        if not path.startswith("/"):
-            import os
-
-            path = os.path.join(base_dir, path)
         import os
 
+        path = urllib.parse.unquote(parsed.path)
+        if (os.name == "nt" and len(path) > 3 and path[0] == "/"
+                and path[1].isalpha() and path[2] == ":"):
+            path = path[1:]
+        if not os.path.isabs(path):
+            path = os.path.join(base_dir, path)
         os.makedirs(os.path.dirname(os.path.abspath(path)) or ".", exist_ok=True)
         return SqliteRepository(path)
     if scheme.startswith("mysql"):

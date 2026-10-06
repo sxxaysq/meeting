@@ -146,20 +146,6 @@ class TaskRepository:
             ).fetchone()
         return dict(row) if row is not None else None
 
-    def has_active_run(self) -> bool:
-        with connect(self.database_path) as connection:
-            row = connection.execute(
-                """
-                SELECT 1 FROM runs
-                WHERE status IN (
-                    'queued', 'running_m1', 'running_m2', 'running_m1_5',
-                    'running_m6', 'applying_database'
-                )
-                LIMIT 1
-                """
-            ).fetchone()
-        return row is not None
-
     def list_tasks(
         self,
         status: str | None = None,

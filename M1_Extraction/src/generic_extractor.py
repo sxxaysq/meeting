@@ -4,7 +4,7 @@
 This path is deliberately high-recall and format-tolerant. It feeds the whole
 normalized document to a generic meeting-task prompt and maps the returned
 ``tasks`` array into the existing M1 ``items`` schema. It does not split or
-merge semantically similar items; downstream M2 can handle consolidation and
+merge semantically similar items; downstream M3/M6 handle project resolution and
 stricter quality decisions.
 """
 

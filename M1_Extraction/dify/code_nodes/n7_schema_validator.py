@@ -6,7 +6,7 @@
 禁止 additionalProperties。
 
 校验失败时**不**输出一个"看起来正常"的结果，而是直接抛异常让整个
-workflow 显式失败——把不合规的结果悄悄交给 M2 比报错危险得多。
+workflow 显式失败——把不合规的结果悄悄交给下游 比报错危险得多。
 
 输入：items_json
 输出：items（array[object]，最终业务输出）、item_count

@@ -9,9 +9,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+for import_root in (ROOT.parent, ROOT):
+    if str(import_root) not in sys.path:
+        sys.path.insert(0, str(import_root))
 
-from src.m2_input import load_m2_payload
+from src.m1_input import load_m1_payload
 
 
 def main() -> None:
@@ -21,7 +23,7 @@ def main() -> None:
     args = parser.parse_args()
     samples = []
     for path in args.inputs:
-        document_id, contexts = load_m2_payload(path, require_pass=True)
+        document_id, contexts = load_m1_payload(path)
         for context in contexts:
             if context.item["item_type"] == "NON_TASK_ITEM":
                 continue

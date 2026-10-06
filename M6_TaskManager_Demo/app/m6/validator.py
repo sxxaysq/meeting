@@ -103,9 +103,9 @@ class CommandValidator:
             evidence["segment_id"] != source["segment_id"]
             or evidence["subsegment_id"] != source["subsegment_id"]
         ):
-            raise CommandValidationError("证据来源 ID 与当前 M2 记录不一致")
+            raise CommandValidationError("证据来源 ID 与当前来源记录不一致")
         if evidence["text"] not in source["text"]:
-            raise CommandValidationError("证据文本不是当前 M2 原文的逐字片段")
+            raise CommandValidationError("证据文本不是当前来源原文的逐字片段")
 
         if action == "CREATE":
             if target_task_id is not None or expected_version is not None:

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import tempfile
-import unittest
 import io
 import json
+import tempfile
+import unittest
 import zipfile
 from dataclasses import replace
 from pathlib import Path
@@ -12,9 +12,10 @@ from fastapi.testclient import TestClient
 
 from app.config import Settings
 from app.database import connect
-from app.main import _stable_meeting_id, create_app
+from app.main import create_app
 from app.m6.executor import CommandExecutor
-from app.m6.model_client import RuleBasedM6Client, empty_patch
+from app.m6.model_client import empty_patch
+from tests.helpers import OfflineReviewClient
 
 
 class ApiTest(unittest.TestCase):
@@ -30,7 +31,7 @@ class ApiTest(unittest.TestCase):
             seed_demo_data=True,
         )
         self.client = TestClient(
-            create_app(settings=settings, m6_client=RuleBasedM6Client())
+            create_app(settings=settings, review_client=OfflineReviewClient())
         )
 
     def tearDown(self) -> None:
@@ -138,23 +139,52 @@ class ApiTest(unittest.TestCase):
         self.assertEqual(history[1]["description"], "完成现场勘察。")
         self.assertFalse(history[1]["is_latest_release"])
 
-    def test_upload_rejects_invalid_extension(self) -> None:
-        response = self.client.post(
-            "/api/demo/runs",
-            data={
-                "meeting_date": "2026-07-27",
-                "meeting_type": "调度会",
-            },
-            files={"file": ("meeting.txt", b"hello", "text/plain")},
+    def test_upload_is_unavailable_and_does_not_create_runs(self) -> None:
+        for filename, media_type in (
+            ("meeting.pdf", "application/pdf"),
+            (
+                "meeting.docx",
+                "application/vnd.openxmlformats-officedocument."
+                "wordprocessingml.document",
+            ),
+            ("meeting.txt", "text/plain"),
+        ):
+            response = self.client.post(
+                "/api/demo/runs",
+                data={"meeting_date": "2026-10-06", "meeting_type": "调度会"},
+                files={"file": (filename, b"test document", media_type)},
+            )
+            self.assertEqual(response.status_code, 503)
+            self.assertIn("M1→M3→M6", response.json()["detail"])
+        self.assertEqual(self.client.app.state.repository.list_meetings(), [])
+        self.assertEqual(
+            list(self.client.app.state.settings.runs_dir.iterdir()), []
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertFalse(hasattr(self.client.app.state, "orchestrator"))
 
-    def test_meeting_identity_is_stable_and_content_sensitive(self) -> None:
-        first = _stable_meeting_id("2026-07-27", "调度会", "abc")
-        second = _stable_meeting_id("2026-07-27", "调度会", "abc")
-        changed = _stable_meeting_id("2026-07-27", "调度会", "def")
-        self.assertEqual(first, second)
-        self.assertNotEqual(first, changed)
+    def test_saved_run_queries_hide_retired_processing_counters(self) -> None:
+        repository = self.client.app.state.repository
+        repository.create_run(
+            run_id="SEMANTIC_RUN",
+            meeting_id="SEMANTIC_MEETING",
+            source_file="result.docx",
+            meeting_date="2026-10-06",
+            meeting_type="调度会",
+        )
+        repository.update_run(
+            "SEMANTIC_RUN",
+            status="completed",
+            m2_count=0,
+            summary_json=json.dumps({"m2_count": 0, "applied_count": 3}),
+        )
+        run = self.client.get("/api/demo/runs/SEMANTIC_RUN")
+        summary = self.client.get("/api/demo/runs/SEMANTIC_RUN/summary")
+        self.assertEqual(run.status_code, 200)
+        self.assertEqual(summary.status_code, 200)
+        self.assertNotIn("m2_count", run.json())
+        self.assertNotIn("m2_count", run.json()["summary"])
+        self.assertNotIn("m2_count", summary.json())
+        self.assertEqual(summary.json()["summary"], {"applied_count": 3})
 
     def test_human_review_candidate_can_create_a_task(self) -> None:
         repository = self.client.app.state.repository

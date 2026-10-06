@@ -3,7 +3,7 @@
 
 用法::
 
-    python cron_scan.py --dir /home/yty/m1x/meeting-m2-work/M1_Extraction/out_v14/generic
+    python integration/m1_staging/cron_scan.py --dir M1_Extraction/out_v14/generic
     # 可选：--state 自定义状态文件；--once 单次执行（默认），交给 crontab 周期调用
 
 增量语义：状态文件记录每个文件的内容 sha1；内容未变的文件跳过，

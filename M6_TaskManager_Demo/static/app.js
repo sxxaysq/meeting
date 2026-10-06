@@ -4,15 +4,10 @@ createApp({
   data() {
     return {
       basePath: '', departmentId: '', departmentName: '', departmentWorkspaces: [], organization: { company: '', units: [] }, departmentSummary: null, workspaceReady: false, workspaceError: '', processingTask: null, progressDraft: { status: 'open', progress_note: '' },
-      activeTab: 'tasks', health: 'checking', busy: false, message: '', messageIsError: false,
-      form: { meetingTitle: '', meetingDate: new Date().toISOString().slice(0, 10), meetingTime: '', meetingType: '调度会', attendees: '', leaderRequirements: '' },
-      run: null, summary: null, tasks: [], events: [], selectedTask: null, taskEvents: [], taskMeeting: null, taskHistory: [], historyOpen: false, historyLoading: false, historyLoadedTaskId: '', meetings: [], selectedMeetingId: '', reviewCandidates: [], reviewDrafts: {}, reviewMessage: '', reviewMessageIsError: false, editingTask: false, taskDraft: {}, taskEditorMessage: '', taskEditorMessageIsError: false,
+      activeTab: 'tasks', health: 'checking', message: '', messageIsError: false,
+      tasks: [], events: [], selectedTask: null, taskEvents: [], taskMeeting: null, taskHistory: [], historyOpen: false, historyLoading: false, historyLoadedTaskId: '', meetings: [], selectedMeetingId: '', reviewCandidates: [], reviewDrafts: {}, reviewMessage: '', reviewMessageIsError: false, editingTask: false, taskDraft: {}, taskEditorMessage: '', taskEditorMessageIsError: false,
       deletionTarget: null, taskMutationBusy: false, taskActionMessage: '', taskActionMessageIsError: false,
-      taskFilter: '', includeDeleted: false, searchText: '', departmentFilter: '', projectFilter: '', pageSize: 10, currentPage: 1, pollTimer: null,
-      stages: [
-        { index: 1, key: 'running_m1', label: 'M1 预处理' }, { index: 2, key: 'running_m2', label: 'M2 分类' },
-        { index: 3, key: 'running_m6', label: 'M6 命令' }, { index: 4, key: 'completed', label: '数据库更新' },
-      ],
+      taskFilter: '', includeDeleted: false, searchText: '', departmentFilter: '', projectFilter: '', pageSize: 10, currentPage: 1,
     };
   },
   computed: {
@@ -59,7 +54,6 @@ createApp({
     } catch (error) { this.workspaceError = error.message; }
     finally { this.workspaceReady = true; }
   },
-  beforeUnmount() { if (this.pollTimer) clearTimeout(this.pollTimer); },
   methods: {
     async api(path, options = {}) {
       if (this.isDepartmentView && path.startsWith('/api/')) {
@@ -84,30 +78,6 @@ createApp({
     },
     priorityClass(priority) { return ({ 高: 'high', 中: 'mid', 低: 'low' })[priority] || 'none'; },
     async checkHealth() { try { this.health = (await this.api('/health')).status; } catch (_) { this.health = 'bad'; } },
-    async startRun() {
-      const file = this.$refs.fileInput.files[0]; if (!file) return;
-      this.busy = true; this.message = ''; this.messageIsError = false;
-      const body = new FormData(); body.append('file', file); body.append('meeting_date', this.form.meetingDate); body.append('meeting_type', this.form.meetingType); body.append('meeting_title', this.form.meetingTitle); body.append('meeting_time', this.form.meetingTime); body.append('attendees', this.form.attendees); body.append('leader_requirements', this.form.leaderRequirements);
-      try { this.run = await this.api('/api/demo/runs', { method: 'POST', body }); this.events = []; this.summary = null; this.message = '运行已创建，正在处理会议材料。'; await this.pollRun(); }
-      catch (error) { this.message = error.message; this.messageIsError = true; this.busy = false; }
-    },
-    async pollRun() {
-      if (!this.run) return;
-      try {
-        this.run = await this.api(`/api/demo/runs/${this.run.run_id}`); this.summary = await this.api(`/api/demo/runs/${this.run.run_id}/summary`);
-        if (['completed', 'completed_with_errors', 'failed'].includes(this.run.status)) {
-          this.busy = false; this.message = this.run.status === 'failed' ? this.runFailureMessage() : '处理完成，任务清单已刷新。'; this.messageIsError = this.run.status === 'failed'; await this.loadAll(); return;
-        }
-        this.pollTimer = setTimeout(() => this.pollRun(), 1200);
-      } catch (error) { this.message = error.message; this.messageIsError = true; this.busy = false; }
-    },
-    runFailureMessage() {
-      const detail = this.run?.error_summary || '';
-      const safePrefixes = ['模型服务暂时不可用', '模型服务连接异常', '模型服务未配置', '会议材料处理超时', '会议材料处理失败'];
-      const safeDetail = safePrefixes.some(prefix => detail.startsWith(prefix))
-        ? detail : '会议材料处理未完成';
-      return `运行失败：${safeDetail} 可稍后重新上传重试。`;
-    },
     async loadAll() { await Promise.all([this.loadTasks(), this.loadMeetings(), this.isDepartmentView ? this.loadDepartmentSummary() : this.loadEvents(), this.isDepartmentView ? Promise.resolve() : this.loadOrganization()]); },
     async loadDepartmentSummary() { this.departmentSummary = await this.api(`/api/departments/${this.departmentId}`); },
     async loadOrganization() {
@@ -335,11 +305,6 @@ createApp({
         if (!response.ok) { const body = await response.json(); throw new Error(body.detail || '导出失败'); }
         const url = URL.createObjectURL(await response.blob()); const link = document.createElement('a'); link.href = url; link.download = 'meeting-task-training-samples.zip'; link.click(); URL.revokeObjectURL(url);
       } catch (error) { this.message = error.message; this.messageIsError = true; }
-    },
-    statusLabel(status) { return ({ queued: '排队中', running_m1: 'M1 处理中', running_m2: 'M2 分类中', running_m6: 'M6 执行中', applying_database: '数据库更新中', completed: '已完成', completed_with_errors: '完成但有失败项', failed: '运行失败' })[status] || status; },
-    stageClass(key) {
-      if (!this.run) return ''; const order = ['queued', 'running_m1', 'running_m2', 'running_m6', 'completed']; const current = ['completed_with_errors', 'failed'].includes(this.run.status) ? (this.run.status === 'failed' ? -1 : 4) : order.indexOf(this.run.status); const target = order.indexOf(key);
-      return { active: current === target, done: current > target || ['completed', 'completed_with_errors'].includes(this.run.status) };
     },
     taskStatusLabel(task) { if (task.is_deleted) return '已软删除'; return ({ open: '待执行', in_progress: '进行中', blocked: '受阻', completed: '已完成', cancelled: '已取消' })[task.status] || task.status; },
     historyActionLabel(action) { return ({ CREATE: '首次发布', HUMAN_CREATE: '人工发布', UPDATE_FIELDS: '进度更新', UPDATE_STATUS: '状态更新' })[action] || action; },

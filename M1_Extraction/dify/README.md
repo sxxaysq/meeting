@@ -25,7 +25,7 @@ Code  Final JSON Schema Validator   不合规直接抛错
 End   items
 ```
 
-End 只输出 `items`，因此一次调用的结果就是 `{"items": [...]}`，可直接作为 M2 输入。
+End 只输出 `items`，因此一次调用的结果就是 `{"items": [...]}`，可作为当前 M1→M3→M6 链路的 M1 输入。
 
 ## 生成 DSL
 

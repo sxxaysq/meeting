@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # 补跑新增 4 份会议的 block（正则结构切分）模式，与 out_eval_block_0820 同模式。
 set -euo pipefail
-SRC=/home/yty/数据集/原始数据
-OUT=/home/yty/m1x/meeting-m2-work/M1_Extraction/out_v14/block
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SRC="${MEETING_INPUT_DIR:?Set MEETING_INPUT_DIR to the source PDF directory}"
+OUT="${M1_OUTPUT_DIR:-$REPO_ROOT/M1_Extraction/out_v14/block}"
 mkdir -p "$OUT"
 export LLM_BASE_URL=http://192.168.30.215:8000/v1
 export LLM_MODEL="Qwen/Qwen3.6-35B-A3B"
 export LLM_ENABLE_THINKING=false
 export LLM_TEMPERATURE=0
 export LLM_MAX_TOKENS=65536
-PY=/home/yty/m1x_venv/bin/python
-CLI=/home/yty/m1x/meeting-m2-work/M1_Extraction/src/cli.py
+PY="${PYTHON_BIN:-python}"
+CLI="$REPO_ROOT/M1_Extraction/src/cli.py"
 run_one() {
   echo "=== [$(date +%H:%M:%S)] 开始 $2 (block)"
   "$PY" "$CLI" extract "$SRC/$1信息公司周例会工作安排备忘录.pdf" \

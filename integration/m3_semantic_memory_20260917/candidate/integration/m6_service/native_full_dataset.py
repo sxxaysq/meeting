@@ -5,21 +5,18 @@ a Neo4j long-term memory graph, and LLM evidence reading replace the lexical and
 regex guards. See ``M3_KnowledgeGraph/src/{embedding_client,semantic_memory,
 project_resolver,semantic_reader,task_retrieval}.py``.
 """
-import fcntl
+import os
 import hashlib
 import json
 import sys
 import threading
 import argparse
-import subprocess
-import uuid
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
-BENCH=ROOT/'integration/m1_m3_m6_20260915'
 sys.path.insert(0,str(ROOT))
 from M6_TaskManager.src.repository import TaskRepository,utc_now
 from M6_TaskManager.src.m1_input import load_m1_payload
@@ -37,8 +34,27 @@ from M3_KnowledgeGraph.src.semantic_memory import connect_memory
 from M3_KnowledgeGraph.src.semantic_reader import SemanticReader
 from M3_KnowledgeGraph.src.task_retrieval import SemanticTaskIndex,configure_semantics
 
-LLM_BASE_URL='http://192.168.30.215:8000/v1'
-LLM_MODEL='qwen3.8-27b'
+LLM_BASE_URL=os.getenv('M6_LLM_BASE_URL','http://127.0.0.1:8000/v1')
+LLM_MODEL=os.getenv('M6_LLM_MODEL','qwen3.8-27b')
+
+
+def acquire_run_lock(path):
+    """Keep one replay writer per output directory on Windows and POSIX."""
+    handle=Path(path).open('a+b')
+    try:
+        if sys.platform=='win32':
+            import msvcrt
+            if handle.seek(0,os.SEEK_END)==0:
+                handle.write(b'\0');handle.flush()
+            handle.seek(0)
+            msvcrt.locking(handle.fileno(),msvcrt.LK_NBLCK,1)
+        else:
+            import fcntl
+            fcntl.flock(handle,fcntl.LOCK_EX|fcntl.LOCK_NB)
+    except Exception:
+        handle.close()
+        raise
+    return handle
 
 
 def independent_groups(contexts,admission,history):
@@ -108,12 +124,17 @@ def build_semantic_layer(repo,scope_client,out,*,reset_memory):
 
 
 def run_batch(inputs, departments, out, *, reset_memory=True):
-    inputs,departments,out=Path(inputs),Path(departments),Path(out)
+    out=Path(out)
     out.mkdir(parents=True,exist_ok=True)
-    handle=(out/'run.lock').open('a');fcntl.flock(handle,fcntl.LOCK_EX|fcntl.LOCK_NB)
+    with acquire_run_lock(out/'run.lock'):
+        return _run_batch(inputs,departments,out,reset_memory=reset_memory)
+
+
+def _run_batch(inputs, departments, out, *, reset_memory):
+    inputs,departments,out=Path(inputs),Path(departments),Path(out)
     repo=TaskRepository(out/'lifecycle.sqlite');repo.initialize()
     assert not repo.list_tasks(), 'Use a fresh replay database, never mix trials'
-    for d in json.loads(departments.read_text()):
+    for d in json.loads(departments.read_text(encoding='utf-8')):
         repo.upsert_department(d['department_id'],d['name'],'test://scope/'+d['department_id'],json.loads(d['aliases_json']))
     scope_client=OpenAICompatibleLifecycleClient(base_url=LLM_BASE_URL,model=LLM_MODEL,enable_thinking=False)
     layer=build_semantic_layer(repo,scope_client,out,reset_memory=reset_memory)
@@ -123,10 +144,10 @@ def run_batch(inputs, departments, out, *, reset_memory=True):
           'reset',reset_memory,'embedding_url',embedder.embedding_url,flush=True)
     manifest={p.parent.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs.glob('E2E*/m1.json')}
     expected=inputs.parent/'frozen_manifest.json'
-    if expected.exists():assert manifest==json.loads(expected.read_text())['inputs'],'Frozen M1 inputs changed'
+    if expected.exists():assert manifest==json.loads(expected.read_text(encoding='utf-8'))['inputs'],'Frozen M1 inputs changed'
     if not manifest:raise ValueError('No native M1 source files')
     summary={'complete':False,'model':LLM_MODEL,'started_at':utc_now(),'documents':[],
-        'pipeline':'M1→M3→M6','m2_enabled':False,'admission_calls':0,'admission_format_retries':0,
+        'pipeline':'M1→M3→M6','input_stage':'M1','admission_calls':0,'admission_format_retries':0,
         'admission_service_failures':0,
         'lifecycle_calls':0,'lifecycle_format_retries':0,'lifecycle_service_failures':0,
         'scheduling':'meetings chronological; compatible identities/targets serial; at most 4 independent groups',
@@ -143,9 +164,7 @@ def run_batch(inputs, departments, out, *, reset_memory=True):
         scope_rows=[r for (d,_),r in admission.rows.items() if d==doc]
         if doc.endswith('2026-04-07'):
             roots={r['parent_project'] for r in scope_rows if r['route']=='M6' and '红沙泉' in str(r['original_item'].get('project'))}
-            # 2026-09-17 policy reversal: mine number, phase and subsystem are no
-            # longer distinctions, so every 红沙泉* surface collapses to one parent.
-            # The previous assertion required {'红沙泉项目','红沙泉二矿项目'}.
+            # Mine number, phase and subsystem belong to the same project family.
             assert roots=={'红沙泉项目'}, roots
         groups=independent_groups(contexts,admission,repo.list_tasks())
         records={};lock=threading.Lock()
@@ -159,7 +178,7 @@ def run_batch(inputs, departments, out, *, reset_memory=True):
                     if result['execution']['action']=='TECHNICAL_FAILURE': result=service.process_context(context)
                     with lock:
                         records[context.item_index]=result
-                        with (out/'records.jsonl').open('a') as journal:journal.write(json.dumps(result,ensure_ascii=False)+'\n')
+                        with (out/'records.jsonl').open('a',encoding='utf-8') as journal:journal.write(json.dumps(result,ensure_ascii=False)+'\n')
                         if len(records)%10==0:
                             progress={'document':doc,'processed':len(records),'total':len(contexts),'completed_meetings':len(summary['documents']),'updated_at':utc_now()}
                             atomic_write_json(out/'progress.json',progress)
@@ -214,29 +233,6 @@ def run_batch(inputs, departments, out, *, reset_memory=True):
     scope_client.client.close();layer['reader_client'].client.close()
     memory.close();embedder.close()
     print('COMPLETE',flush=True)
-
-
-def start():
-    data=HERE/'data/native_full'/uuid.uuid4().hex
-    data.mkdir(parents=True)
-    atomic_write_json(HERE/'data/native_full_active.json',{'path':str(data)})
-    with (data/'run.log').open('ab') as log:
-        p=subprocess.Popen([sys.executable,str(Path(__file__).resolve()),'--inputs',str(BENCH/'frozen_m1'),
-            '--departments',str(BENCH/'departments.json'),'--output',str(data)],
-            cwd=ROOT,stdin=subprocess.DEVNULL,stdout=log,stderr=log,start_new_session=True)
-    atomic_write_json(data/'process.json',{'pid':p.pid})
-    return {'status':'RUNNING','pipeline':'M1→M3→M6','m2_enabled':False,'run_id':data.name}
-
-
-def summary():
-    active=HERE/'data/native_full_active.json'
-    if not active.exists():return {'status':'NOT_STARTED','pipeline':'M1→M3→M6','m2_enabled':False}
-    data=Path(json.loads(active.read_text())['path'])
-    result=json.loads((data/'summary.json').read_text()) if (data/'summary.json').exists() else {}
-    progress=json.loads((data/'progress.json').read_text()) if (data/'progress.json').exists() else {}
-    failure=json.loads((data/'failure.json').read_text()) if (data/'failure.json').exists() else None
-    return {**result,'progress':progress,'failure':failure,'status':'FAILED' if failure else 'PASS' if result.get('complete') else 'RUNNING',
-        'pipeline':'M1→M3→M6','m2_enabled':False,'run_id':data.name}
 
 
 if __name__=='__main__':

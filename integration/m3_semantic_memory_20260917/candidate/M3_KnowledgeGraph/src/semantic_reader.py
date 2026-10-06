@@ -45,7 +45,7 @@ goal_in_evidence：证据确实在讲这个任务的目标，而不是别的工�
 
 # Not ``str.format``: the prompt contains literal JSON braces, and ``format``
 # would read ``{"explicit": ...}`` as a replacement field. The same trap is
-# documented in M2's ``text_utils._ORDINAL``.
+# documented in M1's ``text_utils._ORDINAL``.
 STATUS_CHANGE_PROMPT = '''判断证据是否明示了一次状态变更。只返回 JSON：
 {"explicit":布尔,"negated":布尔,"reason":"简短依据"}
 

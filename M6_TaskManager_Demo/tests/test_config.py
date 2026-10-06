@@ -3,74 +3,51 @@ from __future__ import annotations
 import os
 import tempfile
 import unittest
+from dataclasses import fields
 from pathlib import Path
 from unittest.mock import patch
 
 from app.config import Settings
-from app.orchestrator import PipelineOrchestrator
 
 
 class SettingsTest(unittest.TestCase):
-    def test_pipeline_error_summary_is_safe_and_actionable(self) -> None:
-        summary = PipelineOrchestrator._error_summary(
-            RuntimeError("stage failed: openai.InternalServerError: Error code: 502")
-        )
-        self.assertEqual(
-            summary,
-            "模型服务暂时不可用（HTTP 502），已自动重试仍未恢复，请稍后重新提交。",
-        )
-        generic = PipelineOrchestrator._error_summary(
-            RuntimeError("Traceback: C:\\secret\\internal.py")
-        )
-        self.assertEqual(
-            generic,
-            "会议材料处理失败，请稍后重新提交；若问题持续请联系管理员。",
-        )
-
-    def test_default_paths_target_local_new_pipeline(self) -> None:
+    def test_defaults_only_configure_results_and_review(self) -> None:
         project_root = Path(__file__).resolve().parent.parent
         with patch.dict(os.environ, {}, clear=True):
             settings = Settings.load(project_root=project_root)
-        self.assertEqual(
-            settings.m1_project, project_root.parent / "M1_Preprocess"
-        )
-        self.assertEqual(
-            settings.m2_project, project_root.parent / "M2_TaskClassifier"
-        )
+        self.assertEqual(settings.database_path, project_root / "data/demo.db")
+        self.assertEqual(settings.runs_dir, project_root / "demo_runs")
+        self.assertEqual(settings.static_dir, project_root / "static")
         self.assertFalse(settings.seed_demo_data)
+        self.assertEqual(
+            {field.name for field in fields(Settings)},
+            {
+                "project_root", "database_path", "runs_dir", "static_dir",
+                "llm_base_url", "llm_model", "llm_api_key",
+                "llm_timeout_seconds", "seed_demo_data",
+            },
+        )
 
-    def test_pipeline_python_keeps_virtualenv_symlink_path(self) -> None:
+    def test_environment_selects_display_database_and_review_model(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            system_python = root / "system-python"
-            system_python.write_text("", encoding="utf-8")
-            venv_python = root / "venv-python"
-            try:
-                venv_python.symlink_to(system_python)
-            except OSError:
-                self.skipTest("当前文件系统不允许创建符号链接")
             with patch.dict(
                 os.environ,
-                {"M6_PIPELINE_PYTHON": str(venv_python)},
-                clear=False,
+                {
+                    "M6_DATABASE_PATH": str(root / "results.sqlite"),
+                    "M6_LLM_BASE_URL": "http://127.0.0.1:8000/v1",
+                    "M6_LLM_MODEL": "review-model",
+                    "M6_LLM_TIMEOUT_SECONDS": "45",
+                    "M6_SEED_DEMO_DATA": "true",
+                },
+                clear=True,
             ):
                 settings = Settings.load(project_root=root)
-            self.assertEqual(settings.pipeline_python, venv_python)
-            self.assertNotEqual(settings.pipeline_python, system_python)
-
-    def test_m1_receives_application_llm_settings(self) -> None:
-        with patch.dict(os.environ, {"KEEP_ME": "present"}, clear=True):
-            settings = Settings.load(project_root=Path(__file__).resolve().parent.parent)
-            environment = PipelineOrchestrator(
-                settings=settings,
-                repository=None,
-                automation=None,
-            )
-            environment = environment._m1_environment()
-        self.assertEqual(environment["LLM_BASE_URL"], settings.llm_base_url)
-        self.assertEqual(environment["LLM_MODEL"], settings.llm_model)
-        self.assertEqual(environment["LLM_API_KEY"], settings.llm_api_key)
-        self.assertEqual(environment["KEEP_ME"], "present")
+        self.assertEqual(settings.database_path, root / "results.sqlite")
+        self.assertEqual(settings.llm_base_url, "http://127.0.0.1:8000/v1")
+        self.assertEqual(settings.llm_model, "review-model")
+        self.assertEqual(settings.llm_timeout_seconds, 45)
+        self.assertTrue(settings.seed_demo_data)
 
 
 if __name__ == "__main__":

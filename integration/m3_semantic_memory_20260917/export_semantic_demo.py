@@ -1,16 +1,10 @@
-"""Export the 11 completed meetings of the semantic M1→M3→M6 run to the Demo schema.
+"""Export completed native M1→M3→M6 meetings to a new Demo database.
 
-Adapted from integration/m1_m3_m6_20260915/export_twelve.py. Differences:
-
-* The full run crashed on a strict ``assert not REJECTED`` at meeting 12 (0727),
-  so ``summary['complete']`` is False. We export the 11 cleanly completed
-  meetings listed in ``summary['documents']`` and drop everything from 0727.
-* Task state is reconstructed from the last in-scope audit's ``after_state_json``
-  (not the ``tasks`` table, whose current state already includes 0727 updates),
-  so the exported snapshot is exactly "as of the 11th meeting".
-* Names / m1 counts come from the existing verification.json (15 docs).
-
-Read-only on the run; refuses to overwrite an existing Demo export.
+Only documents listed in the current run's summary are exported. Task state is
+reconstructed from their last audit, preserving each release's source evidence.
+The source run stays read-only and an existing export is never overwritten.
+EXPORT_METADATA optionally supplies document file names; no historical batch
+output or HTTP service is needed.
 """
 import json
 import os
@@ -19,13 +13,13 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-ROOT = Path('/home/yty-s/meeting-m2-work')
+ROOT = Path(__file__).resolve().parents[2]
 DEMO = ROOT / 'M6_TaskManager_Demo'
 SOURCE = Path(os.getenv('EXPORT_SOURCE') or
               ROOT / 'integration/m3_semantic_memory_20260917/runs/full_semantic')
 TARGET = Path(os.getenv('EXPORT_TARGET') or
               DEMO / 'data/m1_m3_m6_semantic_20260917.sqlite')
-VERIFICATION = ROOT / 'integration/m6_service/data/full_dataset_item_policy_v2_20260914/verification.json'
+METADATA = Path(os.environ['EXPORT_METADATA']) if os.getenv('EXPORT_METADATA') else None
 sys.path.insert(0, str(DEMO))
 from app.database import initialize_database  # noqa: E402
 from app.task_repository import TaskRepository  # noqa: E402
@@ -70,7 +64,7 @@ def snapshot(state, doc, item_id, evidence, content):
 
 
 def evidence_of(provenance):
-    trace = provenance.get('merge_trace', {})
+    trace = provenance.get('source_trace', {})
     parts = [e.get('text', '') for e in trace.get('source_evidence', []) if e.get('text')]
     if parts:
         return '\n'.join(parts)
@@ -103,15 +97,19 @@ def project_descriptions(audits, events):
 
 
 def main():
-    summary = json.loads((SOURCE / 'summary.json').read_text())
+    summary = json.loads((SOURCE / 'summary.json').read_text(encoding='utf-8'))
     in_scope = [d['source_document_id'] for d in summary['documents']]
     in_scope_set = set(in_scope)
     counts_by_doc = {d['source_document_id']: d for d in summary['documents']}
-    verification = json.loads(VERIFICATION.read_text())
-    names = {d['source_document_id']: d['file_name'] for d in verification['documents']}
-    m1_counts = {d['source_document_id']: d['m1_item_count'] for d in verification['documents']}
+    if not in_scope:
+        raise SystemExit('No completed native meetings to export')
+    names = {doc: doc for doc in in_scope}
+    if METADATA is not None:
+        metadata = json.loads(METADATA.read_text(encoding='utf-8'))
+        names.update({d['source_document_id']: d['file_name'] for d in metadata['documents']})
+    m1_counts = {doc: counts_by_doc[doc]['item_count'] for doc in in_scope}
 
-    source = sqlite3.connect('file:' + str(SOURCE / 'lifecycle.sqlite') + '?mode=ro', uri=True)
+    source = sqlite3.connect((SOURCE / 'lifecycle.sqlite').resolve().as_uri() + '?mode=ro', uri=True)
     source.row_factory = sqlite3.Row
     audits = [dict(r) for r in source.execute(
         'SELECT * FROM task_audit WHERE source_document_id IN (%s) ORDER BY rowid'
@@ -145,6 +143,7 @@ def main():
     temporary = TARGET.with_suffix('.building.sqlite')
     if TARGET.exists() or temporary.exists():
         raise SystemExit('Refusing to overwrite an existing Demo export: %s' % TARGET)
+    TARGET.parent.mkdir(parents=True, exist_ok=True)
     initialize_database(temporary, seed_demo_data=False)
     repository = TaskRepository(temporary)
 

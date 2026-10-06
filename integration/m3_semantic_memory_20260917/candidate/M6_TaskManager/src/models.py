@@ -43,7 +43,7 @@ class M6Error(RuntimeError):
 
 
 class InputContractError(M6Error):
-    """M2 input is unsafe or does not satisfy the published contract."""
+    """M1 input is unsafe or does not satisfy the published contract."""
 
 
 class DecisionValidationError(M6Error):
@@ -69,12 +69,11 @@ class SourceContext:
     source_mode: str
     item_index: int
     item: dict[str, Any]
-    merge_trace: dict[str, Any]
+    source_trace: dict[str, Any]
     project_entity_id: str | None
-    project_entities: list[dict[str, Any]]
-    m2_validation: dict[str, Any]
+    input_validation: dict[str, Any]
     admission: dict[str, Any] | None = None
-    input_stage: str = 'M2'
+    input_stage: str = 'M1'
     origin_document_id: str | None = None
 
     @property
@@ -82,9 +81,8 @@ class SourceContext:
         return {
             "source_mode": self.source_mode,
             "item_index": self.item_index,
-            "merge_trace": self.merge_trace,
-            "project_entities": self.project_entities,
-            ("input_validation" if self.input_stage=='M1' else "m2_validation"): self.m2_validation,
+            "source_trace": self.source_trace,
+            "input_validation": self.input_validation,
             'input_stage': self.input_stage,
             'origin_document_id': self.origin_document_id or self.source_document_id,
             **({'admission': self.admission} if self.admission else {}),

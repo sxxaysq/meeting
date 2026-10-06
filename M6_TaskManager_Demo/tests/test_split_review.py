@@ -11,8 +11,9 @@ from fastapi.testclient import TestClient
 
 from app.config import Settings
 from app.main import create_app
-from app.m6.model_client import RuleBasedM6Client
 from app.review_plan import FIELDS, suggest_operations
+
+from tests.helpers import OfflineReviewClient
 
 
 class SplitReviewTest(unittest.TestCase):
@@ -20,7 +21,7 @@ class SplitReviewTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
         settings = replace(Settings.load(), database_path=root/'test.sqlite', runs_dir=root/'runs', seed_demo_data=False)
-        self.client = TestClient(create_app(settings, RuleBasedM6Client()))
+        self.client = TestClient(create_app(settings, OfflineReviewClient()))
         self.repo = self.client.app.state.repository
         self.tasks = [self.repo.create_manual_task({'title': title, 'description': title+'原要求',
             'department': '原部门', 'project': '原项目', 'evidence_text': title+'原文'}) for title in ('设备安装', '平台开发')]

@@ -1,0 +1,24 @@
+{
+  "source_document_id": "example-meeting",
+  "mode": "generic",
+  "items": [
+    {
+      "department": "Example department",
+      "work_section": null,
+      "delivery_group": null,
+      "project": "Example project",
+      "item_type": "PROJECT_TASK",
+      "assignee": [],
+      "title": "Prepare an implementation plan",
+      "content": "Prepare an implementation plan.",
+      "evidence": {
+        "text": "Prepare an implementation plan.",
+        "page_start": null,
+        "page_end": null,
+        "start_char": 0,
+        "end_char": 31,
+        "exact_match": true
+      }
+    }
+  ]
+}

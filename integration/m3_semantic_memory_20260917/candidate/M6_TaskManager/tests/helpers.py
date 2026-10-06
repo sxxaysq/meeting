@@ -53,18 +53,15 @@ def context(
         source_mode="block",
         item_index=0,
         item=current,
-        merge_trace={
+        source_trace={
             "item_index": 0,
             "source_indexes": [0],
-            "merged": False,
-            "evidence_mode": "single",
-            "evidence_contiguous": True,
             "source_evidence": [current["evidence"]],
             "project_entity_id": project_entity_id,
         },
         project_entity_id=project_entity_id,
-        project_entities=[],
-        m2_validation={"status": "PASS", "issues": []},
+
+        input_validation={"status": "PASS", "issues": []},
     )
 
 

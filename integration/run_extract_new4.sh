@@ -4,8 +4,9 @@
 # 注：2026-08-20 清理后最新全量 14 份归并于 out_v14；本脚本 OUT 指向同一目录，重跑即覆盖。
 set -euo pipefail
 
-SRC=/home/yty/数据集/原始数据
-OUT=/home/yty/m1x/meeting-m2-work/M1_Extraction/out_v14/generic
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+SRC="${MEETING_INPUT_DIR:?Set MEETING_INPUT_DIR to the source PDF directory}"
+OUT="${M1_OUTPUT_DIR:-$REPO_ROOT/M1_Extraction/out_v14/generic}"
 mkdir -p "$OUT"
 
 export LLM_BASE_URL=http://192.168.30.215:8000/v1
@@ -14,8 +15,8 @@ export LLM_ENABLE_THINKING=false
 export LLM_TEMPERATURE=0
 export LLM_MAX_TOKENS=65536   # generic 整篇单调用，输出可达 2w+ tokens，8192 会截断
 
-PY=/home/yty/m1x_venv/bin/python
-CLI=/home/yty/m1x/meeting-m2-work/M1_Extraction/src/cli.py
+PY="${PYTHON_BIN:-python}"
+CLI="$REPO_ROOT/M1_Extraction/src/cli.py"
 
 run_one() {  # $1=文件名前缀(2026.7.20)  $2=规范日期(2026-07-20)
   echo "=== [$(date +%H:%M:%S)] 开始 $1 -> $2"

@@ -1,4 +1,4 @@
-"""Validated M2 items to per-item, per-operation lifecycle execution."""
+"""Validated M1 items to per-item, per-operation lifecycle execution."""
 
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from .candidate_retriever import CandidateRetriever, same_goal
 from .command_validator import CommandValidator
 from .executor import TaskExecutor
 from .lifecycle_judge import LifecycleJudge
-from .m2_input import load_m2_payload
 from .m1_input import load_m1_payload
 from .models import ExecutionConflict, SourceContext, TechnicalFailure, DecisionValidationError
 from .repository import TaskRepository
@@ -167,19 +166,6 @@ class TaskLifecycleService:
                 'item_index':source.item_index,'failure_kind':kind,'reason':reason,'execution':result,
                 'model_audit':{'recovery':recovery,**metrics},'llm_called':metrics['calls']>0,'idempotent_replay':False}
 
-    def process_file(
-        self,
-        m2_path: Path | str,
-        *,
-        output_path: Path | str,
-        document_id: str | None = None,
-    ) -> dict[str, Any]:
-        resolved_document_id, contexts = load_m2_payload(
-            m2_path,
-            document_id=document_id,
-            require_pass=False,
-        )
-        return self._process_loaded(resolved_document_id, contexts, m2_path, output_path, 'legacy-M2')
 
     def process_m1_file(self, m1_path, *, output_path, document_id=None):
         resolved_document_id, contexts = load_m1_payload(m1_path, document_id=document_id)

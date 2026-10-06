@@ -1,11 +1,13 @@
 """Live probe: 红沙泉 family collapse, 乌冬→乌东 typo, cross-family refusal.
 
-Uses the real bge-m3 / qwen3.8-27b services and scratch M3Mem labels inside the
-shared Neo4j, then cleans up. Not part of the E2E run.
+Uses real embedding and model services, and resets the configured semantic
+memory before probing. Use an isolated test Neo4j database. Not an automated
+unit test or part of the chronological batch run.
 """
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -67,8 +69,8 @@ def main() -> int:
     memory.reset()
     memory.ensure_schema()
     client = OpenAICompatibleLifecycleClient(
-        base_url="http://192.168.30.215:8000/v1",
-        model="qwen3.8-27b",
+        base_url=os.getenv("M6_LLM_BASE_URL", "http://127.0.0.1:8000/v1"),
+        model=os.getenv("M6_LLM_MODEL", "qwen3.8-27b"),
         enable_thinking=False,
     )
     resolver = ProjectResolver(memory, client)

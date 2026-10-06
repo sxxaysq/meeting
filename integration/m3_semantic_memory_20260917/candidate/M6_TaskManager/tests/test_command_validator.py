@@ -19,7 +19,7 @@ def decision(action: str, target: str | None = None, **overrides):
     return LifecycleDecision.from_dict(payload)
 
 
-def test_create_uses_only_m2_fields(tmp_path) -> None:
+def test_create_uses_only_m1_fields(tmp_path) -> None:
     repo = repository(tmp_path / "tasks.db")
     command = validator(repo).build(context(), decision("CREATE"), [])
     assert command.action.value == "CREATE"

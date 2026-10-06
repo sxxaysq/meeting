@@ -51,7 +51,7 @@ def build_parser() -> argparse.ArgumentParser:
     history.add_argument("input", type=Path)
     history.add_argument("--database", type=Path, required=True)
 
-    process = subparsers.add_parser("process", help="M1→M3检索与项目记忆→M6；硬错误拒绝")
+    process = subparsers.add_parser("process", help="Process native M1 with isolated M6 contracts; full semantics use the batch runner")
     process.add_argument("input", type=Path)
     process.add_argument("--database", type=Path, required=True)
     process.add_argument("--output", type=Path, required=True)
@@ -60,7 +60,7 @@ def build_parser() -> argparse.ArgumentParser:
     process.add_argument("--closed-quota", type=int, default=2)
     process.add_argument(
         "--base-url",
-        default=os.getenv("LLM_BASE_URL", "http://192.168.30.215:8000/v1"),
+        default=os.getenv("M6_LLM_BASE_URL", os.getenv("LLM_BASE_URL", "http://127.0.0.1:8000/v1")),
     )
     process.add_argument(
         "--model",

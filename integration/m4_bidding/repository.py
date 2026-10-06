@@ -562,8 +562,11 @@ def build_repository(dsn: str, base_dir: str) -> BiddingRepository:
     if scheme.startswith("sqlite"):
         import os
 
-        path = parsed.path
-        if not path.startswith("/"):
+        path = urllib.parse.unquote(parsed.path)
+        if (os.name == "nt" and len(path) > 3 and path[0] == "/"
+                and path[1].isalpha() and path[2] == ":"):
+            path = path[1:]
+        if not os.path.isabs(path):
             path = os.path.join(base_dir, path)
         os.makedirs(os.path.dirname(os.path.abspath(path)) or ".", exist_ok=True)
         return SqliteBiddingRepository(path)

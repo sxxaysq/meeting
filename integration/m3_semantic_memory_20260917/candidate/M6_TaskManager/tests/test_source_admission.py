@@ -103,9 +103,9 @@ def test_same_family_is_compatible_across_mine_numbers(tmp_path):
         '新河二矿项目': 'FAM-XINHE',
         '蓝川煤矿项目': 'FAM-LANCHUAN',
     }))
-    assert project_compatible(admitted, {'project_entity_id': 'OLD-M2-ID', 'project': '新河三矿智能化建设项目'})
-    assert project_compatible(admitted, {'project_entity_id': 'OLD-M2-ID', 'project': '新河二矿项目'})
-    assert not project_compatible(admitted, {'project_entity_id': 'OLD-M2-ID', 'project': '蓝川煤矿项目'})
+    assert project_compatible(admitted, {'project_entity_id': 'OLD-ENTITY-ID', 'project': '新河三矿智能化建设项目'})
+    assert project_compatible(admitted, {'project_entity_id': 'OLD-ENTITY-ID', 'project': '新河二矿项目'})
+    assert not project_compatible(admitted, {'project_entity_id': 'OLD-ENTITY-ID', 'project': '蓝川煤矿项目'})
 
 
 def test_unknown_parent_never_erases_existing_identity(tmp_path):

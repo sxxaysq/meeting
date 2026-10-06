@@ -17,7 +17,6 @@ class CommandValidatorTest(unittest.TestCase):
             "subsegment_id": "001",
             "actor_hint": "机电队",
             "text": "机电队月底前提交应急方案。",
-            "task_category": "task",
         }
 
     def test_valid_create(self) -> None:

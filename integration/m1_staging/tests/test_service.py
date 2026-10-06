@@ -143,7 +143,7 @@ def test_reingest_with_fewer_items_clears_stale_tail(client):
     回归背景（2026-09-04 数据集端到端测试实测踩到）：upsert 只按 item_id 更新，
     条目从 159 变 147 时 item_seq 147..158 的旧行留在表里，于是
     `ods_m1_source_documents.item_count`(147) 与 items 实际行数(159) 打架，
-    下游 m2 的输入指纹、中台数据服务 API 全部跟着错。
+    下游输入指纹、中台数据服务 API 都会读取到错误来源。
     """
     three = [make_item(title="甲"), make_item(title="乙"), make_item(title="丙")]
     assert client.post("/m1/ingest", json=make_body(items=three)).status_code == 200

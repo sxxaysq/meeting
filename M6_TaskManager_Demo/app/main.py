@@ -1,81 +1,34 @@
-"""FastAPI 入口：上传、编排、任务查询与静态前端。"""
+"""FastAPI entry point for semantic results and human review."""
 
 from __future__ import annotations
 
-import shutil
-import uuid
-import hashlib
 import io
 import json
 import re
 import zipfile
-from datetime import date, datetime, timezone
 from pathlib import Path
 
-from fastapi import (
-    BackgroundTasks,
-    FastAPI,
-    File,
-    Form,
-    HTTPException,
-    Query,
-    UploadFile,
-)
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from .config import Settings
 from .database import initialize_database
-from .m6.executor import CommandExecutor, CommandExecutionError
-from .review_plan import suggest_operations, validate_operations
-from .m6.model_client import M6Client, OpenAICompatibleM6Client
-from .m6.service import TaskAutomationService
-from .m6.target_matcher import TargetMatcher
-from .m6.validator import CommandValidator
-from .m6.model_client import empty_patch
-from .orchestrator import PipelineOrchestrator
-from .task_repository import TaskRepository
 from .department_workbench import register_department_routes
+from .m6.executor import CommandExecutor, CommandExecutionError
+from .m6.model_client import (
+    OpenAICompatibleReviewClient,
+    ReviewClient,
+    empty_patch,
+)
+from .m6.validator import CommandValidator
+from .review_plan import suggest_operations, validate_operations
+from .task_repository import TaskRepository
 
 
-ALLOWED_SUFFIXES = {".pdf", ".docx"}
 TASK_STATUSES = {"open", "in_progress", "blocked", "completed", "cancelled"}
 MIN_TRAINING_EVIDENCE_CHARS = 80
 TRAINING_EVIDENCE_CONTEXT_NEIGHBORS = 2
-
-
-def _new_run_id() -> str:
-    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-    return f"{stamp}_{uuid.uuid4().hex[:6]}"
-
-
-def _stable_meeting_id(
-    meeting_date: str,
-    meeting_type: str,
-    content_sha256: str,
-) -> str:
-    identity = hashlib.sha256(
-        (
-            meeting_date.strip()
-            + "\0"
-            + meeting_type.strip()
-            + "\0"
-            + content_sha256
-        ).encode("utf-8")
-    ).hexdigest()
-    return f"DEMO_{identity[:20]}"
-
-
-def _safe_filename(filename: str | None) -> str:
-    name = Path(filename or "meeting.pdf").name
-    if not name:
-        raise HTTPException(status_code=400, detail="文件名为空")
-    if Path(name).suffix.lower() not in ALLOWED_SUFFIXES:
-        raise HTTPException(
-            status_code=400,
-            detail="只允许上传 PDF 或 DOCX",
-        )
-    return name
 
 
 def _validate_task_payload(payload: dict, *, creating: bool = False) -> dict:
@@ -209,7 +162,7 @@ def _training_evidence_texts(
 
 def create_app(
     settings: Settings | None = None,
-    m6_client: M6Client | None = None,
+    review_client: ReviewClient | None = None,
 ) -> FastAPI:
     resolved = settings or Settings.load()
     resolved.runs_dir.mkdir(parents=True, exist_ok=True)
@@ -219,33 +172,21 @@ def create_app(
         seed_demo_data=resolved.seed_demo_data,
     )
     repository = TaskRepository(resolved.database_path)
-    client = m6_client or OpenAICompatibleM6Client(
+    client = review_client or OpenAICompatibleReviewClient(
         base_url=resolved.llm_base_url,
         model=resolved.llm_model,
         api_key=resolved.llm_api_key,
         timeout_seconds=resolved.llm_timeout_seconds,
     )
-    automation = TaskAutomationService(
-        repository=repository,
-        client=client,
-        matcher=TargetMatcher(max_candidates=resolved.max_task_candidates),
-        validator=CommandValidator(),
-        executor=CommandExecutor(resolved.database_path),
-        allow_decision_create=resolved.allow_decision_create,
-    )
-    orchestrator = PipelineOrchestrator(
-        settings=resolved,
-        repository=repository,
-        automation=automation,
-    )
+    validator = CommandValidator()
+    executor = CommandExecutor(resolved.database_path)
 
     app = FastAPI(
-        title="M6 会议任务数据库自动维护演示",
+        title="会议语义结果查询与人工复核",
         version="0.1.0",
     )
     app.state.settings = resolved
     app.state.repository = repository
-    app.state.orchestrator = orchestrator
     register_department_routes(app, repository, resolved.static_dir)
     app.mount(
         "/static",
@@ -257,97 +198,30 @@ def create_app(
     def health() -> dict:
         return {"status": "ok", "database": "ready"}
 
-    @app.post("/api/demo/runs", status_code=202)
-    async def create_run(
-        background_tasks: BackgroundTasks,
-        file: UploadFile = File(...),
-        meeting_date: str = Form(...),
-        meeting_type: str = Form(...),
-        meeting_title: str = Form(default=""),
-        meeting_time: str = Form(default=""),
-        attendees: str = Form(default=""),
-        leader_requirements: str = Form(default=""),
-    ) -> dict:
-        filename = _safe_filename(file.filename)
-        try:
-            date.fromisoformat(meeting_date)
-        except ValueError as exc:
-            raise HTTPException(
-                status_code=400,
-                detail="meeting_date 必须是 YYYY-MM-DD",
-            ) from exc
-        if not meeting_type.strip():
-            raise HTTPException(status_code=400, detail="meeting_type 不能为空")
-        if repository.has_active_run():
-            raise HTTPException(
-                status_code=409,
-                detail="已有演示运行正在执行，请等待完成",
-            )
-
-        run_id = _new_run_id()
-        input_dir = resolved.runs_dir / run_id / "input"
-        input_dir.mkdir(parents=True, exist_ok=False)
-        target = input_dir / filename
-        total = 0
-        content_hasher = hashlib.sha256()
-        try:
-            with target.open("wb") as stream:
-                while chunk := await file.read(1024 * 1024):
-                    total += len(chunk)
-                    if total > resolved.max_upload_bytes:
-                        raise HTTPException(
-                            status_code=413,
-                            detail="上传文件超过大小限制",
-                        )
-                    content_hasher.update(chunk)
-                    stream.write(chunk)
-        except Exception:
-            if target.exists():
-                target.unlink()
-            shutil.rmtree(input_dir.parent, ignore_errors=True)
-            raise
-        finally:
-            await file.close()
-        if total == 0:
-            shutil.rmtree(input_dir.parent, ignore_errors=True)
-            raise HTTPException(status_code=400, detail="上传文件为空")
-        meeting_id = _stable_meeting_id(
-            meeting_date,
-            meeting_type,
-            content_hasher.hexdigest(),
+    @app.post("/api/demo/runs")
+    def create_run() -> dict:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "网页自动导入尚未接入当前语义链路。"
+                "请使用 M1→M3→M6 批处理生成结果，再导出到展示库。"
+            ),
         )
-
-        repository.create_run(
-            run_id=run_id,
-            meeting_id=meeting_id,
-            source_file=filename,
-            meeting_date=meeting_date,
-            meeting_type=meeting_type.strip(),
-            meeting_title=meeting_title,
-            meeting_time=meeting_time,
-            attendees=attendees,
-            leader_requirements=leader_requirements,
-        )
-        background_tasks.add_task(
-            orchestrator.process_run,
-            run_id,
-            meeting_id,
-            meeting_date,
-            meeting_type.strip(),
-            target,
-        )
-        return {
-            "run_id": run_id,
-            "meeting_id": meeting_id,
-            "status": "queued",
-        }
 
     @app.get("/api/demo/runs/{run_id}")
     def get_run(run_id: str) -> dict:
         run = repository.get_run(run_id)
         if run is None:
             raise HTTPException(status_code=404, detail="运行不存在")
-        return run
+        result = {
+            key: value for key, value in run.items() if key != "m2_count"
+        }
+        if isinstance(result.get("summary"), dict):
+            result["summary"] = {
+                key: value for key, value in result["summary"].items()
+                if not key.startswith("m2_")
+            }
+        return result
 
     @app.get("/api/demo/runs/{run_id}/summary")
     def get_run_summary(run_id: str) -> dict:
@@ -358,12 +232,14 @@ def create_app(
             "run_id": run_id,
             "status": run["status"],
             "m1_count": run["m1_count"],
-            "m2_count": run["m2_count"],
             "command_count": run["command_count"],
             "applied_count": run["applied_count"],
             "noop_count": run["noop_count"],
             "failed_count": run["failed_count"],
-            "summary": run.get("summary") or {},
+            "summary": {
+                key: value for key, value in (run.get("summary") or {}).items()
+                if not key.startswith("m2_")
+            },
         }
 
     @app.get("/api/demo/runs/{run_id}/events")
@@ -537,7 +413,7 @@ def create_app(
                 note = payload.get('reviewer_note') or ''
                 if not isinstance(note, str):
                     raise ValueError('复核备注必须是文本')
-                return automation.executor.execute_review(candidate_id, payload['operations'], note)
+                return executor.execute_review(candidate_id, payload['operations'], note)
             except KeyError as exc:
                 raise HTTPException(status_code=404, detail=str(exc)) from exc
             except CommandExecutionError as exc:
@@ -595,12 +471,12 @@ def create_app(
             "commands": [command],
         }
         try:
-            automation.validator.validate_batch(
+            validator.validate_batch(
                 batch, source, review["meeting_id"], {"candidates": []}
             )
         except Exception as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
-        result = automation.executor.execute_command(
+        result = executor.execute_command(
             batch["source_key"], command, review["run_id"], review["meeting_id"]
         )
         if result["execution_status"] not in {"applied", "noop", "duplicate"}:

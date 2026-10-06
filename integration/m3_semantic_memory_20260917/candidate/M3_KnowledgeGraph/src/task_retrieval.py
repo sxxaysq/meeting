@@ -1,29 +1,4 @@
-"""Semantic candidate recall over the M6 lifecycle history.
-
-Recall decides *which* historical tasks are worth putting in front of the
-model; it never decides a lifecycle action by itself. That division is
-unchanged from the lexical version — what changed is the signal.
-
-Replaced here (2026-09-17):
-
-* ``scope_conflict()`` and the ``[一二三四五六七八九十\\d]+(?:矿|号井|期)|20\\d{2}``
-  qualifier regex are gone. Mine number, shaft number, phase and tender lot no
-  longer separate projects; identity comes from the family the memory graph
-  resolved the name into.
-* The ``(.+项目)\\s*[-—–:：]\\s*(.+)`` hierarchy regex is gone. Parent/child
-  naming is now a memory fact (``M3MemSurface`` → ``M3MemProject``), not a
-  string pattern.
-* Dice-on-bigrams ranking is replaced by bge-m3 cosine through
-  ``SemanticTaskIndex``.
-
-Kept deliberately, because they are text folding and not business validation:
-
-* ``normalize_text`` — whitespace/punctuation folding used as a cache and
-  comparison key across six modules.
-* ``bigrams``/``dice`` — no longer used for any decision. Retained only because
-  ``M6_TaskManager/eval/old_matcher_baseline.py`` reproduces the pre-semantic
-  baseline and must keep computing it the old way.
-"""
+"""Retrieve task candidates from historical state, vectors and project families."""
 
 from __future__ import annotations
 
@@ -157,18 +132,7 @@ FAMILY_ID_PREFIX = "FAMILY-"
 
 
 def project_compatible(source: SourceContext, task: dict[str, Any]) -> bool:
-    """Same project identity, judged by resolved family rather than name shape.
-
-    ``红沙泉二矿项目`` and ``红沙泉项目`` are compatible because the memory graph
-    resolved both into one family; ``红沙泉项目`` and ``陶忽图项目`` are not,
-    however similar their wording looks.
-
-    Two memory-resolved families that disagree are decisive. A task carrying an
-    id from an older scheme (``PARENT-…``, or an imported M2 entity id) is not
-    comparable that way, so it falls through to the resolved family and then to
-    the normalized name — otherwise every task written before this change would
-    become permanently unrecallable.
-    """
+    """Check source-backed project scope before considering a historical task."""
     left_key = str(source.project_entity_id or "")
     right_key = str(task.get("project_entity_id") or "")
     if left_key and right_key:

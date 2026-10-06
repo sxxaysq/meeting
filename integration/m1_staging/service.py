@@ -7,7 +7,7 @@
 - 单事务 upsert 进 staging 库（MySQL 正式形态 / SQLite 自测形态，见 repository.py）；
 - 重复 ingest 零重复行（稳定 item_id = "item:m1:" + sha1(source_document_id#idx)）。
 
-红线提醒：本表是 ODS 贴源资产，权威源仍是 M2 JSON；中台/顿悟数据不得写回流水线。
+本表是 M1 输出的 ODS 贴源资产；中台/顿悟加工不得写回原始抽取输出。
 """
 
 from __future__ import annotations

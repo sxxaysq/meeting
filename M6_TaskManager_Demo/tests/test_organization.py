@@ -9,8 +9,9 @@ from fastapi.testclient import TestClient
 from app.config import Settings
 from app.database import connect, initialize_database
 from app.main import create_app
-from app.m6.model_client import RuleBasedM6Client
 from app.organization import COMPANY, OFFICIAL_UNITS, USER_ADDED_UNITS, SHORT_NAMES, merge_existing_tasks, organization_key
+
+from tests.helpers import OfflineReviewClient
 
 
 class OrganizationTest(unittest.TestCase):
@@ -18,7 +19,7 @@ class OrganizationTest(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         root = Path(self.temp.name)
         settings = replace(Settings.load(), database_path=root/'tasks.sqlite', runs_dir=root/'runs', seed_demo_data=False)
-        self.client = TestClient(create_app(settings, RuleBasedM6Client()))
+        self.client = TestClient(create_app(settings, OfflineReviewClient()))
         self.repo = self.client.app.state.repository
 
     def tearDown(self):

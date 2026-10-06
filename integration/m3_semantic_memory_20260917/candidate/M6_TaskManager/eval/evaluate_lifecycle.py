@@ -12,10 +12,12 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+for import_root in (ROOT.parent, ROOT):
+    if str(import_root) not in sys.path:
+        sys.path.insert(0, str(import_root))
 
 from eval.metrics import evaluate_predictions
-from eval.old_matcher_baseline import predict as old_predict
+from eval.lexical_baseline import predict as lexical_predict
 from src.candidate_retriever import CandidateRetriever
 from src.command_validator import CommandValidator
 from src.department_router import DepartmentRouter
@@ -23,6 +25,7 @@ from src.executor import TaskExecutor
 from src.lifecycle_judge import LifecycleJudge
 from src.llm_client import OpenAICompatibleLifecycleClient
 from src.models import SourceContext
+from src.input_contract import context_from_item
 from src.repository import TaskRepository
 from src.service import TaskLifecycleService
 
@@ -59,26 +62,13 @@ def load_samples(path: Path) -> list[dict[str, Any]]:
 
 
 def source_context(sample: dict[str, Any]) -> SourceContext:
-    current = sample["current_item"]
-    project_entity_id = sample.get("project_entity_id")
-    return SourceContext(
-        source_document_id=sample["source_document_id"],
-        source_item_id=sample["source_item_id"],
-        source_mode=sample.get("source_mode", "block"),
-        item_index=0,
-        item=current,
-        merge_trace={
-            "item_index": 0,
-            "source_indexes": [0],
-            "merged": False,
-            "evidence_mode": "single",
-            "evidence_contiguous": True,
-            "source_evidence": [current["evidence"]],
-            "project_entity_id": project_entity_id,
-        },
-        project_entity_id=project_entity_id,
-        project_entities=[],
-        m2_validation={"status": "PASS", "issues": []},
+    return context_from_item(
+        sample["current_item"],
+        document_id=sample["source_document_id"],
+        item_index=sample.get("item_index", 0),
+        mode=sample.get("source_mode", "block"),
+        source_id=sample["source_item_id"],
+        project_entity_id=sample.get("project_entity_id"),
     )
 
 
@@ -93,9 +83,9 @@ def evaluate(
     idempotency_violations = 0
     transaction_failures = 0
     for sample in samples:
-        if mode == "old":
-            prediction = old_predict(sample)
-            audit = {"model": "old_dice_matcher"}
+        if mode == "lexical":
+            prediction = lexical_predict(sample)
+            audit = {"model": "lexical_matcher"}
         elif mode == "oracle":
             gold = sample["gold"]
             prediction = {
@@ -232,7 +222,7 @@ def main() -> None:
         default=ROOT / "gold" / "lifecycle_gold_v1.json",
     )
     parser.add_argument(
-        "--mode", choices=("old", "llm", "pipeline", "oracle"), required=True
+        "--mode", choices=("lexical", "llm", "pipeline", "oracle"), required=True
     )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(

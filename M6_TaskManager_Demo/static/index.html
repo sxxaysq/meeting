@@ -16,7 +16,7 @@
       <h1>{{ isDepartmentView ? departmentName + '工作台' : '煤矿会议智能任务管理' }}</h1>
       <div class="header-actions">
         <select v-if="meetings.length" v-model="selectedMeetingId" @change="onMeetingChange" class="header-meeting-select"><option value="">全部会议</option><option v-for="meeting in meetings" :key="meeting.meeting_id + meeting.started_at" :value="meeting.meeting_id">{{ meeting.meeting_date }} {{ meeting.meeting_title || meeting.source_file }}</option></select>
-        <button v-if="!isDepartmentView" class="header-import" @click="activeTab = 'import'">导入数据</button>
+        <button v-if="!isDepartmentView" class="header-import" @click="activeTab = 'import'">导入说明</button>
         <span class="task-count">当前 {{ taskRows.length }} 项任务</span>
         <span class="health" :class="{ bad: health !== 'ok' }">服务{{ health === 'ok' ? '正常' : '检查中' }}</span>
       </div>
@@ -26,7 +26,7 @@
       <button class="tab" :class="{ active: activeTab === 'tasks' }" @click="activeTab = 'tasks'">{{ isDepartmentView ? '待办任务' : '任务清单' }}</button>
       <button v-if="!isDepartmentView" class="tab" :class="{ active: activeTab === 'departments' }" @click="activeTab = 'departments'">部门视图</button>
       <button v-if="!isDepartmentView" class="tab" :class="{ active: activeTab === 'meeting' }" @click="activeTab = 'meeting'">会议信息</button>
-      <button v-if="!isDepartmentView" class="tab" :class="{ active: activeTab === 'import' }" @click="activeTab = 'import'">导入会议</button>
+      <button v-if="!isDepartmentView" class="tab" :class="{ active: activeTab === 'import' }" @click="activeTab = 'import'">导入说明</button>
       <button v-if="!isDepartmentView" class="tab" :class="{ active: activeTab === 'review' }" @click="activeTab = 'review'; loadReviewCandidates()">人工复核</button>
       <button v-if="!isDepartmentView" class="tab" :class="{ active: activeTab === 'events' }" @click="activeTab = 'events'; loadEvents()">操作记录</button>
       <button v-if="!isDepartmentView" class="tab" :class="{ active: activeTab === 'workspaces' }" @click="activeTab = 'workspaces'; loadDepartmentWorkspaces()">部门工作台</button>
@@ -159,25 +159,11 @@
       </section>
 
       <section v-else-if="activeTab === 'import'">
-        <div class="page-heading"><div><h2>导入会议材料</h2><p>处理过程保留 M1、M2、M6 的结果与证据；完成后自动刷新任务清单。</p></div></div>
+        <div class="page-heading"><div><h2>会议数据导入说明</h2><p>当前页面展示语义批处理结果。</p></div></div>
         <div class="panel upload-panel">
-          <form @submit.prevent="startRun">
-            <label><span>会议文件</span><input ref="fileInput" type="file" accept=".pdf,.docx" required></label>
-            <label><span>会议题目</span><input v-model.trim="form.meetingTitle" placeholder="例如：信息公司周例会"></label>
-            <label><span>会议日期</span><input v-model="form.meetingDate" type="date" required></label>
-            <label><span>会议时间</span><input v-model.trim="form.meetingTime" placeholder="例如：09:00–10:30"></label>
-            <label><span>会议类型</span><select v-model="form.meetingType"><option>调度会</option><option>班前会</option><option>早调会</option><option>生产经营会</option></select></label>
-            <label><span>参会人员</span><input v-model.trim="form.attendees" placeholder="姓名、部门或职务"></label>
-            <label class="upload-textarea"><span>领导要求</span><textarea v-model.trim="form.leaderRequirements" rows="2" placeholder="填写会议明确提出的领导要求"></textarea></label>
-            <button class="primary" :disabled="busy">{{ busy ? '处理中…' : '开始自动处理' }}</button>
-          </form>
-          <p v-if="message" class="message" :class="{ error: messageIsError }">{{ message }}</p>
-        </div>
-
-        <div v-if="run" class="panel progress-panel">
-          <div class="section-title"><div><h3>运行进度</h3><p>{{ run.run_id }}</p></div><span class="badge status-open">{{ statusLabel(run.status) }}</span></div>
-          <div class="pipeline"><div v-for="stage in stages" :key="stage.key" class="stage" :class="stageClass(stage.key)"><span>{{ stage.index }}</span><strong>{{ stage.label }}</strong></div></div>
-          <div v-if="summary" class="metrics"><article><span>M1 片段</span><strong>{{ summary.m1_count || 0 }}</strong></article><article><span>M2 分类</span><strong>{{ summary.m2_count || 0 }}</strong></article><article><span>成功落库</span><strong>{{ summary.applied_count || 0 }}</strong></article><article><span>重复</span><strong>{{ summary.noop_count || 0 }}</strong></article><article><span>失败</span><strong>{{ summary.failed_count || 0 }}</strong></article></div>
+          <p role="status">网页自动导入尚未接入当前语义链路。请使用 M1→M3→M6 批处理生成结果，再导出到展示库。</p>
+          <p class="muted">结果导出完成后，可在任务清单刷新查看，或进入人工复核处理待确认事项。</p>
+          <button class="primary" disabled>网页自动处理暂不可用</button>
         </div>
       </section>
 

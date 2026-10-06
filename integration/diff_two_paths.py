@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-M1_SRC = HERE.parent / "meeting-m2-work" / "M1_Extraction" / "src"
+M1_SRC = HERE.parent / "M1_Extraction" / "src"
 sys.path.insert(0, str(M1_SRC))
 
 from llm_client import LLMClient, LLMConfig  # noqa: E402
